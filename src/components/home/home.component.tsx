@@ -1,5 +1,5 @@
 import React, { useContext, FunctionComponent } from "react";
-import { IUserProfile } from "../../services/auth/auth.service";
+import { IUserProfile } from "../../services/auth/auth.types";
 import AuthContext from "../../services/auth/auth.context";
 
 interface ProfileProps {
@@ -10,6 +10,8 @@ const Profile: FunctionComponent<ProfileProps> = ({ profile }) => {
   return (
     <>
       <h2>{profile.email}</h2>
+      <h3>{profile.displayName}</h3>
+      <h3>{profile.photoURL}</h3>
       <h3>{profile.createdAt.toDateString()}</h3>
     </>
   );

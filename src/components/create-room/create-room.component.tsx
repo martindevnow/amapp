@@ -6,6 +6,8 @@ import {
   RoomsContext,
   RoomsService,
 } from "../../services/rooms/rooms.provider";
+import Button from "../ui/button/button.component";
+import Input from "../ui/input/input.component";
 
 const CreateRoomForm = () => {
   const [name, setName] = useState("");
@@ -26,7 +28,7 @@ const CreateRoomForm = () => {
   };
   return (
     <form onSubmit={onSubmit}>
-      <input
+      <Input
         type="text"
         name="title"
         value={name}
@@ -34,7 +36,7 @@ const CreateRoomForm = () => {
         onChange={(e) => setName(e.target.value)}
       />
 
-      <button type="submit">Create</button>
+      <Button type="submit">Create</Button>
     </form>
   );
 };

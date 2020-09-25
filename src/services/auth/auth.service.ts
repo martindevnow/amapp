@@ -1,31 +1,35 @@
 import firebase, { FirebaseService } from "../firebase/firebase.service";
-
-export interface IUserProfile {
-  uid: string;
-  email: string;
-  photoURL?: string;
-  displayName?: string;
-  createdAt: Date;
-  roles?: {
-    member: boolean;
-    moderator: boolean;
-    admin: boolean;
-  };
-}
+import { ACL, AclActions, AclRoles, DEFAULT_ACL } from "./auth.acl";
+import { IUserProfile } from "./auth.types";
 
 export class AuthService {
   private auth: firebase.auth.Auth;
   private db: firebase.firestore.Firestore;
   public user: IUserProfile | null;
 
-  constructor(private firebase: FirebaseService) {
+  constructor(private firebase: FirebaseService, private acl: ACL) {
     this.auth = firebase.auth;
     this.db = firebase.db;
     this.user = null;
   }
 
+  loadAcl = (acl: ACL) => (this.acl = acl);
   userProfileRef = (uid: string) => this.db.doc(`users/${uid}`);
   userProfile = (uid: string) => this.userProfileRef(uid).get();
+
+  canUserDo = (user: IUserProfile | null, aclAction: AclActions) => {
+    const reqRoles = this.acl[aclAction];
+    if (!reqRoles || !reqRoles.length) {
+      return false;
+    }
+    if (user === null) {
+      return reqRoles.includes(AclRoles.GUEST_ROLE);
+    }
+    return (
+      reqRoles.includes(AclRoles.GUEST_ROLE) ||
+      reqRoles.some((role) => user.roles[role])
+    );
+  };
 
   hasVotedForQuestion = async (questionId: string, userId: string) => {
     if (userId === "TODO") {
@@ -75,9 +79,10 @@ export class AuthService {
         email: user.email as string,
         createdAt,
         roles: {
-          member: true,
-          moderator: false,
-          admin: false,
+          [AclRoles.MEMBER_ROLE]: true,
+          [AclRoles.MODERATOR_ROLE]: false,
+          [AclRoles.ADMIN_ROLE]: false,
+          [AclRoles.GUEST_ROLE]: false,
         },
         ...additionalData,
       };
@@ -91,5 +96,5 @@ export class AuthService {
   };
 }
 
-const authService = new AuthService(firebase);
+const authService = new AuthService(firebase, DEFAULT_ACL);
 export default authService;

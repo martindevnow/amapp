@@ -4,6 +4,8 @@ import "./add-question.styles.scss";
 import { QuestionsContext } from "../../services/questions/questions.provider";
 import AuthContext from "../../services/auth/auth.context";
 import { IQuestionRecord } from "../../services/questions/questions.types";
+import Button from "../ui/button/button.component";
+import Input from "../ui/input/input.component";
 
 interface AddQuestionFormProps {
   roomId: string;
@@ -42,20 +44,20 @@ const AddQuestionForm: FunctionComponent<AddQuestionFormProps> = ({
 
   return (
     <div className="inline-form">
-      <input
+      <Input
         type="text"
         name="title"
         value={title}
         placeholder="Your question .. ?"
         onChange={(e) => setTitle(e.target.value)}
       />
-      <button
+      <Button
         onClick={() => setAnonymous(!anonymous)}
         className={anonymous ? "anonymously" : ""}
       >
         {buttonText}
-      </button>
-      <button onClick={onSubmit}>Ask</button>
+      </Button>
+      <Button onClick={onSubmit}>Ask</Button>
     </div>
   );
 };

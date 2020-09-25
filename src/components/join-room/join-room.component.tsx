@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
-
-import "./join-room.styles.scss";
+import Button from "../ui/button/button.component";
+import Input from "../ui/input/input.component";
 
 const JoinRoom = () => {
   const [roomId, setRoomId] = useState("");
@@ -13,14 +13,14 @@ const JoinRoom = () => {
   };
   return (
     <form onSubmit={(e) => onSubmit(e)} className="join-room-form">
-      <input
+      <Input
         type="text"
         name="roomId"
         value={roomId}
         placeholder="Room ID"
         onChange={(e) => setRoomId(e.target.value)}
       />
-      <button>Join Room</button>
+      <Button>Join Room</Button>
     </form>
   );
 };

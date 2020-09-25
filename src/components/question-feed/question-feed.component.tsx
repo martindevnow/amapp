@@ -3,6 +3,7 @@ import Question from "../question/question.component";
 import { QuestionsContext } from "../../services/questions/questions.provider";
 import { IQuestion } from "../../services/questions/questions.types";
 import { sortByCreatedAt, sortByUpVotes } from "../../services/utilities";
+import Button from "../ui/button/button.component";
 
 interface QuestionFeedProps {
   roomId: string;
@@ -17,13 +18,13 @@ const QuestionFeed: FunctionComponent<QuestionFeedProps> = ({ roomId }) => {
 
   return (
     <section>
-      <button
+      <Button
         onClick={() => {
           setOrderBy(opposite(orderBy));
         }}
       >
         {orderBy === "upVotes" ? "Newest" : "Most Votes"}
-      </button>
+      </Button>
       {(questions as IQuestion[])
         .sort(orderBy === "upVotes" ? sortByUpVotes : sortByCreatedAt)
         .map((q) => (

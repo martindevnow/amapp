@@ -12,6 +12,8 @@ import {
   QuestionsService,
 } from "../../services/questions/questions.provider";
 import { IQuestion } from "../../services/questions/questions.types";
+import Button from "../ui/button/button.component";
+import AddIcon from "../ui/icon/add-icon.component";
 
 interface QuestionProps {
   roomId: string;
@@ -44,9 +46,9 @@ const Question: FunctionComponent<QuestionProps> = ({ roomId, question }) => {
     <div className="question">
       <span className="question-upvote-count">{question.upVotes}</span>
       <span className="question-title">{question.title}</span>
-      <button className={hasVoted ? "has-voted" : ""} onClick={upVote}>
-        ^
-      </button>
+      <Button className={hasVoted ? "has-voted" : ""} onClick={upVote}>
+        <AddIcon />
+      </Button>
     </div>
   );
 };

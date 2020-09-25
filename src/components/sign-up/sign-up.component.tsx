@@ -1,8 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { FormEvent, useContext, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 
 import * as ROUTES from "../../constants/routes";
 import AuthContext from "../../services/auth/auth.context";
+import Button from "../ui/button/button.component";
+import Input from "../ui/input/input.component";
 
 export const SignUpForm = () => {
   const { authService } = useContext(AuthContext);
@@ -28,7 +30,7 @@ export const SignUpForm = () => {
     setError(null);
   };
 
-  const onSubmit = (event: any) => {
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log({ displayName, email, passwordOne });
     authService
@@ -50,37 +52,37 @@ export const SignUpForm = () => {
 
   return (
     <form onSubmit={onSubmit}>
-      <input
+      <Input
         name="displayName"
         value={displayName}
         onChange={(e) => setDisplayName(e.target.value)}
         type="text"
         placeholder="Full Name"
       />
-      <input
+      <Input
         name="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         type="text"
         placeholder="Email Address"
       />
-      <input
+      <Input
         name="passwordOne"
         value={passwordOne}
         onChange={(e) => setPasswordOne(e.target.value)}
         type="password"
         placeholder="Password"
       />
-      <input
+      <Input
         name="passwordTwo"
         value={passwordTwo}
         onChange={(e) => setPasswordTwo(e.target.value)}
         type="password"
         placeholder="Confirm Password"
       />
-      <button disabled={isInvalid} type="submit">
+      <Button disabled={isInvalid} type="submit">
         Sign Up
-      </button>
+      </Button>
 
       {error && <p>{error.message}</p>}
     </form>

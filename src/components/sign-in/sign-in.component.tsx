@@ -1,9 +1,11 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, FormEvent } from "react";
 import { useHistory } from "react-router-dom";
 
 import { SignUpLink } from "../sign-up/sign-up.component";
 import * as ROUTES from "../../constants/routes";
 import AuthContext from "../../services/auth/auth.context";
+import Button from "../ui/button/button.component";
+import Input from "../ui/input/input.component";
 
 export const SignInForm = () => {
   const { authService } = useContext(AuthContext);
@@ -20,10 +22,10 @@ export const SignInForm = () => {
     setError(null);
   };
 
-  const onSubmit = (event: any) => {
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     authService
       .doSignInWithEmailAndPassword(email, password)
-      .then(() => {
+      .then((_) => {
         clearForm();
         history.push(ROUTES.HOME);
       })
@@ -38,23 +40,23 @@ export const SignInForm = () => {
 
   return (
     <form onSubmit={onSubmit}>
-      <input
+      <Input
         name="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         type="text"
         placeholder="Email Address"
       />
-      <input
+      <Input
         name="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         type="password"
         placeholder="Password"
       />
-      <button disabled={isInvalid} type="submit">
+      <Button disabled={isInvalid} type="submit">
         Sign In
-      </button>
+      </Button>
 
       {error && <p>{error.message}</p>}
     </form>

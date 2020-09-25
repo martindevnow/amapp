@@ -5,54 +5,57 @@ import React, {
   useState,
 } from "react";
 import FirebaseContext from "../firebase/firebase.context";
-import authService, { IUserProfile } from "./auth.service";
+import authService from "./auth.service";
 import AuthContext from "./auth.context";
+import { ACL, DEFAULT_ACL } from "./auth.acl";
+import { IUserProfile } from "./auth.types";
+import { Observable, of } from "rxjs";
+import { switchMap } from "rxjs/operators";
 
 const AuthProvider: FunctionComponent = (props) => {
   const firebase = useContext(FirebaseContext);
   const [user, setUser] = useState<IUserProfile | null>(null);
   const [loaded, setLoaded] = useState<boolean>(false);
 
-  // TODO: Add a event listener in `useEffect` to
-  // This code was found in the FrontendMasters course on React with Firebase V2:
-  // But it appears to cause a memory leak when we subscribe to the `userRef.onSnapshot`
-  // Unless, the unsubscribe to
-  // componentDidMount = async () => {
-  //   this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userInfo) => {
-  //     const userRef = await createUserDocument(userInfo);
-  //     userRef.onSnapshot((snapshot) => {
-  //       const user = collectIdsAndData(snapshot);
-  //       this.setState({ user, loaded: true });
-  //     });
-  //   });
-  // };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [acl, _setAcl] = useState<ACL>(DEFAULT_ACL);
+  authService.loadAcl(acl);
+
   useEffect(() => {
-    console.log("AuthProvider :: Initializing useEffect");
-    return firebase.auth.onAuthStateChanged(async (userInfo) => {
-      console.log("AuthProvider :: onAuthStateChanged");
-      setLoaded(true);
+    const { auth } = firebase;
+    const user$ = new Observable<firebase.User | null>((observer) =>
+      auth.onAuthStateChanged((userInfo) => observer.next(userInfo))
+    ).pipe(
+      switchMap((userInfo) => authService.createUserProfileDocument(userInfo)),
+      switchMap((userRef) =>
+        userRef
+          ? new Observable<IUserProfile>((observer) =>
+              userRef.onSnapshot((snapshot) => {
+                const normalizedUser = {
+                  uid: snapshot.id,
+                  ...snapshot.data(),
+                  createdAt: snapshot.data()?.createdAt.toDate(),
+                };
+                return observer.next(normalizedUser as IUserProfile);
+              })
+            )
+          : of(null)
+      )
+    );
 
-      const userRef = await authService.createUserProfileDocument(userInfo);
-      if (!userRef) {
-        console.log("AuthProvider :: User Ref nullish :: failed logged out?");
-        setUser(null);
-        return;
+    const subscription = user$.subscribe(
+      (user) => {
+        console.log("user subscription", user);
+        setUser(user);
+        setLoaded(true);
+      },
+      (e) => {
+        setUser(() => {
+          throw e;
+        });
       }
-
-      const userSnapshot = await userRef.get();
-      if (!userSnapshot.exists) {
-        console.log("AuthProvider :: User snapshot doesn't exist :: logout?");
-        setUser(null);
-        return;
-      }
-
-      const normalizedUser = {
-        uid: userSnapshot.id,
-        ...userSnapshot.data(),
-        createdAt: userSnapshot.data()?.createdAt.toDate(),
-      };
-      setUser(normalizedUser as IUserProfile);
-    });
+    );
+    return () => subscription.unsubscribe();
   }, [firebase]);
 
   return (
