@@ -1,0 +1,36 @@
+.navigation {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  background-color: #eeeeee;
+
+  .app-logo-link {
+    padding: 1rem;
+    font-weight: 800;
+    text-decoration: none;
+    font-size: 1.6rem;
+  }
+
+  & ul {
+    display: flex;
+    flex-direction: row;
+
+    & li {
+      list-style: none;
+      padding: 0 0.5rem;
+      width: 5rem;
+      text-align: center;
+
+      & > a {
+        text-decoration: none;
+
+        &:hover {
+          color: darkblue;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}

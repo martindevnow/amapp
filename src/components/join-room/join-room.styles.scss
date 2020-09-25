@@ -1,0 +1,23 @@
+form {
+  & input {
+    border: 1px solid lightgray;
+    padding: 0.5rem 1rem;
+    width: 15rem;
+  }
+  & button {
+    padding: 0.5rem 1rem;
+    border: 1px solid lightgray;
+  }
+}
+
+.inline-form {
+  & input {
+    border: 1px solid lightgray;
+    padding: 0.5rem 1rem;
+    width: 15rem;
+  }
+  & button {
+    padding: 0.5rem 1rem;
+    border: 1px solid lightgray;
+  }
+}
