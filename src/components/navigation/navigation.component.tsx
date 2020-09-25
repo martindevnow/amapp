@@ -1,18 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 
 import * as ROUTES from "../../constants/routes";
+import AuthContext from "../../services/auth/auth.context";
 import SignOutButton from "../sign-out/sign-out.component";
 import "./navigation.styles.scss";
 
-const Navigation = ({ authUser }: { authUser: any }) => (
-  <nav className="navigation">
-    <Link to="/" className="app-logo-link">
-      AMApp
-    </Link>
-    {authUser ? <NavigationAuth /> : <NavigationNonAuth />}
-  </nav>
-);
+const Navigation = () => {
+  const { user } = useContext(AuthContext);
+  return (
+    <nav className="navigation">
+      <Link to="/" className="app-logo-link">
+        AMApp
+      </Link>
+      {user ? <NavigationAuth /> : <NavigationNonAuth />}
+    </nav>
+  );
+};
 
 const NavigationAuth = () => (
   <ul>

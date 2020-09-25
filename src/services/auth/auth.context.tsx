@@ -1,5 +1,5 @@
 import React from "react";
-import authService, { AuthService, IUserProfile } from "./auth-service.class";
+import authService, { AuthService, IUserProfile } from "./auth.service";
 
 const INITIAL = {
   authService: authService,

@@ -4,7 +4,7 @@ import "firebase/firestore";
 
 import { firebaseConfig } from "./firebase.config";
 
-export class Firebase {
+export class FirebaseService {
   public auth: firebase.auth.Auth;
   public db: firebase.firestore.Firestore;
 
@@ -19,5 +19,5 @@ export class Firebase {
   decrement = app.firestore.FieldValue.increment(-1);
 }
 
-const firebase = new Firebase();
+const firebase = new FirebaseService();
 export default firebase;

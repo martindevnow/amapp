@@ -7,7 +7,7 @@ import "./join-room.styles.scss";
 const JoinRoom = () => {
   const [roomId, setRoomId] = useState("");
   const history = useHistory();
-  const onSubmit = (e: any) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     history.push(ROUTES.ROOM_BY_ID(roomId));
   };

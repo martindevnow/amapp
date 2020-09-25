@@ -1,11 +1,11 @@
-import firebase, { Firebase } from "../firebase/firebase.class";
+import firebase, { FirebaseService } from "../firebase/firebase.service";
 
 export interface IUserProfile {
   uid: string;
   email: string;
   photoURL?: string;
   displayName?: string;
-  createdAt: any;
+  createdAt: Date;
   roles?: {
     member: boolean;
     moderator: boolean;
@@ -16,10 +16,12 @@ export interface IUserProfile {
 export class AuthService {
   private auth: firebase.auth.Auth;
   private db: firebase.firestore.Firestore;
+  public user: IUserProfile | null;
 
-  constructor(private firebase: Firebase) {
+  constructor(private firebase: FirebaseService) {
     this.auth = firebase.auth;
     this.db = firebase.db;
+    this.user = null;
   }
 
   userProfileRef = (uid: string) => this.db.doc(`users/${uid}`);
@@ -50,32 +52,37 @@ export class AuthService {
     this.auth.createUserWithEmailAndPassword(email, password);
 
   createUserProfileDocument = async (
-    user: any, //firebase.auth.User,
+    user: firebase.User | null,
     additionalData?: { displayName: string }
   ) => {
-    if (!user) return;
+    if (!user) {
+      this.user = user;
+      return user;
+    }
 
     try {
       // Get reference to User Profile Data using Auth UID
-      const userRef = this.db.doc(`users/${user.uid}`);
+      const userRef = this.userProfileRef(user.uid);
 
       const snapshot = await userRef.get();
-      if (!snapshot.exists) {
-        const createdAt = new Date();
-
-        const data: IUserProfile = {
-          uid: user.uid,
-          email: user.email as string,
-          createdAt,
-          roles: {
-            member: true,
-            moderator: false,
-            admin: false,
-          },
-          ...additionalData,
-        };
-        await userRef.set(data);
+      if (snapshot.exists) {
+        return userRef;
       }
+
+      const createdAt = new Date();
+      const profile: IUserProfile = {
+        uid: user.uid,
+        email: user.email as string,
+        createdAt,
+        roles: {
+          member: true,
+          moderator: false,
+          admin: false,
+        },
+        ...additionalData,
+      };
+      await userRef.set(profile);
+      this.user = profile;
     } catch (error) {
       console.error(error);
     }

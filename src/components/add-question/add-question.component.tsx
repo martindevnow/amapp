@@ -18,7 +18,9 @@ const AddQuestionForm: FunctionComponent<AddQuestionFormProps> = ({
   const [title, setTitle] = useState("");
   const [anonymous, setAnonymous] = useState(true);
 
-  const onSubmit = async (e: any) => {
+  const onSubmit = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     e.preventDefault();
     const userId = user?.uid || "TODO";
     if (!title) {

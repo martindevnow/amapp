@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import FirebaseContext from "./firebase.context";
-import firebase from "../../services/firebase/firebase.class";
+import firebase from "./firebase.service";
 
 const FirebaseProvider: FunctionComponent = (props) => {
   return (

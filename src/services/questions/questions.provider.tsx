@@ -19,6 +19,7 @@ export interface QuestionsService {
 
 interface QuestionsContextValue {
   questions: IQuestion[];
+  loaded: boolean;
   questionsService: QuestionsService;
 }
 
@@ -26,6 +27,7 @@ export const QuestionsContext = React.createContext<
   Partial<QuestionsContextValue>
 >({
   questions: [],
+  loaded: false,
 });
 
 const QuestionsProvider: FunctionComponent<QuestionsProviderProps> = ({
@@ -34,6 +36,7 @@ const QuestionsProvider: FunctionComponent<QuestionsProviderProps> = ({
 }) => {
   const firebase = useContext(FirebaseContext);
   const { user, authService } = useContext(AuthContext);
+  const [loaded, setLoaded] = useState<boolean>(false);
 
   const [questions, setQuestions] = useState<IQuestion[]>([]);
 
@@ -46,19 +49,23 @@ const QuestionsProvider: FunctionComponent<QuestionsProviderProps> = ({
         const questions = qs.docs.map((doc) => ({
           id: doc.id,
           ...(doc.data() as IQuestionRecord),
+          createdAt: doc.data().createdAt.toDate(),
         }));
         setQuestions(questions);
+        setLoaded(true);
       });
   }, [firebase, roomId]);
 
   const askQuestion = async (question: IQuestionRecord) => {
     // TODO: Add ACL layer, here?
     console.log("askQuestionInRoom", { roomId }, { user: user });
+    // TODO: Generate CreatedAt on the Backend
+    const createdAt = new Date();
     const questionRef = firebase.db
       .collection("rooms")
       .doc(roomId)
       .collection("questions")
-      .add(question);
+      .add({ ...question, createdAt });
     const questionAskedSnapshot = await (await questionRef).get();
     const questionId = questionAskedSnapshot.id;
 
@@ -105,6 +112,7 @@ const QuestionsProvider: FunctionComponent<QuestionsProviderProps> = ({
     <QuestionsContext.Provider
       value={{
         questions,
+        loaded,
         questionsService: { askQuestion, upVoteQuestion },
       }}
     >

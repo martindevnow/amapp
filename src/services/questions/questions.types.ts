@@ -8,4 +8,5 @@ export interface IQuestionRecord {
 
 export interface IQuestion extends IQuestionRecord {
   id: string;
+  createdAt: Date;
 }

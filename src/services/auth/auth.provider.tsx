@@ -5,7 +5,7 @@ import React, {
   useState,
 } from "react";
 import FirebaseContext from "../firebase/firebase.context";
-import authService, { IUserProfile } from "./auth-service.class";
+import authService, { IUserProfile } from "./auth.service";
 import AuthContext from "./auth.context";
 
 const AuthProvider: FunctionComponent = (props) => {
@@ -29,6 +29,7 @@ const AuthProvider: FunctionComponent = (props) => {
   useEffect(() => {
     console.log("AuthProvider :: Initializing useEffect");
     return firebase.auth.onAuthStateChanged(async (userInfo) => {
+      console.log("AuthProvider :: onAuthStateChanged");
       setLoaded(true);
 
       const userRef = await authService.createUserProfileDocument(userInfo);
@@ -42,18 +43,20 @@ const AuthProvider: FunctionComponent = (props) => {
       if (!userSnapshot.exists) {
         console.log("AuthProvider :: User snapshot doesn't exist :: logout?");
         setUser(null);
-      } else {
-        const normalizedUser = {
-          uid: userSnapshot.id,
-          ...userSnapshot.data(),
-        };
-        setUser(normalizedUser as IUserProfile);
+        return;
       }
+
+      const normalizedUser = {
+        uid: userSnapshot.id,
+        ...userSnapshot.data(),
+        createdAt: userSnapshot.data()?.createdAt.toDate(),
+      };
+      setUser(normalizedUser as IUserProfile);
     });
   }, [firebase]);
 
   return (
-    <AuthContext.Provider value={{ user, loaded, authService: authService }}>
+    <AuthContext.Provider value={{ user, loaded, authService }}>
       {props.children}
     </AuthContext.Provider>
   );

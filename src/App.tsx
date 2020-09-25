@@ -1,10 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import * as ROUTES from "./constants/routes";
 
 import "./App.scss";
-import FirebaseContext from "./services/firebase/firebase.context";
-
-import { useAuthState } from "react-firebase-hooks/auth";
 import Navigation from "./components/navigation/navigation.component";
 import { Route, BrowserRouter as Router } from "react-router-dom";
 import SignUpPage from "./components/sign-up/sign-up.component";
@@ -15,13 +12,10 @@ import RoomPage from "./components/room/room.component";
 import LobbyPage from "./components/lobby/lobby.component";
 
 function App() {
-  const fb = useContext(FirebaseContext);
-
-  const [user] = useAuthState(fb.auth);
   return (
     <Router>
       <div>
-        <Navigation authUser={user} />
+        <Navigation />
         <main className="app-main">
           <Route exact path={ROUTES.LANDING} component={LandingPage} />
           <Route path={ROUTES.SIGN_UP} component={SignUpPage} />

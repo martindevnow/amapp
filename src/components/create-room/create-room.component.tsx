@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { IRoomRecord } from "../room/room.types";
+import { IRoomRecord } from "../../services/rooms/rooms.types";
 import { useHistory } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
 import {
@@ -13,7 +13,7 @@ const CreateRoomForm = () => {
   const { roomsService } = useContext(RoomsContext);
   const history = useHistory();
 
-  const onSubmit = async (e: any) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const room: IRoomRecord = {
       name,
