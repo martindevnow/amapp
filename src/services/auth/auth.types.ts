@@ -5,7 +5,7 @@ export interface IUserProfile {
   email: string;
   photoURL?: string;
   displayName?: string;
-  createdAt: Date;
+  createdAt: firebase.firestore.Timestamp | Date;
   roles: {
     [key in AclRoles]: boolean;
   };

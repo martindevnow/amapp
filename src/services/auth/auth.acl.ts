@@ -29,6 +29,9 @@ export enum AclActions {
   DELETE_ROOM = "DELETE_ROOM",
 
   ASK_QUESTION = "ASK_QUESTION",
+  DELETE_QUESTION = "DELETE_QUESTION",
+  APPROVE_QUESTION = "APPROVE_QUESTION",
+  UP_VOTE_QUESTION = "UP_VOTE_QUESTION",
 }
 
 export type ACL = {
@@ -40,5 +43,8 @@ export const DEFAULT_ACL: ACL = {
   [AclActions.LIST_ROOMS]: AclEveryone,
   [AclActions.ARCHIVE_ROOM]: AclEveryone,
   [AclActions.DELETE_ROOM]: AclEveryone,
+  [AclActions.UP_VOTE_QUESTION]: AclMembersOnly,
   [AclActions.ASK_QUESTION]: AclMembersOnly,
+  [AclActions.DELETE_QUESTION]: AclMembersOnly,
+  [AclActions.APPROVE_QUESTION]: AclMembersOnly,
 };

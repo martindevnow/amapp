@@ -1,10 +1,11 @@
 import React, { FunctionComponent } from "react";
+
 import FirebaseContext from "./firebase.context";
-import firebase from "./firebase.service";
+import firebaseService from "./firebase.service";
 
 const FirebaseProvider: FunctionComponent = (props) => {
   return (
-    <FirebaseContext.Provider value={firebase}>
+    <FirebaseContext.Provider value={firebaseService}>
       {props.children}
     </FirebaseContext.Provider>
   );

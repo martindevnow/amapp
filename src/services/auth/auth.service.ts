@@ -1,33 +1,71 @@
-import firebase, { FirebaseService } from "../firebase/firebase.service";
+import firebase from "firebase";
+import firebaseService, { FirebaseService } from "../firebase/firebase.service";
 import { ACL, AclActions, AclRoles, DEFAULT_ACL } from "./auth.acl";
 import { IUserProfile } from "./auth.types";
 
 export class AuthService {
+  private userProfile: IUserProfile | null;
   private auth: firebase.auth.Auth;
   private db: firebase.firestore.Firestore;
-  public user: IUserProfile | null;
+  private storage: firebase.storage.Storage;
 
-  constructor(private firebase: FirebaseService, private acl: ACL) {
-    this.auth = firebase.auth;
-    this.db = firebase.db;
-    this.user = null;
+  constructor(firebaseService: FirebaseService, private acl: ACL) {
+    console.log("AuthService :: Constructor");
+    this.auth = firebaseService.auth;
+    this.db = firebaseService.db;
+    this.storage = firebaseService.storage;
+    this.userProfile = null;
   }
 
   loadAcl = (acl: ACL) => (this.acl = acl);
-  userProfileRef = (uid: string) => this.db.doc(`users/${uid}`);
-  userProfile = (uid: string) => this.userProfileRef(uid).get();
+  userProfileRef = (
+    uid: string
+  ): firebase.firestore.DocumentReference<IUserProfile> =>
+    this.db.doc(`users/${uid}`) as firebase.firestore.DocumentReference<
+      IUserProfile
+    >;
+  userProfileSnapshot = (uid: string) => this.userProfileRef(uid).get();
 
-  canUserDo = (user: IUserProfile | null, aclAction: AclActions) => {
+  normalizeUser = (
+    userProfileSnapshot: firebase.firestore.DocumentSnapshot<IUserProfile>
+  ): IUserProfile => {
+    const normalizedUser = {
+      uid: userProfileSnapshot.id,
+      ...userProfileSnapshot.data(),
+      createdAt:
+        (userProfileSnapshot.data()
+          ?.createdAt as firebase.firestore.Timestamp).toDate() || new Date(),
+    };
+    return normalizedUser as IUserProfile;
+  };
+
+  updateUser = (uid: string, profile: Partial<IUserProfile>) => {
+    return this.userProfileRef(uid).update(profile);
+  };
+
+  saveUserProfilePic = (uid: string, file: File) => {
+    return this.storage
+      .ref()
+      .child("user-profiles")
+      .child(uid)
+      .child(file.name)
+      .put(file)
+      .then((resp) => resp.ref.getDownloadURL())
+      .then((photoURL) => this.userProfileRef(uid).update({ photoURL }));
+  };
+
+  canUserDo = (aclAction: AclActions, userProfile?: IUserProfile | null) => {
     const reqRoles = this.acl[aclAction];
+    userProfile = userProfile || this.userProfile;
     if (!reqRoles || !reqRoles.length) {
       return false;
     }
-    if (user === null) {
+    if (!(userProfile || this.userProfile)) {
       return reqRoles.includes(AclRoles.GUEST_ROLE);
     }
     return (
       reqRoles.includes(AclRoles.GUEST_ROLE) ||
-      reqRoles.some((role) => user.roles[role])
+      reqRoles.some((role) => (userProfile as IUserProfile).roles[role])
     );
   };
 
@@ -58,10 +96,10 @@ export class AuthService {
   createUserProfileDocument = async (
     user: firebase.User | null,
     additionalData?: { displayName: string }
-  ) => {
+  ): Promise<firebase.firestore.DocumentReference<IUserProfile> | null> => {
     if (!user) {
-      this.user = user;
-      return user;
+      this.userProfile = null;
+      return null;
     }
 
     try {
@@ -86,8 +124,8 @@ export class AuthService {
         },
         ...additionalData,
       };
+      this.userProfile = profile;
       await userRef.set(profile);
-      this.user = profile;
     } catch (error) {
       console.error(error);
     }
@@ -96,5 +134,5 @@ export class AuthService {
   };
 }
 
-const authService = new AuthService(firebase, DEFAULT_ACL);
+const authService = new AuthService(firebaseService, DEFAULT_ACL);
 export default authService;

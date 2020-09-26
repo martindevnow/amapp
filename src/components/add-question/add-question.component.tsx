@@ -1,11 +1,12 @@
 import React, { useState, FunctionComponent, useContext } from "react";
 
-import "./add-question.styles.scss";
 import { QuestionsContext } from "../../services/questions/questions.provider";
 import AuthContext from "../../services/auth/auth.context";
 import { IQuestionRecord } from "../../services/questions/questions.types";
 import Button from "../ui/button/button.component";
 import Input from "../ui/input/input.component";
+
+import "./add-question.styles.scss";
 
 interface AddQuestionFormProps {
   roomId: string;
@@ -33,7 +34,10 @@ const AddQuestionForm: FunctionComponent<AddQuestionFormProps> = ({
       title,
       anonymous,
       answered: false,
-      authorId: userId,
+      author: {
+        uid: userId,
+        name: anonymous ? "" : user?.displayName || "",
+      },
       upVotes: 1,
     };
     // TODO: Handle Possible Errors here?

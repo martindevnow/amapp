@@ -1,4 +1,5 @@
 import React from "react";
+
 import JoinRoom from "../join-room/join-room.component";
 
 const LandingPage = () => {

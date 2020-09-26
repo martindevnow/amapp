@@ -1,15 +1,16 @@
 import React from "react";
-import * as ROUTES from "./constants/routes";
-
-import "./App.scss";
-import Navigation from "./components/navigation/navigation.component";
 import { Route, BrowserRouter as Router } from "react-router-dom";
+
+import * as ROUTES from "./constants/routes";
+import Navigation from "./components/navigation/navigation.component";
 import SignUpPage from "./components/sign-up/sign-up.component";
 import SignInPage from "./components/sign-in/sign-in.component";
 import LandingPage from "./components/landing/landing.component";
 import HomePage from "./components/home/home.component";
 import RoomPage from "./components/room/room.component";
 import LobbyPage from "./components/lobby/lobby.component";
+
+import "./App.scss";
 
 function App() {
   return (

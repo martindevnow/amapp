@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
-import { IRoomRecord } from "../../services/rooms/rooms.types";
 import { useHistory } from "react-router-dom";
+
+import { IRoomRecord } from "../../services/rooms/rooms.types";
 import * as ROUTES from "../../constants/routes";
 import {
   RoomsContext,

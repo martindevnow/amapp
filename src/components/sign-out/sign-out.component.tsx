@@ -1,8 +1,10 @@
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
+
 import * as ROUTES from "../../constants/routes";
 import AuthContext from "../../services/auth/auth.context";
 import Button from "../ui/button/button.component";
+
 import "./sign-out.styles.scss";
 
 const SignOutButton = () => {

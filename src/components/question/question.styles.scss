@@ -1,8 +1,9 @@
 .question {
   display: flex;
   width: 100%;
+  border: 1px solid lightgray;
+
   & .question-upvote-count {
-    border: 1px solid lightgray;
     width: 3rem;
     height: 3rem;
     display: flex;
@@ -10,21 +11,22 @@
     justify-content: center;
   }
   & .question-title {
-    border: 1px solid lightgray;
     width: 100%;
-    display: flex;
-    justify-content: flex-start;
     padding-left: 1rem;
-    align-items: center;
-    height: 3rem;
   }
   & button {
     width: 3rem;
     height: 3rem;
-    border: 1px solid lightgray;
 
     &.has-voted {
       background-color: lightgreen;
     }
   }
+}
+.question.deleted {
+  display: none;
+}
+
+.question.unapproved {
+  background-color: orange;
 }

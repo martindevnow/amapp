@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 
+import * as ROUTES from "../../constants/routes";
 import Can from "../../hoc/can.component";
 import { AclActions } from "../../services/auth/auth.acl";
 import { RoomsContext } from "../../services/rooms/rooms.provider";
 import CreateRoom from "../create-room/create-room.component";
 import JoinRoom from "../join-room/join-room.component";
-import * as ROUTES from "../../constants/routes";
 
 const LobbyPage = () => {
   const { rooms } = useContext(RoomsContext);

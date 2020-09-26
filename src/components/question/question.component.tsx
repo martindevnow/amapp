@@ -4,16 +4,20 @@ import React, {
   useEffect,
   useState,
 } from "react";
+import Can from "../../hoc/can.component";
+import { AclActions } from "../../services/auth/auth.acl";
 
-import "./question.styles.scss";
 import AuthContext from "../../services/auth/auth.context";
-import {
-  QuestionsContext,
-  QuestionsService,
-} from "../../services/questions/questions.provider";
+import { QuestionsContext } from "../../services/questions/questions.provider";
+import { QuestionsService } from "../../services/questions/questions.service";
 import { IQuestion } from "../../services/questions/questions.types";
 import Button from "../ui/button/button.component";
-import AddIcon from "../ui/icon/add-icon.component";
+import CheckIcon from "../ui/icon/check-icon.component";
+import UpVoteIcon from "../ui/icon/up-vote-icon.component";
+
+import "./question.styles.scss";
+import TrashIcon from "../ui/icon/trash-icon.component";
+import EyeSlashIcon from "../ui/icon/eye-slash-icon.component";
 
 interface QuestionProps {
   roomId: string;
@@ -30,7 +34,7 @@ const Question: FunctionComponent<QuestionProps> = ({ roomId, question }) => {
   useEffect(() => {
     const run = async () => {
       const voted = await authService.hasVotedForQuestion(question.id, userId);
-      setHasVoted(voted || question.authorId === userId);
+      setHasVoted(voted || question.author.uid === userId);
     };
     run();
   }, [authService, question, userId]);
@@ -42,13 +46,51 @@ const Question: FunctionComponent<QuestionProps> = ({ roomId, question }) => {
       .catch((e) => alert(JSON.stringify(e)));
   };
 
+  const approveQuestion = async () => {
+    await questionsService?.approveQuestion(question.id);
+  };
+
+  const deleteQuestion = async () => {
+    await questionsService?.deleteQuestion(question.id);
+  };
+
+  const questionClass: string = new Array<string>()
+    .concat(question.anonymous ? ["anonymous"] : [])
+    .concat(question.answered ? ["answered"] : ["unanswered"])
+    .concat(question.approved ? ["approved"] : ["unapproved"])
+    .concat(question.deleted ? ["deleted"] : [])
+    .join(" ");
+
   return (
-    <div className="question">
-      <span className="question-upvote-count">{question.upVotes}</span>
-      <span className="question-title">{question.title}</span>
-      <Button className={hasVoted ? "has-voted" : ""} onClick={upVote}>
-        <AddIcon />
-      </Button>
+    <div className={`question ${questionClass}`}>
+      {!question.approved ? (
+        <Can aclAction={AclActions.APPROVE_QUESTION}>
+          <Button onClick={approveQuestion}>
+            <CheckIcon fill="green" />
+          </Button>
+        </Can>
+      ) : (
+        <Button className="question-upvote-button" onClick={upVote}>
+          <UpVoteIcon fill={hasVoted ? "red" : "black"} />
+        </Button>
+      )}
+
+      <span className="question-upvote-count">
+        {question.approved ? question.upVotes : "..."}
+      </span>
+      <p className="question-title">{question.title}</p>
+      {question.anonymous ? (
+        <EyeSlashIcon fill="black" />
+      ) : (
+        <span>{question.author.name}</span>
+      )}
+      {!question.deleted && (
+        <Can aclAction={AclActions.DELETE_QUESTION}>
+          <Button onClick={deleteQuestion}>
+            <TrashIcon fill="red" />
+          </Button>
+        </Can>
+      )}
     </div>
   );
 };

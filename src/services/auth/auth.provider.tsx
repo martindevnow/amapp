@@ -4,16 +4,17 @@ import React, {
   useEffect,
   useState,
 } from "react";
+import { Observable, of } from "rxjs";
+import { switchMap } from "rxjs/operators";
+
 import FirebaseContext from "../firebase/firebase.context";
 import authService from "./auth.service";
 import AuthContext from "./auth.context";
 import { ACL, DEFAULT_ACL } from "./auth.acl";
 import { IUserProfile } from "./auth.types";
-import { Observable, of } from "rxjs";
-import { switchMap } from "rxjs/operators";
 
 const AuthProvider: FunctionComponent = (props) => {
-  const firebase = useContext(FirebaseContext);
+  const firebaseService = useContext(FirebaseContext);
   const [user, setUser] = useState<IUserProfile | null>(null);
   const [loaded, setLoaded] = useState<boolean>(false);
 
@@ -22,24 +23,25 @@ const AuthProvider: FunctionComponent = (props) => {
   authService.loadAcl(acl);
 
   useEffect(() => {
-    const { auth } = firebase;
+    const { auth } = firebaseService;
     const user$ = new Observable<firebase.User | null>((observer) =>
       auth.onAuthStateChanged((userInfo) => observer.next(userInfo))
     ).pipe(
       switchMap((userInfo) => authService.createUserProfileDocument(userInfo)),
-      switchMap((userRef) =>
-        userRef
-          ? new Observable<IUserProfile>((observer) =>
-              userRef.onSnapshot((snapshot) => {
-                const normalizedUser = {
-                  uid: snapshot.id,
-                  ...snapshot.data(),
-                  createdAt: snapshot.data()?.createdAt.toDate(),
-                };
-                return observer.next(normalizedUser as IUserProfile);
-              })
-            )
-          : of(null)
+      switchMap(
+        (userRef: firebase.firestore.DocumentReference<IUserProfile> | null) =>
+          userRef
+            ? new Observable<IUserProfile>((observer) =>
+                userRef.onSnapshot(
+                  (
+                    snapshot: firebase.firestore.DocumentSnapshot<IUserProfile>
+                  ) => {
+                    const normalizedUser = authService.normalizeUser(snapshot);
+                    return observer.next(normalizedUser as IUserProfile);
+                  }
+                )
+              )
+            : of(null)
       )
     );
 
@@ -56,7 +58,7 @@ const AuthProvider: FunctionComponent = (props) => {
       }
     );
     return () => subscription.unsubscribe();
-  }, [firebase]);
+  }, [firebaseService]);
 
   return (
     <AuthContext.Provider value={{ user, loaded, authService }}>
