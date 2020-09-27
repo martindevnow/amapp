@@ -1,23 +1,21 @@
-import React, {
-  FunctionComponent,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+/** @jsx jsx */
+import { FunctionComponent, useContext, useEffect, useState } from "react";
+import { css, jsx } from "@emotion/core";
+
 import Can from "../../hoc/can.component";
+
 import { AclActions } from "../../services/auth/auth.acl";
 
 import AuthContext from "../../services/auth/auth.context";
 import { QuestionsContext } from "../../services/questions/questions.provider";
 import { QuestionsService } from "../../services/questions/questions.service";
 import { IQuestion } from "../../services/questions/questions.types";
-import Button from "../ui/button/button.component";
-import CheckIcon from "../ui/icon/check-icon.component";
-import UpVoteIcon from "../ui/icon/up-vote-icon.component";
 
-import "./question.styles.scss";
-import TrashIcon from "../ui/icon/trash-icon.component";
-import EyeSlashIcon from "../ui/icon/eye-slash-icon.component";
+import { ReactComponent as CheckIcon } from "../../assets/fa/solid/check.svg";
+import { ReactComponent as UpVoteIcon } from "../../assets/fa/solid/arrow-up.svg";
+import { ReactComponent as TrashIcon } from "../../assets/fa/solid/trash-alt.svg";
+import { ReactComponent as EyeSlashIcon } from "../../assets/fa/solid/eye-slash.svg";
+import { IconButton } from "../ui/button/button.component";
 
 interface QuestionProps {
   roomId: string;
@@ -54,41 +52,91 @@ const Question: FunctionComponent<QuestionProps> = ({ roomId, question }) => {
     await questionsService?.deleteQuestion(question.id);
   };
 
-  const questionClass: string = new Array<string>()
-    .concat(question.anonymous ? ["anonymous"] : [])
-    .concat(question.answered ? ["answered"] : ["unanswered"])
-    .concat(question.approved ? ["approved"] : ["unapproved"])
-    .concat(question.deleted ? ["deleted"] : [])
-    .join(" ");
+  const backgroundColor = question.approved ? "white" : "#ffbbbb";
 
   return (
-    <div className={`question ${questionClass}`}>
+    <div
+      css={css`
+        width: 100%;
+        display: flex;
+        border: 1px solid lightgray;
+        align-items: center;
+        background-color: ${backgroundColor};
+      `}
+    >
       {!question.approved ? (
         <Can aclAction={AclActions.APPROVE_QUESTION}>
-          <Button onClick={approveQuestion}>
-            <CheckIcon fill="green" />
-          </Button>
+          <IconButton
+            css={css`
+              min-width: 3rem;
+            `}
+            onClick={approveQuestion}
+          >
+            <CheckIcon width="1.5rem" height="1.5rem" fill="green" />
+          </IconButton>
         </Can>
       ) : (
-        <Button className="question-upvote-button" onClick={upVote}>
-          <UpVoteIcon fill={hasVoted ? "red" : "black"} />
-        </Button>
+        <IconButton
+          css={css`
+            min-width: 3rem;
+          `}
+          onClick={upVote}
+        >
+          <UpVoteIcon
+            width="1.5rem"
+            height="1.5rem"
+            fill={hasVoted ? "red" : "black"}
+          />
+        </IconButton>
       )}
 
-      <span className="question-upvote-count">
+      <span
+        css={css`
+          width: 3rem;
+          min-width: 3rem;
+          text-align: center;
+        `}
+      >
         {question.approved ? question.upVotes : "..."}
       </span>
-      <p className="question-title">{question.title}</p>
-      {question.anonymous ? (
-        <EyeSlashIcon fill="black" />
-      ) : (
-        <span>{question.author.name}</span>
-      )}
+      <div
+        css={css`
+          flex-grow: 2;
+          padding: 0.5rem;
+        `}
+      >
+        <p>{question.title}</p>
+        {question.anonymous ? (
+          <EyeSlashIcon
+            css={css`
+              float: right;
+            `}
+            width="1.5rem"
+            height="1.5rem"
+            fill="#333333"
+          />
+        ) : (
+          <span
+            css={css`
+              float: right;
+            `}
+          >
+            {question.author.name}
+          </span>
+        )}
+      </div>
+
       {!question.deleted && (
         <Can aclAction={AclActions.DELETE_QUESTION}>
-          <Button onClick={deleteQuestion}>
-            <TrashIcon fill="red" />
-          </Button>
+          <IconButton
+            css={css`
+              justify-self: flex-end;
+              min-width: 3rem;
+            `}
+            onClick={deleteQuestion}
+          >
+            <TrashIcon width="1.5rem" height="1.5rem" fill="red" />
+          </IconButton>
         </Can>
       )}
     </div>

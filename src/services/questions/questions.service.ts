@@ -58,6 +58,9 @@ export class QuestionsService {
     const user = this.firebaseService.auth.currentUser;
     if (!this.authService.canUserDo(AclActions.UP_VOTE_QUESTION)) {
       // TODO: Throw error here?
+      console.error(
+        "User is not allowed to UpVote.. this should not have been triggered..."
+      );
       return false;
     }
 

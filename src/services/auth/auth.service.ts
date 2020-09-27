@@ -36,7 +36,8 @@ export class AuthService {
         (userProfileSnapshot.data()
           ?.createdAt as firebase.firestore.Timestamp).toDate() || new Date(),
     };
-    return normalizedUser as IUserProfile;
+    this.userProfile = normalizedUser as IUserProfile;
+    return this.userProfile;
   };
 
   updateUser = (uid: string, profile: Partial<IUserProfile>) => {
@@ -57,6 +58,11 @@ export class AuthService {
   canUserDo = (aclAction: AclActions, userProfile?: IUserProfile | null) => {
     const reqRoles = this.acl[aclAction];
     userProfile = userProfile || this.userProfile;
+    console.log(
+      "AuthService :: canUserDo(aclAction, userProfile)",
+      { aclAction },
+      { userProfile }
+    );
     if (!reqRoles || !reqRoles.length) {
       return false;
     }

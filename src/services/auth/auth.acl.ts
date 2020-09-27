@@ -43,6 +43,7 @@ export const DEFAULT_ACL: ACL = {
   [AclActions.LIST_ROOMS]: AclEveryone,
   [AclActions.ARCHIVE_ROOM]: AclEveryone,
   [AclActions.DELETE_ROOM]: AclEveryone,
+
   [AclActions.UP_VOTE_QUESTION]: AclMembersOnly,
   [AclActions.ASK_QUESTION]: AclMembersOnly,
   [AclActions.DELETE_QUESTION]: AclMembersOnly,

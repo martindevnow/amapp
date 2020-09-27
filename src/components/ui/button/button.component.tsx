@@ -6,4 +6,15 @@ const Button = styled("button")`
   cursor: pointer;
 `;
 
+export const IconButton = styled("button")`
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  background: none;
+`;
+
 export default Button;
