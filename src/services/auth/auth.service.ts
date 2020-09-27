@@ -1,6 +1,13 @@
 import firebase from "firebase";
 import firebaseService, { FirebaseService } from "../firebase/firebase.service";
-import { ACL, AclActions, AclRoles, DEFAULT_ACL } from "./auth.acl";
+import {
+  ACL,
+  AclActions,
+  AclRoleMap,
+  AclRoles,
+  DEFAULT_ACL,
+  GuestRoleMap,
+} from "./auth.acl";
 import { IUserProfile } from "./auth.types";
 
 export class AuthService {
@@ -18,12 +25,14 @@ export class AuthService {
   }
 
   loadAcl = (acl: ACL) => (this.acl = acl);
+
   userProfileRef = (
     uid: string
   ): firebase.firestore.DocumentReference<IUserProfile> =>
     this.db.doc(`users/${uid}`) as firebase.firestore.DocumentReference<
       IUserProfile
     >;
+
   userProfileSnapshot = (uid: string) => this.userProfileRef(uid).get();
 
   normalizeUser = (
@@ -55,29 +64,29 @@ export class AuthService {
       .then((photoURL) => this.userProfileRef(uid).update({ photoURL }));
   };
 
-  canUserDo = (aclAction: AclActions, userProfile?: IUserProfile | null) => {
+  canUserDo = (aclAction: AclActions) => {
     const reqRoles = this.acl[aclAction];
-    userProfile = userProfile || this.userProfile;
-    console.log(
-      "AuthService :: canUserDo(aclAction, userProfile)",
-      { aclAction },
-      { userProfile }
-    );
+    const roles: AclRoleMap = this.userProfile?.roles || GuestRoleMap;
+
     if (!reqRoles || !reqRoles.length) {
+      console.error(
+        `This action was not registered in the system. Default to hide. Check action ${aclAction} `
+      );
       return false;
     }
-    if (!(userProfile || this.userProfile)) {
-      return reqRoles.includes(AclRoles.GUEST_ROLE);
-    }
-    return (
-      reqRoles.includes(AclRoles.GUEST_ROLE) ||
-      reqRoles.some((role) => (userProfile as IUserProfile).roles[role])
-    );
+    return reqRoles.some((role) => !!roles[role]);
   };
+
+  // TODO: Add separate resolvers for Auth => ACL => Route (guard)
+  // canUserVisit = (
+  //   path: string | string[] | undefined,
+  //   params: any
+  // ): boolean => {};
 
   hasVotedForQuestion = async (questionId: string, userId: string) => {
     if (userId === "TODO") {
-      console.log("user ID was not loaded yet");
+      console.warn("Guests cannot vote.");
+      return false;
     }
     const hasVotedRef = this.userProfileRef(userId)
       .collection("votes")

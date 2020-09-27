@@ -15,6 +15,8 @@ import { ReactComponent as CheckIcon } from "../../assets/fa/solid/check.svg";
 import { ReactComponent as UpVoteIcon } from "../../assets/fa/solid/arrow-up.svg";
 import { ReactComponent as TrashIcon } from "../../assets/fa/solid/trash-alt.svg";
 import { ReactComponent as EyeSlashIcon } from "../../assets/fa/solid/eye-slash.svg";
+import { ReactComponent as CommentSlashIcon } from "../../assets/fa/solid/comment-slash.svg";
+import { ReactComponent as CommentIcon } from "../../assets/fa/solid/comment.svg";
 import { IconButton } from "../ui/button/button.component";
 
 interface QuestionProps {
@@ -52,8 +54,17 @@ const Question: FunctionComponent<QuestionProps> = ({ roomId, question }) => {
     await questionsService?.deleteQuestion(question.id);
   };
 
-  const backgroundColor = question.approved ? "white" : "#ffbbbb";
+  const answerQuestion = async () => {
+    await questionsService?.answerQuestion(question.id);
+  };
 
+  const unanswerQuestion = async () => {
+    await questionsService?.unanswerQuestion(question.id);
+  };
+
+  const backgroundColor = question.approved ? "white" : "#ffbbbb";
+  const upVotedColor = "#ff4400";
+  const upVoteColor = hasVoted ? upVotedColor : "#666";
   return (
     <div
       css={css`
@@ -79,14 +90,15 @@ const Question: FunctionComponent<QuestionProps> = ({ roomId, question }) => {
         <IconButton
           css={css`
             min-width: 3rem;
+            :hover {
+              & svg {
+                fill: ${upVotedColor};
+              }
+            }
           `}
           onClick={upVote}
         >
-          <UpVoteIcon
-            width="1.5rem"
-            height="1.5rem"
-            fill={hasVoted ? "red" : "black"}
-          />
+          <UpVoteIcon width="1.5rem" height="1.5rem" fill={upVoteColor} />
         </IconButton>
       )}
 
@@ -113,7 +125,7 @@ const Question: FunctionComponent<QuestionProps> = ({ roomId, question }) => {
             `}
             width="1.5rem"
             height="1.5rem"
-            fill="#333333"
+            fill="#555"
           />
         ) : (
           <span
@@ -126,6 +138,31 @@ const Question: FunctionComponent<QuestionProps> = ({ roomId, question }) => {
         )}
       </div>
 
+      {!question.answered ? (
+        <Can aclAction={AclActions.ANSWER_QUESTION}>
+          <IconButton
+            css={css`
+              justify-self: flex-end;
+              min-width: 3rem;
+            `}
+            onClick={answerQuestion}
+          >
+            <CommentSlashIcon width="1.5rem" height="1.5rem" fill="green" />
+          </IconButton>
+        </Can>
+      ) : (
+        <Can aclAction={AclActions.ANSWER_QUESTION}>
+          <IconButton
+            css={css`
+              justify-self: flex-end;
+              min-width: 3rem;
+            `}
+            onClick={unanswerQuestion}
+          >
+            <CommentIcon width="1.5rem" height="1.5rem" fill="green" />
+          </IconButton>
+        </Can>
+      )}
       {!question.deleted && (
         <Can aclAction={AclActions.DELETE_QUESTION}>
           <IconButton

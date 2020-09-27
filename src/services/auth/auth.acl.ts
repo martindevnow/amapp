@@ -5,6 +5,17 @@ export enum AclRoles {
   ADMIN_ROLE = "admin",
 }
 
+export type AclRoleMap = {
+  [key in AclRoles]: boolean;
+};
+
+export const GuestRoleMap: AclRoleMap = {
+  [AclRoles.GUEST_ROLE]: true,
+  [AclRoles.MEMBER_ROLE]: false,
+  [AclRoles.MODERATOR_ROLE]: false,
+  [AclRoles.ADMIN_ROLE]: false,
+};
+
 const AclEveryone = [
   AclRoles.GUEST_ROLE,
   AclRoles.MEMBER_ROLE,
@@ -32,6 +43,11 @@ export enum AclActions {
   DELETE_QUESTION = "DELETE_QUESTION",
   APPROVE_QUESTION = "APPROVE_QUESTION",
   UP_VOTE_QUESTION = "UP_VOTE_QUESTION",
+  ANSWER_QUESTION = "ANSWER_QUESTION",
+
+  // Routing
+  VISIT_HOME = "VISIT_HOME",
+  VISIT_ROOM = "VISIT_ROOM",
 }
 
 export type ACL = {
@@ -39,13 +55,21 @@ export type ACL = {
 };
 
 export const DEFAULT_ACL: ACL = {
-  [AclActions.CREATE_ROOM]: AclEveryone,
-  [AclActions.LIST_ROOMS]: AclEveryone,
-  [AclActions.ARCHIVE_ROOM]: AclEveryone,
-  [AclActions.DELETE_ROOM]: AclEveryone,
-
+  // Members
   [AclActions.UP_VOTE_QUESTION]: AclMembersOnly,
   [AclActions.ASK_QUESTION]: AclMembersOnly,
-  [AclActions.DELETE_QUESTION]: AclMembersOnly,
-  [AclActions.APPROVE_QUESTION]: AclMembersOnly,
+  [AclActions.LIST_ROOMS]: AclMembersOnly,
+
+  [AclActions.VISIT_HOME]: AclMembersOnly,
+  [AclActions.VISIT_ROOM]: AclMembersOnly,
+
+  // Moderator or Higher
+  [AclActions.CREATE_ROOM]: AclModeratorsOnly,
+
+  [AclActions.APPROVE_QUESTION]: AclModeratorsOnly,
+  [AclActions.DELETE_QUESTION]: AclModeratorsOnly,
+  [AclActions.ANSWER_QUESTION]: AclModeratorsOnly,
+
+  [AclActions.ARCHIVE_ROOM]: AclAdminsOnly,
+  [AclActions.DELETE_ROOM]: AclAdminsOnly,
 };

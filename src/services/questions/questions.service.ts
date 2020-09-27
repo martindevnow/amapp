@@ -26,6 +26,20 @@ export class QuestionsService {
       .update({ approved: true });
   };
 
+  answerQuestion = async (questionId: string) => {
+    return this._getRoom()
+      .collection("questions")
+      .doc(questionId)
+      .update({ answered: true });
+  };
+
+  unanswerQuestion = async (questionId: string) => {
+    return this._getRoom()
+      .collection("questions")
+      .doc(questionId)
+      .update({ answered: false });
+  };
+
   askQuestion = async (question: IQuestionRecord) => {
     // TODO: Add ACL layer, here?
     console.log(

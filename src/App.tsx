@@ -11,6 +11,8 @@ import RoomPage from "./components/room/room.component";
 import LobbyPage from "./components/lobby/lobby.component";
 
 import "./App.scss";
+import ProtectedRoute from "./hoc/protected-route.component";
+import { AclActions } from "./services/auth/auth.acl";
 
 function App() {
   return (
@@ -21,7 +23,11 @@ function App() {
           <Route exact path={ROUTES.LANDING} component={LandingPage} />
           <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
           <Route path={ROUTES.SIGN_IN} component={SignInPage} />
-          <Route path={ROUTES.HOME} component={HomePage} />
+          <ProtectedRoute
+            action={AclActions.VISIT_HOME}
+            path={ROUTES.HOME}
+            component={HomePage}
+          />
           <Route exact path={ROUTES.LOBBY} component={LobbyPage} />
           <Route path={ROUTES.ROOM} component={RoomPage} />
           {/* <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} /> */}
