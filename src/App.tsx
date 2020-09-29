@@ -1,4 +1,5 @@
-import React from "react";
+/** @jsx jsx */
+import { css, jsx } from "@emotion/core";
 import { Route, BrowserRouter as Router } from "react-router-dom";
 
 import * as ROUTES from "./constants/routes";
@@ -10,7 +11,6 @@ import HomePage from "./components/home/home.component";
 import RoomPage from "./components/room/room.component";
 import LobbyPage from "./components/lobby/lobby.component";
 
-import "./App.scss";
 import ProtectedRoute from "./hoc/protected-route.component";
 import { AclActions } from "./services/auth/auth.acl";
 
@@ -19,7 +19,14 @@ function App() {
     <Router>
       <div>
         <Navigation />
-        <main className="app-main">
+        <main
+          css={css`
+            padding: 0 1rem 1rem;
+            @media (min-width: 420px) {
+              padding: 0 2rem 2rem;
+            }
+          `}
+        >
           <Route exact path={ROUTES.LANDING} component={LandingPage} />
           <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
           <Route path={ROUTES.SIGN_IN} component={SignInPage} />

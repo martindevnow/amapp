@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { css, jsx } from "@emotion/core";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -13,7 +15,12 @@ const JoinRoom = () => {
     history.push(ROUTES.ROOM_BY_ID(roomId));
   };
   return (
-    <form onSubmit={(e) => onSubmit(e)} className="join-room-form">
+    <form
+      css={css`
+        text-align: center;
+      `}
+      onSubmit={(e) => onSubmit(e)}
+    >
       <Input
         type="text"
         name="roomId"

@@ -13,10 +13,6 @@ const LobbyPage = () => {
 
   return (
     <div>
-      <Can aclAction={AclActions.CREATE_ROOM}>
-        <h2>Create a New Room</h2>
-        <CreateRoom />
-      </Can>
       <Can aclAction={AclActions.LIST_ROOMS}>
         <h2>Active Rooms</h2>
         {rooms &&
@@ -26,6 +22,11 @@ const LobbyPage = () => {
             </Link>
           ))}
       </Can>
+      <Can aclAction={AclActions.CREATE_ROOM}>
+        <h2>Create a New Room</h2>
+        <CreateRoom />
+      </Can>
+
       <h2>Join an Open Room</h2>
       <JoinRoom />
     </div>

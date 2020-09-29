@@ -1,34 +1,62 @@
-import React from "react";
-
+/** @jsx jsx */
+import { css, jsx } from "@emotion/core";
+import styled from "@emotion/styled";
 import JoinRoom from "../join-room/join-room.component";
+import Can from "../../hoc/can.component";
+import { AclActions } from "../../services/auth/auth.acl";
+import CreateRoom from "../create-room/create-room.component";
+
+const Paragraph = styled.p`
+  margin-bottom: 1rem;
+`;
 
 const LandingPage = () => {
   return (
-    <>
-      <h1>Welcome to the AMA App (AMApp)</h1>
-      <p>
-        This app serves as a tool for audiences to ask questions of speakers at
-        events. Everyone in the audience is invited to join the room with the ID
-        shared by the speaker.
-      </p>
-      <p>
-        The audience can then submit their own questions, or vote for questions
-        they would like to have answered. These questions can be submitted
-        anonymously. (Spam and inappropriate messages will still be punished.)
-      </p>
-      <p>
-        The speaker will then (hopefully) answer the questions which have the
-        most votes.
-      </p>
-      <p>
-        Once the question has been answered, it can be marked as such by the
-        speaker or moderator to hide is from view so the discussion can move to
-        the next question.
-      </p>
+    <div
+      css={css`
+        width: 100%;
+        margin: 0 auto;
+        @media (min-width: 420px) {
+          width: 80%;
+        }
+      `}
+    >
+      <h1>Ask Me Anything</h1>
+      <Paragraph>
+        In 2009, the sub-reddit <code>r/IAmA</code> was founded on the premise
+        of Asking Me Anything (about a topic or whatnot). Since then, the AMA
+        format has gone on to take the world by storm.
+      </Paragraph>
+      <Paragraph>
+        Join the room for your AMA and submit questions to the speaker. Be sure
+        to see if someone else has already asked your question. You'll have more
+        success "up-voting" their question to gain visibility.
+      </Paragraph>
+      <Paragraph>
+        The speaker will then typically answer the questions which have the most
+        votes. Answered questions can be filtered out to show only outstanding
+        questions of the speaker.
+      </Paragraph>
 
-      <h2>Have a Room ID?</h2>
+      <h2
+        css={css`
+          margin-top: 1.5rem;
+        `}
+      >
+        Have a Room ID?
+      </h2>
       <JoinRoom />
-    </>
+      <Can aclAction={AclActions.CREATE_ROOM}>
+        <h2
+          css={css`
+            margin-top: 1.5rem;
+          `}
+        >
+          Create a new Room{" "}
+        </h2>
+        <CreateRoom />
+      </Can>
+    </div>
   );
 };
 

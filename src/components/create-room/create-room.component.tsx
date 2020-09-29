@@ -1,4 +1,6 @@
-import React, { useState, useContext } from "react";
+/** @jsx jsx */
+import { css, jsx } from "@emotion/core";
+import { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 
 import { IRoomRecord } from "../../services/rooms/rooms.types";
@@ -23,12 +25,15 @@ const CreateRoomForm = () => {
     };
     // TODO: Handle Possible Errors here?
     const newRoomId = await (roomsService as RoomsService).createRoom(room);
-    console.log({ newRoomId });
-
     history.push(ROUTES.ROOM_BY_ID(newRoomId));
   };
   return (
-    <form onSubmit={onSubmit}>
+    <form
+      onSubmit={onSubmit}
+      css={css`
+        text-align: center;
+      `}
+    >
       <Input
         type="text"
         name="title"
@@ -37,7 +42,9 @@ const CreateRoomForm = () => {
         onChange={(e) => setName(e.target.value)}
       />
 
-      <Button type="submit">Create</Button>
+      <Button css={css``} type="submit">
+        Create
+      </Button>
     </form>
   );
 };

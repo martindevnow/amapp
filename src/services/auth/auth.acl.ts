@@ -16,12 +16,12 @@ export const GuestRoleMap: AclRoleMap = {
   [AclRoles.ADMIN_ROLE]: false,
 };
 
-const AclEveryone = [
-  AclRoles.GUEST_ROLE,
-  AclRoles.MEMBER_ROLE,
-  AclRoles.MODERATOR_ROLE,
-  AclRoles.ADMIN_ROLE,
-];
+// const AclEveryone = [
+//   AclRoles.GUEST_ROLE,
+//   AclRoles.MEMBER_ROLE,
+//   AclRoles.MODERATOR_ROLE,
+//   AclRoles.ADMIN_ROLE,
+// ];
 
 const AclMembersOnly = [
   AclRoles.MEMBER_ROLE,

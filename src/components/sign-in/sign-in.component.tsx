@@ -1,4 +1,6 @@
-import React, { useState, useContext, FormEvent } from "react";
+/** @jsx jsx */
+import { css, jsx } from "@emotion/core";
+import { useState, useContext, FormEvent } from "react";
 import { useHistory } from "react-router-dom";
 
 import { SignUpLink } from "../sign-up/sign-up.component";
@@ -40,6 +42,16 @@ export const SignInForm = () => {
 
   return (
     <form onSubmit={onSubmit}>
+      <label
+        htmlFor="email"
+        css={css`
+          display: block;
+          margin-top: 1rem;
+          margin-bottom: 0.2rem;
+        `}
+      >
+        Email
+      </label>
       <Input
         name="email"
         value={email}
@@ -47,6 +59,16 @@ export const SignInForm = () => {
         type="text"
         placeholder="Email Address"
       />
+      <label
+        htmlFor="password"
+        css={css`
+          display: block;
+          margin-top: 1rem;
+          margin-bottom: 0.2rem;
+        `}
+      >
+        Password
+      </label>
       <Input
         name="password"
         value={password}
@@ -54,7 +76,14 @@ export const SignInForm = () => {
         type="password"
         placeholder="Password"
       />
-      <Button disabled={isInvalid} type="submit">
+      <Button
+        css={css`
+          margin-top: 1rem;
+          display: block;
+        `}
+        disabled={isInvalid}
+        type="submit"
+      >
         Sign In
       </Button>
 
@@ -65,7 +94,7 @@ export const SignInForm = () => {
 
 const SignInPage = () => (
   <div>
-    <h1>SignIn</h1>
+    <h1>Sign In</h1>
     <SignInForm />
     <SignUpLink />
   </div>

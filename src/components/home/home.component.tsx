@@ -9,12 +9,10 @@ const HomePage = () => {
 
   return (
     <div>
-      <h1>Home Page</h1>
-      <p>Welcome to your homepage.</p>
+      <h1>Your Profile</h1>
       {user && (
         <>
           <UserProfile />
-
           <EditProfile />
         </>
       )}

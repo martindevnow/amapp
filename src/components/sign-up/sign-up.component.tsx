@@ -1,4 +1,6 @@
-import React, { FormEvent, useContext, useState } from "react";
+/** @jsx jsx */
+import { css, jsx } from "@emotion/core";
+import { FormEvent, useContext, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 
 import * as ROUTES from "../../constants/routes";
@@ -32,15 +34,12 @@ export const SignUpForm = () => {
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log({ displayName, email, passwordOne });
     authService
       .doCreateUserWithEmailAndPassword(email, passwordOne)
       .then((credential) => {
         authService.createUserProfileDocument(
           credential.user as firebase.User,
-          {
-            displayName,
-          }
+          { displayName }
         );
         clearState();
         history.push(ROUTES.HOME);
@@ -52,13 +51,33 @@ export const SignUpForm = () => {
 
   return (
     <form onSubmit={onSubmit}>
+      <label
+        htmlFor="displayName"
+        css={css`
+          display: block;
+          margin-top: 1rem;
+          margin-bottom: 0.2rem;
+        `}
+      >
+        Display Name
+      </label>
       <Input
         name="displayName"
         value={displayName}
         onChange={(e) => setDisplayName(e.target.value)}
         type="text"
-        placeholder="Full Name"
+        placeholder="Display Name"
       />
+      <label
+        htmlFor="email"
+        css={css`
+          display: block;
+          margin-top: 1rem;
+          margin-bottom: 0.2rem;
+        `}
+      >
+        Email
+      </label>
       <Input
         name="email"
         value={email}
@@ -66,6 +85,16 @@ export const SignUpForm = () => {
         type="text"
         placeholder="Email Address"
       />
+      <label
+        htmlFor="passwordOne"
+        css={css`
+          display: block;
+          margin-top: 1rem;
+          margin-bottom: 0.2rem;
+        `}
+      >
+        Password
+      </label>
       <Input
         name="passwordOne"
         value={passwordOne}
@@ -73,6 +102,16 @@ export const SignUpForm = () => {
         type="password"
         placeholder="Password"
       />
+      <label
+        htmlFor="passwordTwo"
+        css={css`
+          display: block;
+          margin-top: 1rem;
+          margin-bottom: 0.2rem;
+        `}
+      >
+        Confirm Password
+      </label>
       <Input
         name="passwordTwo"
         value={passwordTwo}
@@ -80,10 +119,16 @@ export const SignUpForm = () => {
         type="password"
         placeholder="Confirm Password"
       />
-      <Button disabled={isInvalid} type="submit">
+      <Button
+        disabled={isInvalid}
+        type="submit"
+        css={css`
+          display: block;
+          margin-top: 1rem;
+        `}
+      >
         Sign Up
       </Button>
-
       {error && <p>{error.message}</p>}
     </form>
   );

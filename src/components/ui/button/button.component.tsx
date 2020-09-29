@@ -13,8 +13,17 @@ export const IconButton = styled("button")`
   align-items: center;
   justify-content: center;
   width: 3rem;
+  min-width: 3rem;
   height: 3rem;
+  margin: 0.2rem;
   background: none;
+  border-radius: 10px;
+  :hover {
+    background-color: #eee;
+    & svg {
+      fill: #555;
+    }
+  }
 `;
 
 export default Button;

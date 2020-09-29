@@ -33,17 +33,30 @@ export class AuthService {
       IUserProfile
     >;
 
+  authChanged = (user: firebase.User | null) => {
+    if (user === null) {
+      this.userProfile = null;
+      return null;
+    }
+
+    return this.userProfileRef(user.uid);
+  };
+
   userProfileSnapshot = (uid: string) => this.userProfileRef(uid).get();
 
   normalizeUser = (
     userProfileSnapshot: firebase.firestore.DocumentSnapshot<IUserProfile>
   ): IUserProfile => {
+    const userData = userProfileSnapshot.data();
+
     const normalizedUser = {
       uid: userProfileSnapshot.id,
-      ...userProfileSnapshot.data(),
+      ...userData,
       createdAt:
-        (userProfileSnapshot.data()
-          ?.createdAt as firebase.firestore.Timestamp).toDate() || new Date(),
+        (userData &&
+          userData.createdAt &&
+          (userData.createdAt as firebase.firestore.Timestamp).toDate()) ||
+        new Date(),
     };
     this.userProfile = normalizedUser as IUserProfile;
     return this.userProfile;
@@ -67,7 +80,9 @@ export class AuthService {
   canUserDo = (aclAction: AclActions) => {
     const reqRoles = this.acl[aclAction];
     const roles: AclRoleMap = this.userProfile?.roles || GuestRoleMap;
-
+    if (aclAction === AclActions.DELETE_QUESTION) {
+      console.log({ aclAction, reqRoles, roles });
+    }
     if (!reqRoles || !reqRoles.length) {
       console.error(
         `This action was not registered in the system. Default to hide. Check action ${aclAction} `
@@ -112,6 +127,7 @@ export class AuthService {
     user: firebase.User | null,
     additionalData?: { displayName: string }
   ): Promise<firebase.firestore.DocumentReference<IUserProfile> | null> => {
+    console.log("AuthService :: createUserProfileDocument", { additionalData });
     if (!user) {
       this.userProfile = null;
       return null;
@@ -123,6 +139,7 @@ export class AuthService {
 
       const snapshot = await userRef.get();
       if (snapshot.exists) {
+        console.log("snapshot.exists is true, do not make new profile");
         return userRef;
       }
 
@@ -140,6 +157,11 @@ export class AuthService {
         ...additionalData,
       };
       this.userProfile = profile;
+      console.log(
+        "AuthService :: createUserProfileDocument",
+        "saving new profile",
+        { profile }
+      );
       await userRef.set(profile);
     } catch (error) {
       console.error(error);

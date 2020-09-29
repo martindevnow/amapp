@@ -27,27 +27,26 @@ const AuthProvider: FunctionComponent = (props) => {
     const user$ = new Observable<firebase.User | null>((observer) =>
       auth.onAuthStateChanged((userInfo) => observer.next(userInfo))
     ).pipe(
-      switchMap((userInfo) => authService.createUserProfileDocument(userInfo)),
-      switchMap(
-        (userRef: firebase.firestore.DocumentReference<IUserProfile> | null) =>
-          userRef
-            ? new Observable<IUserProfile>((observer) =>
-                userRef.onSnapshot(
-                  (
-                    snapshot: firebase.firestore.DocumentSnapshot<IUserProfile>
-                  ) => {
-                    const normalizedUser = authService.normalizeUser(snapshot);
-                    return observer.next(normalizedUser as IUserProfile);
-                  }
-                )
+      // switchMap((userInfo) => authService.createUserProfileDocument(userInfo)),
+      switchMap((userInfo) => {
+        const userRef = authService.authChanged(userInfo);
+        return userRef
+          ? new Observable<IUserProfile>((observer) =>
+              userRef.onSnapshot(
+                (
+                  snapshot: firebase.firestore.DocumentSnapshot<IUserProfile>
+                ) => {
+                  const normalizedUser = authService.normalizeUser(snapshot);
+                  return observer.next(normalizedUser as IUserProfile);
+                }
               )
-            : of(null)
-      )
+            )
+          : of(null);
+      })
     );
 
     const subscription = user$.subscribe(
       (user) => {
-        console.log("user subscription", user);
         setUser(user);
         setLoaded(true);
       },

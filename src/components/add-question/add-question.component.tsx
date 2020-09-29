@@ -1,4 +1,6 @@
-import React, { useState, FunctionComponent, useContext } from "react";
+/** @jsx jsx */
+import { css, jsx } from "@emotion/core";
+import React, { useState, useContext } from "react";
 
 import { QuestionsContext } from "../../services/questions/questions.provider";
 import AuthContext from "../../services/auth/auth.context";
@@ -8,13 +10,7 @@ import Input from "../ui/input/input.component";
 
 import "./add-question.styles.scss";
 
-interface AddQuestionFormProps {
-  roomId: string;
-}
-
-const AddQuestionForm: FunctionComponent<AddQuestionFormProps> = ({
-  roomId,
-}) => {
+const AddQuestionForm = () => {
   const { user } = useContext(AuthContext);
   const { questionsService } = useContext(QuestionsContext);
 
@@ -47,7 +43,11 @@ const AddQuestionForm: FunctionComponent<AddQuestionFormProps> = ({
   const buttonText = anonymous ? "Anonymously..." : `As ${user?.email}`;
 
   return (
-    <div className="inline-form">
+    <div
+      css={css`
+        text-align: center;
+      `}
+    >
       <Input
         type="text"
         name="title"
@@ -66,12 +66,8 @@ const AddQuestionForm: FunctionComponent<AddQuestionFormProps> = ({
   );
 };
 
-interface AddQuestionProps {
-  roomId: string;
-}
-
-const AddQuestion: FunctionComponent<AddQuestionProps> = ({ roomId }) => {
-  return <AddQuestionForm roomId={roomId} />;
+const AddQuestion = () => {
+  return <AddQuestionForm />;
 };
 
 export default AddQuestion;

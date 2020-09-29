@@ -18,6 +18,8 @@ import { ReactComponent as EyeSlashIcon } from "../../assets/fa/solid/eye-slash.
 import { ReactComponent as CommentSlashIcon } from "../../assets/fa/solid/comment-slash.svg";
 import { ReactComponent as CommentIcon } from "../../assets/fa/solid/comment.svg";
 import { IconButton } from "../ui/button/button.component";
+import React from "react";
+import Unless from "../../hoc/unless.component";
 
 interface QuestionProps {
   roomId: string;
@@ -111,6 +113,44 @@ const Question: FunctionComponent<QuestionProps> = ({ roomId, question }) => {
       >
         {question.approved ? question.upVotes : "..."}
       </span>
+
+      {!question.answered ? (
+        <React.Fragment>
+          <Can aclAction={AclActions.ANSWER_QUESTION}>
+            <IconButton onClick={answerQuestion}>
+              <CommentSlashIcon width="1.5rem" height="1.5rem" fill="green" />
+            </IconButton>
+          </Can>
+          <Unless aclAction={AclActions.ANSWER_QUESTION}>
+            <IconButton
+              css={css`
+                cursor: default;
+              `}
+            >
+              <CommentSlashIcon width="1.5rem" height="1.5rem" fill="green" />
+            </IconButton>
+          </Unless>
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          <Can aclAction={AclActions.ANSWER_QUESTION}>
+            <IconButton onClick={unanswerQuestion}>
+              <CommentIcon width="1.5rem" height="1.5rem" fill="green" />
+            </IconButton>
+          </Can>
+          <Unless aclAction={AclActions.ANSWER_QUESTION}>
+            <IconButton
+              css={css`
+                min-width: 3rem;
+                cursor: default;
+              `}
+            >
+              <CommentIcon width="1.5rem" height="1.5rem" fill="green" />
+            </IconButton>
+          </Unless>
+        </React.Fragment>
+      )}
+
       <div
         css={css`
           flex-grow: 2;
@@ -138,31 +178,6 @@ const Question: FunctionComponent<QuestionProps> = ({ roomId, question }) => {
         )}
       </div>
 
-      {!question.answered ? (
-        <Can aclAction={AclActions.ANSWER_QUESTION}>
-          <IconButton
-            css={css`
-              justify-self: flex-end;
-              min-width: 3rem;
-            `}
-            onClick={answerQuestion}
-          >
-            <CommentSlashIcon width="1.5rem" height="1.5rem" fill="green" />
-          </IconButton>
-        </Can>
-      ) : (
-        <Can aclAction={AclActions.ANSWER_QUESTION}>
-          <IconButton
-            css={css`
-              justify-self: flex-end;
-              min-width: 3rem;
-            `}
-            onClick={unanswerQuestion}
-          >
-            <CommentIcon width="1.5rem" height="1.5rem" fill="green" />
-          </IconButton>
-        </Can>
-      )}
       {!question.deleted && (
         <Can aclAction={AclActions.DELETE_QUESTION}>
           <IconButton
