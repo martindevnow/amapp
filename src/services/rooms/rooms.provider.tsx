@@ -4,12 +4,9 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { IRoom, IRoomRecord } from "../../components/room/room.types";
-import FirebaseContext from "../firebase/firebase.context";
 
-export interface RoomMap {
-  [key: string]: IRoom;
-}
+import { RoomMap, IRoomRecord } from "./rooms.types";
+import FirebaseContext from "../firebase/firebase.context";
 
 export interface RoomsService {
   createRoom: (room: IRoomRecord) => Promise<string>;
@@ -18,10 +15,12 @@ export interface RoomsService {
 interface RoomsContextValue {
   roomsService: RoomsService;
   rooms: RoomMap;
+  loaded: boolean;
 }
 
 const INITIAL_ROOMS_CONTEXT_VALUE = {
   rooms: {},
+  loaded: false,
 };
 
 export const RoomsContext = React.createContext<Partial<RoomsContextValue>>(
@@ -29,28 +28,36 @@ export const RoomsContext = React.createContext<Partial<RoomsContextValue>>(
 );
 
 const RoomsProvider: FunctionComponent = (props) => {
-  const firebase = useContext(FirebaseContext);
-  const [rooms, setRooms] = useState({});
+  const firebaseService = useContext(FirebaseContext);
+  const [rooms, setRooms] = useState<RoomMap>({});
+  const [loaded, setLoaded] = useState<boolean>(false);
 
   useEffect(() => {
-    return firebase.db.collection("rooms").onSnapshot((qs) => {
+    return firebaseService.db.collection("rooms").onSnapshot((qs) => {
       const rooms: RoomMap = qs.docs
         .map((doc) => ({
           id: doc.id,
           ...(doc.data() as IRoomRecord),
+          createdAt: doc.data().createdAt.toDate(),
         }))
         .reduce((acc, curr) => ({ ...acc, [curr.id]: curr }), {});
       setRooms(rooms);
+      setLoaded(true);
     });
-  }, [firebase]);
+  }, [firebaseService]);
 
   const createRoom = async (room: IRoomRecord) => {
-    const newRoom = await firebase.db.collection("rooms").add(room);
+    const createdAt = new Date();
+    const newRoom = await firebaseService.db
+      .collection("rooms")
+      .add({ ...room, createdAt });
     return newRoom.id;
   };
 
   return (
-    <RoomsContext.Provider value={{ rooms, roomsService: { createRoom } }}>
+    <RoomsContext.Provider
+      value={{ rooms, loaded, roomsService: { createRoom } }}
+    >
       {props.children}
     </RoomsContext.Provider>
   );

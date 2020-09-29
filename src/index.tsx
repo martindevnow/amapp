@@ -1,11 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
+
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import FirebaseProvider from "./services/firebase/firebase.provider";
 import AuthUserProvider from "./services/auth/auth.provider";
 import RoomsProvider from "./services/rooms/rooms.provider";
+
+import "./index.css";
 
 ReactDOM.render(
   <React.StrictMode>

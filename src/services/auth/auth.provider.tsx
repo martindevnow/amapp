@@ -4,56 +4,63 @@ import React, {
   useEffect,
   useState,
 } from "react";
+import { Observable, of } from "rxjs";
+import { switchMap } from "rxjs/operators";
+
 import FirebaseContext from "../firebase/firebase.context";
-import authService, { IUserProfile } from "./auth-service.class";
+import authService from "./auth.service";
 import AuthContext from "./auth.context";
+import { ACL, DEFAULT_ACL } from "./auth.acl";
+import { IUserProfile } from "./auth.types";
 
 const AuthProvider: FunctionComponent = (props) => {
-  const firebase = useContext(FirebaseContext);
+  const firebaseService = useContext(FirebaseContext);
   const [user, setUser] = useState<IUserProfile | null>(null);
   const [loaded, setLoaded] = useState<boolean>(false);
 
-  // TODO: Add a event listener in `useEffect` to
-  // This code was found in the FrontendMasters course on React with Firebase V2:
-  // But it appears to cause a memory leak when we subscribe to the `userRef.onSnapshot`
-  // Unless, the unsubscribe to
-  // componentDidMount = async () => {
-  //   this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userInfo) => {
-  //     const userRef = await createUserDocument(userInfo);
-  //     userRef.onSnapshot((snapshot) => {
-  //       const user = collectIdsAndData(snapshot);
-  //       this.setState({ user, loaded: true });
-  //     });
-  //   });
-  // };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [acl, _setAcl] = useState<ACL>(DEFAULT_ACL);
+  authService.loadAcl(acl);
+
   useEffect(() => {
-    console.log("AuthProvider :: Initializing useEffect");
-    return firebase.auth.onAuthStateChanged(async (userInfo) => {
-      setLoaded(true);
+    const { auth } = firebaseService;
+    const user$ = new Observable<firebase.User | null>((observer) =>
+      auth.onAuthStateChanged((userInfo) => observer.next(userInfo))
+    ).pipe(
+      // switchMap((userInfo) => authService.createUserProfileDocument(userInfo)),
+      switchMap((userInfo) => {
+        const userRef = authService.authChanged(userInfo);
+        return userRef
+          ? new Observable<IUserProfile>((observer) =>
+              userRef.onSnapshot(
+                (
+                  snapshot: firebase.firestore.DocumentSnapshot<IUserProfile>
+                ) => {
+                  const normalizedUser = authService.normalizeUser(snapshot);
+                  return observer.next(normalizedUser as IUserProfile);
+                }
+              )
+            )
+          : of(null);
+      })
+    );
 
-      const userRef = await authService.createUserProfileDocument(userInfo);
-      if (!userRef) {
-        console.log("AuthProvider :: User Ref nullish :: failed logged out?");
-        setUser(null);
-        return;
+    const subscription = user$.subscribe(
+      (user) => {
+        setUser(user);
+        setLoaded(true);
+      },
+      (e) => {
+        setUser(() => {
+          throw e;
+        });
       }
-
-      const userSnapshot = await userRef.get();
-      if (!userSnapshot.exists) {
-        console.log("AuthProvider :: User snapshot doesn't exist :: logout?");
-        setUser(null);
-      } else {
-        const normalizedUser = {
-          uid: userSnapshot.id,
-          ...userSnapshot.data(),
-        };
-        setUser(normalizedUser as IUserProfile);
-      }
-    });
-  }, [firebase]);
+    );
+    return () => subscription.unsubscribe();
+  }, [firebaseService]);
 
   return (
-    <AuthContext.Provider value={{ user, loaded, authService: authService }}>
+    <AuthContext.Provider value={{ user, loaded, authService }}>
       {props.children}
     </AuthContext.Provider>
   );

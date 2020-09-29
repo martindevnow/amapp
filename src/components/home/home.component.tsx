@@ -1,33 +1,21 @@
-import React, { useContext, FunctionComponent } from "react";
-import { IUserProfile } from "../../services/auth/auth-service.class";
+import React, { useContext } from "react";
+
 import AuthContext from "../../services/auth/auth.context";
-
-interface ProfileProps {
-  profile: IUserProfile;
-}
-
-const Profile: FunctionComponent<ProfileProps> = ({ profile }) => {
-  return (
-    <>
-      <h2>{profile.email}</h2>
-    </>
-  );
-};
-
-const UserProfile: FunctionComponent = () => {
-  const { user } = useContext(AuthContext);
-
-  return user ? <Profile profile={user} /> : null;
-};
+import EditProfile from "../edit-profile/edit-profile.component";
+import UserProfile from "../user-profile/user-profile.component";
 
 const HomePage = () => {
   const { user } = useContext(AuthContext);
 
   return (
     <div>
-      <h1>Home Page</h1>
-      <p>Welcome to your homepage.</p>
-      {user && user.uid ? <UserProfile /> : null}
+      <h1>Your Profile</h1>
+      {user && (
+        <>
+          <UserProfile />
+          <EditProfile />
+        </>
+      )}
     </div>
   );
 };

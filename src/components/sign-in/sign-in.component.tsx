@@ -1,9 +1,13 @@
-import React, { useState, useContext } from "react";
+/** @jsx jsx */
+import { css, jsx } from "@emotion/core";
+import { useState, useContext, FormEvent } from "react";
 import { useHistory } from "react-router-dom";
 
 import { SignUpLink } from "../sign-up/sign-up.component";
 import * as ROUTES from "../../constants/routes";
 import AuthContext from "../../services/auth/auth.context";
+import Button from "../ui/button/button.component";
+import Input from "../ui/input/input.component";
 
 export const SignInForm = () => {
   const { authService } = useContext(AuthContext);
@@ -20,10 +24,10 @@ export const SignInForm = () => {
     setError(null);
   };
 
-  const onSubmit = (event: any) => {
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     authService
       .doSignInWithEmailAndPassword(email, password)
-      .then(() => {
+      .then((_) => {
         clearForm();
         history.push(ROUTES.HOME);
       })
@@ -38,23 +42,50 @@ export const SignInForm = () => {
 
   return (
     <form onSubmit={onSubmit}>
-      <input
+      <label
+        htmlFor="email"
+        css={css`
+          display: block;
+          margin-top: 1rem;
+          margin-bottom: 0.2rem;
+        `}
+      >
+        Email
+      </label>
+      <Input
         name="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         type="text"
         placeholder="Email Address"
       />
-      <input
+      <label
+        htmlFor="password"
+        css={css`
+          display: block;
+          margin-top: 1rem;
+          margin-bottom: 0.2rem;
+        `}
+      >
+        Password
+      </label>
+      <Input
         name="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         type="password"
         placeholder="Password"
       />
-      <button disabled={isInvalid} type="submit">
+      <Button
+        css={css`
+          margin-top: 1rem;
+          display: block;
+        `}
+        disabled={isInvalid}
+        type="submit"
+      >
         Sign In
-      </button>
+      </Button>
 
       {error && <p>{error.message}</p>}
     </form>
@@ -63,7 +94,7 @@ export const SignInForm = () => {
 
 const SignInPage = () => (
   <div>
-    <h1>SignIn</h1>
+    <h1>Sign In</h1>
     <SignInForm />
     <SignUpLink />
   </div>
