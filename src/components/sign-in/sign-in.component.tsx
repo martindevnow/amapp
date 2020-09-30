@@ -131,7 +131,7 @@ const SignInPage = () => (
       <SignInForm />
       <SignInWithMicrosoft />
     </div>
-    <SignUpLink />
+    {/* <SignUpLink /> */}
   </div>
 );
 
