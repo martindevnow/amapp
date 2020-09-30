@@ -44,6 +44,13 @@ export class AuthService {
 
   userProfileSnapshot = (uid: string) => this.userProfileRef(uid).get();
 
+  doSignInWithMicrosoft = () => {
+    const provider = new firebase.auth.OAuthProvider("microsoft.com");
+    provider.setCustomParameters({
+      tenant: "de80155e-45e1-4247-8e47-b03b5a603315",
+    });
+    return firebase.auth().signInWithPopup(provider);
+  };
   normalizeUser = (
     userProfileSnapshot: firebase.firestore.DocumentSnapshot<IUserProfile>
   ): IUserProfile => {

@@ -9,6 +9,34 @@ import AuthContext from "../../services/auth/auth.context";
 import Button from "../ui/button/button.component";
 import Input from "../ui/input/input.component";
 
+export const SignInWithMicrosoft = () => {
+  const { authService } = useContext(AuthContext);
+  const history = useHistory();
+  const [error, setError] = useState<any>(null);
+
+  const onClick = () => {
+    authService
+      .doSignInWithMicrosoft()
+      .then((credential) => {
+        authService.createUserProfileDocument(
+          credential.user as firebase.User,
+          { displayName: credential.user?.displayName || "" }
+        );
+        history.push(ROUTES.HOME);
+      })
+      .catch((error) => {
+        setError(error);
+      });
+  };
+
+  return (
+    <div>
+      <Button onClick={onClick}>Sign In With Microsoft</Button>
+      {error && <p>{error.message}</p>}
+    </div>
+  );
+};
+
 export const SignInForm = () => {
   const { authService } = useContext(AuthContext);
 
@@ -95,7 +123,14 @@ export const SignInForm = () => {
 const SignInPage = () => (
   <div>
     <h1>Sign In</h1>
-    <SignInForm />
+    <div
+      css={css`
+        display: flex;
+      `}
+    >
+      <SignInForm />
+      <SignInWithMicrosoft />
+    </div>
     <SignUpLink />
   </div>
 );
