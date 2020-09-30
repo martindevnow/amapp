@@ -30,7 +30,12 @@ export const SignInWithMicrosoft = () => {
   };
 
   return (
-    <div>
+    <div
+      css={css`
+        display: flex;
+        align-items: center;
+      `}
+    >
       <Button onClick={onClick}>Sign In With Microsoft</Button>
       {error && <p>{error.message}</p>}
     </div>
@@ -126,6 +131,7 @@ const SignInPage = () => (
     <div
       css={css`
         display: flex;
+        justify-content: space-around;
       `}
     >
       <SignInForm />
