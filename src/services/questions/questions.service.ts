@@ -51,7 +51,12 @@ export class QuestionsService {
     const createdAt = new Date();
     const questionRef = this._getRoom()
       .collection("questions")
-      .add({ ...question, createdAt });
+      .add({
+        ...question,
+        createdAt,
+        // TODO: Disable Auto Approve
+        approved: true,
+      });
     const questionAskedSnapshot = await (await questionRef).get();
     const questionId = questionAskedSnapshot.id;
 
