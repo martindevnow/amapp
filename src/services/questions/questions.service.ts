@@ -27,6 +27,7 @@ export class QuestionsService {
   };
 
   answerQuestion = async (questionId: string) => {
+    await this._getRoom().update({ activeQuestionId: questionId });
     return this._getRoom()
       .collection("questions")
       .doc(questionId)
@@ -105,5 +106,9 @@ export class QuestionsService {
     );
     batch.commit();
     return true;
+  };
+
+  clearActiveQuestion = () => {
+    this._getRoom().update({ activeQuestionId: "" });
   };
 }

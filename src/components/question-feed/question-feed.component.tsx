@@ -195,9 +195,7 @@ const QuestionFeed: FunctionComponent<QuestionFeedProps> = ({ roomId }) => {
       </div>
 
       {filteredQuestions.length ? (
-        filteredQuestions.map((q) => (
-          <Question key={q.id} roomId={roomId} question={q} />
-        ))
+        filteredQuestions.map((q) => <Question key={q.id} question={q} />)
       ) : (
         <p
           css={css`

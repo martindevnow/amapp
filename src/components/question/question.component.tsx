@@ -22,11 +22,10 @@ import React from "react";
 import Unless from "../../hoc/unless.component";
 
 interface QuestionProps {
-  roomId: string;
   question: IQuestion;
 }
 
-const Question: FunctionComponent<QuestionProps> = ({ roomId, question }) => {
+const Question: FunctionComponent<QuestionProps> = ({ question }) => {
   const { user, authService } = useContext(AuthContext);
   const userId = user?.uid || "TODO";
 
@@ -177,6 +176,8 @@ const Question: FunctionComponent<QuestionProps> = ({ roomId, question }) => {
             font-size: 0.8rem;
             margin-right: 0.7rem;
             margin-top: 0.7rem;
+            display: block;
+            min-width: 6rem;
           `}
         >
           {`${

@@ -55,6 +55,9 @@ const AddQuestionForm = () => {
     >
       <Toast show={isToastActive}>Your questions has been received</Toast>
       <Input
+        css={css`
+          width: 100%;
+        `}
         type="text"
         name="title"
         value={title}

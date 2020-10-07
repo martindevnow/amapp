@@ -56,7 +56,11 @@ const RoomsProvider: FunctionComponent = (props) => {
 
   return (
     <RoomsContext.Provider
-      value={{ rooms, loaded, roomsService: { createRoom } }}
+      value={{
+        rooms,
+        loaded,
+        roomsService: { createRoom },
+      }}
     >
       {props.children}
     </RoomsContext.Provider>
