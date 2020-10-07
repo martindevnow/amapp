@@ -37,7 +37,11 @@ const AddQuestionForm = () => {
       upVotes: 1,
     };
     // TODO: Handle Possible Errors here?
-    questionsService?.askQuestion(question);
+    questionsService?.askQuestion(question).then((question: any) => {
+      console.log("question asked", question);
+      setTitle("");
+      alert("Success");
+    });
   };
 
   const buttonText = anonymous ? "Anonymously..." : `As ${user?.email}`;

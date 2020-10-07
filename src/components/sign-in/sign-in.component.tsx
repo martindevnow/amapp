@@ -3,7 +3,6 @@ import { css, jsx } from "@emotion/core";
 import { useState, useContext, FormEvent } from "react";
 import { useHistory } from "react-router-dom";
 
-import { SignUpLink } from "../sign-up/sign-up.component";
 import * as ROUTES from "../../constants/routes";
 import AuthContext from "../../services/auth/auth.context";
 import Button from "../ui/button/button.component";
