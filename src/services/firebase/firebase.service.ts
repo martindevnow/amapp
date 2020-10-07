@@ -11,7 +11,7 @@ export class FirebaseService {
   public storage: firebase.storage.Storage;
 
   constructor() {
-    console.log("Firebase Service :: Constructor");
+    // console.log("Firebase Service :: Constructor");
     app.initializeApp(firebaseConfig);
     this.auth = app.auth();
     this.db = app.firestore();

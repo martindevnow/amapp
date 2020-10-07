@@ -14,12 +14,6 @@ interface QuestionFeedProps {
   roomId: string;
 }
 
-const opposite = (order: "createdAt" | "upVotes") =>
-  order === "createdAt" ? "upVotes" : "createdAt";
-
-const sortToLabel = (order: "createdAt" | "upVotes") =>
-  order === "createdAt" ? "Newest" : "Most Votes";
-
 type FilterTypes = "answered" | "unanswered" | "approved" | "unapproved";
 
 type Filter = {
@@ -90,6 +84,17 @@ const QuestionFeed: FunctionComponent<QuestionFeedProps> = ({ roomId }) => {
     }));
   };
 
+  const filteredQuestions = (questions || [])
+    .sort(orderBy === "upVotes" ? sortByUpVotes : sortByCreatedAt)
+    .filter(
+      (question) =>
+        Object.keys(appliedFilters).length === 0 ||
+        Object.entries(appliedFilters).every(
+          ([filter, val]) =>
+            val && QUESTION_FILTERS[filter as FilterTypes](question)
+        )
+    );
+
   // TODO: Add a filter/sorting SVG for the sorting
   return (
     <section
@@ -114,14 +119,33 @@ const QuestionFeed: FunctionComponent<QuestionFeedProps> = ({ roomId }) => {
               margin-right: 1rem;
             `}
           >
-            Currently Sorted By: "{sortToLabel(orderBy)}"
+            Sort:
           </span>
           <Button
+            css={css`
+              background-color: ${orderBy === "createdAt"
+                ? "black"
+                : "lightgray"};
+              color: ${orderBy === "createdAt" ? "lightgray" : "black"};
+            `}
             onClick={() => {
-              setOrderBy(opposite(orderBy));
+              setOrderBy("createdAt");
             }}
           >
-            {orderBy === "upVotes" ? "Newest" : "Most Votes"}
+            Newest
+          </Button>
+          <Button
+            css={css`
+              background-color: ${orderBy === "upVotes"
+                ? "black"
+                : "lightgray"};
+              color: ${orderBy === "upVotes" ? "lightgray" : "black"};
+            `}
+            onClick={() => {
+              setOrderBy("upVotes");
+            }}
+          >
+            Most Votes
           </Button>
         </div>
         <div>
@@ -137,7 +161,7 @@ const QuestionFeed: FunctionComponent<QuestionFeedProps> = ({ roomId }) => {
           </span>
           {filters.map((filter) =>
             filtersAcl[filter] !== undefined ? (
-              <Can aclAction={filtersAcl[filter] as AclActions}>
+              <Can key={filter} aclAction={filtersAcl[filter] as AclActions}>
                 <Button
                   css={css`
                     text-transform: uppercase;
@@ -153,6 +177,7 @@ const QuestionFeed: FunctionComponent<QuestionFeedProps> = ({ roomId }) => {
               </Can>
             ) : (
               <Button
+                key={filter}
                 css={css`
                   text-transform: uppercase;
                   background-color: ${appliedFilters[filter]
@@ -169,19 +194,20 @@ const QuestionFeed: FunctionComponent<QuestionFeedProps> = ({ roomId }) => {
         </div>
       </div>
 
-      {(questions as IQuestion[])
-        .sort(orderBy === "upVotes" ? sortByUpVotes : sortByCreatedAt)
-        .filter(
-          (question) =>
-            Object.keys(appliedFilters).length === 0 ||
-            Object.entries(appliedFilters).every(
-              ([filter, val]) =>
-                val && QUESTION_FILTERS[filter as FilterTypes](question)
-            )
-        )
-        .map((q) => (
+      {filteredQuestions.length ? (
+        filteredQuestions.map((q) => (
           <Question key={q.id} roomId={roomId} question={q} />
-        ))}
+        ))
+      ) : (
+        <p
+          css={css`
+            text-align: center;
+            margin-top: 5rem;
+          `}
+        >
+          No questions.. try asking one or adjusting the filters!
+        </p>
+      )}
     </section>
   );
 };

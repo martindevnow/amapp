@@ -155,42 +155,66 @@ const Question: FunctionComponent<QuestionProps> = ({ roomId, question }) => {
         css={css`
           flex-grow: 2;
           padding: 0.5rem;
+          position: relative;
         `}
       >
-        <p>{question.title}</p>
-        {question.anonymous ? (
-          <EyeSlashIcon
-            css={css`
-              float: right;
-            `}
-            width="1.5rem"
-            height="1.5rem"
-            fill="#555"
-          />
-        ) : (
-          <span
-            css={css`
-              float: right;
-            `}
-          >
-            {question.author.name}
-          </span>
-        )}
+        <p
+          css={css`
+            margin-right: 1.5rem;
+          `}
+        >
+          {question.title}
+        </p>
       </div>
 
-      {!question.deleted && (
-        <Can aclAction={AclActions.DELETE_QUESTION}>
-          <IconButton
-            css={css`
-              justify-self: flex-end;
-              min-width: 3rem;
-            `}
-            onClick={deleteQuestion}
-          >
-            <TrashIcon width="1.5rem" height="1.5rem" fill="red" />
-          </IconButton>
-        </Can>
-      )}
+      <div
+        css={css`
+          text-align: right;
+        `}
+      >
+        <span
+          css={css`
+            font-size: 0.8rem;
+            margin-right: 0.7rem;
+            margin-top: 0.7rem;
+          `}
+        >
+          {`${
+            question.createdAt.getHours() < 12
+              ? question.createdAt.getHours()
+              : question.createdAt.getHours() - 12
+          }:${question.createdAt.getMinutes().toString().padStart(2, "0")} ${
+            question.createdAt.getHours() > 12 ? "PM" : "AM"
+          }`}
+        </span>
+
+        {!question.deleted && (
+          <Can aclAction={AclActions.DELETE_QUESTION}>
+            <IconButton
+              css={css`
+                min-width: 3rem;
+                margin-left: auto;
+              `}
+              onClick={deleteQuestion}
+            >
+              <TrashIcon width="1.5rem" height="1.5rem" fill="red" />
+            </IconButton>
+          </Can>
+        )}
+
+        <div
+          css={css`
+            /* float: right; */
+            margin-right: 0.7rem;
+          `}
+        >
+          {question.anonymous ? (
+            <EyeSlashIcon width="1.5rem" height="1.5rem" fill="#555" />
+          ) : (
+            <span>{question.author.name}</span>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

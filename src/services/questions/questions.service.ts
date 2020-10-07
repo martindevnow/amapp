@@ -9,7 +9,7 @@ export class QuestionsService {
     private authService: AuthService,
     private roomId: string
   ) {
-    console.log(`QuestionsService :: Constructor for room ${this.roomId}`);
+    // console.log(`QuestionsService :: Constructor for room ${this.roomId}`);
   }
 
   private _getRoom = () =>
@@ -42,11 +42,6 @@ export class QuestionsService {
 
   askQuestion = async (question: IQuestionRecord) => {
     // TODO: Add ACL layer, here?
-    console.log(
-      "askQuestionInRoom",
-      { roomId: this.roomId },
-      { user: this.firebaseService.auth.currentUser }
-    );
     // TODO: Generate CreatedAt on the Backend
     const createdAt = new Date();
     const questionRef = this._getRoom()
@@ -74,7 +69,6 @@ export class QuestionsService {
   };
 
   upVoteQuestion = async (questionId: string) => {
-    const user = this.firebaseService.auth.currentUser;
     if (!this.authService.canUserDo(AclActions.UP_VOTE_QUESTION)) {
       // TODO: Throw error here?
       console.error(
@@ -82,12 +76,6 @@ export class QuestionsService {
       );
       return false;
     }
-
-    console.log(
-      "QuestionsService :: upVoteQuestion",
-      { questionId },
-      { uid: user?.uid }
-    );
     const batch = this.firebaseService.db.batch();
     const questionRef = this._getRoom().collection("questions").doc(questionId);
 
