@@ -12,7 +12,8 @@ const Toast: FunctionComponent<ToastProps> = ({ show, children }) => (
       visibility: ${show ? "visible" : "hidden"};
       position: fixed;
       top: 0;
-      right: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
       background-color: orange;
       padding: 1rem 3rem;
       border-bottom-left-radius: 10px;
