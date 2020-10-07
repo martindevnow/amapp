@@ -70,7 +70,7 @@ export class QuestionsService {
         .doc(questionId)
         .set({ questionId });
     }
-    return true;
+    return { ...questionAskedSnapshot, id: questionId };
   };
 
   upVoteQuestion = async (questionId: string) => {
