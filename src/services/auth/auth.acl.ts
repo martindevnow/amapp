@@ -38,6 +38,7 @@ export enum AclActions {
   CREATE_ROOM = "CREATE_ROOM",
   ARCHIVE_ROOM = "ARCHIVE_ROOM",
   DELETE_ROOM = "DELETE_ROOM",
+  CLEAR_ACTIVE_QUESTION = "CLEAR_ACTIVE_QUESTION",
 
   ASK_QUESTION = "ASK_QUESTION",
   DELETE_QUESTION = "DELETE_QUESTION",
@@ -65,6 +66,7 @@ export const DEFAULT_ACL: ACL = {
 
   // Moderator or Higher
   [AclActions.CREATE_ROOM]: AclModeratorsOnly,
+  [AclActions.CLEAR_ACTIVE_QUESTION]: AclModeratorsOnly,
 
   [AclActions.APPROVE_QUESTION]: AclModeratorsOnly,
   [AclActions.DELETE_QUESTION]: AclModeratorsOnly,
