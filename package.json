@@ -2,7 +2,15 @@
   "name": "amapp",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "deploy": "yarn build && bash scripts/confirm.sh && firebase deploy --project=dev"
+  },
   "dependencies": {
+    "@babel/runtime": "^7.12.5",
     "@emotion/core": "^10.0.35",
     "@emotion/styled": "^10.0.27",
     "@testing-library/jest-dom": "^4.2.4",
@@ -23,12 +31,9 @@
     "rxjs": "^6.6.3",
     "typescript": "~3.7.2"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "deploy": "yarn build && bash scripts/confirm.sh && firebase deploy --only rules,hosting"
+  "devDependencies": {
+    "@types/react-router-dom": "^5.1.5",
+    "@types/recompose": "^0.30.7"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -44,9 +49,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@types/react-router-dom": "^5.1.5",
-    "@types/recompose": "^0.30.7"
   }
 }
