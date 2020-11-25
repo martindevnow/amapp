@@ -14,7 +14,7 @@ import Loading from "../loading/loading.component";
 import Can from "../../hoc/can.component";
 import { AclActions } from "../../services/auth/auth.acl";
 import Question from "../question/question.component";
-import Button, { IconButton } from "../ui/button/button.component";
+import Button from "../ui/button/button.component";
 
 interface RoomProps {
   room: IRoom;
