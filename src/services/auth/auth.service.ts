@@ -29,9 +29,9 @@ export class AuthService {
   userProfileRef = (
     uid: string
   ): firebase.firestore.DocumentReference<IUserProfile> =>
-    this.db.doc(`users/${uid}`) as firebase.firestore.DocumentReference<
-      IUserProfile
-    >;
+    this.db.doc(
+      `users/${uid}`
+    ) as firebase.firestore.DocumentReference<IUserProfile>;
 
   authChanged = (user: firebase.User | null) => {
     if (user === null) {
