@@ -8,6 +8,7 @@ interface CanProps {
 const Can: FunctionComponent<CanProps> = ({ aclAction, children }) => {
   const { authService } = useContext(AuthContext);
   const canDo = authService.canUserDo(aclAction);
+  console.log(aclAction);
   return canDo ? <>{children}</> : null;
 };
 

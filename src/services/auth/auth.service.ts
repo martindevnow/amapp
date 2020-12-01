@@ -61,7 +61,7 @@ export class AuthService {
   ): IUserProfile => {
     const user = this.normalizeUser(userProfileSnapshot);
 
-    this.loadRoles(user.uid);
+    // this.loadRoles(user.uid);
     return user;
   };
 
@@ -83,12 +83,14 @@ export class AuthService {
     return this.userProfile;
   };
 
-  loadRoles = (userId: string) => {
-    this.db
+  loadRoles = async (userId: string) => {
+    console.log("auth.service :: loadRoles()");
+    return this.db
       .doc(`roles/${userId}`)
       .get()
       .then((snapshot) => {
         const data = snapshot.data();
+        console.log("roles loaded", data);
         this.userRoles = data as AclRoleMap;
       });
   };
@@ -109,6 +111,10 @@ export class AuthService {
   };
 
   canUserDo = (aclAction: AclActions) => {
+    if (aclAction === AclActions.ASK_QUESTION) {
+      console.log("this.userRoles");
+      console.log(this.userRoles);
+    }
     const reqRoles = this.acl[aclAction];
     const roles: AclRoleMap = this.userRoles || GuestRoleMap;
     if (!reqRoles || !reqRoles.length) {
