@@ -17,9 +17,12 @@ const LobbyPage = () => {
         <h2>Active Rooms</h2>
         {rooms &&
           Object.values(rooms).map((room) => (
-            <Link key={room.id} to={ROUTES.ROOM_BY_ID(room.id)}>
-              {room.name}
-            </Link>
+            <React.Fragment key={room.id}>
+              <Link key={room.id} to={ROUTES.ROOM_BY_ID(room.id)}>
+                {room.name}
+              </Link>
+              <br />
+            </React.Fragment>
           ))}
       </Can>
       <Can aclAction={AclActions.CREATE_ROOM}>

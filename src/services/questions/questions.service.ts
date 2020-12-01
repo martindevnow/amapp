@@ -9,7 +9,7 @@ export class QuestionsService {
     private authService: AuthService,
     private roomId: string
   ) {
-    console.log(`QuestionsService :: Constructor for room ${this.roomId}`);
+    // console.log(`QuestionsService :: Constructor for room ${this.roomId}`);
   }
 
   private _getRoom = () =>
@@ -27,6 +27,7 @@ export class QuestionsService {
   };
 
   answerQuestion = async (questionId: string) => {
+    await this._getRoom().update({ activeQuestionId: questionId });
     return this._getRoom()
       .collection("questions")
       .doc(questionId)
@@ -42,16 +43,16 @@ export class QuestionsService {
 
   askQuestion = async (question: IQuestionRecord) => {
     // TODO: Add ACL layer, here?
-    console.log(
-      "askQuestionInRoom",
-      { roomId: this.roomId },
-      { user: this.firebaseService.auth.currentUser }
-    );
     // TODO: Generate CreatedAt on the Backend
     const createdAt = new Date();
     const questionRef = this._getRoom()
       .collection("questions")
-      .add({ ...question, createdAt });
+      .add({
+        ...question,
+        createdAt,
+        // TODO: Disable Auto Approve
+        approved: true,
+      });
     const questionAskedSnapshot = await (await questionRef).get();
     const questionId = questionAskedSnapshot.id;
 
@@ -65,11 +66,10 @@ export class QuestionsService {
         .doc(questionId)
         .set({ questionId });
     }
-    return true;
+    return { ...questionAskedSnapshot, id: questionId };
   };
 
   upVoteQuestion = async (questionId: string) => {
-    const user = this.firebaseService.auth.currentUser;
     if (!this.authService.canUserDo(AclActions.UP_VOTE_QUESTION)) {
       // TODO: Throw error here?
       console.error(
@@ -77,12 +77,6 @@ export class QuestionsService {
       );
       return false;
     }
-
-    console.log(
-      "QuestionsService :: upVoteQuestion",
-      { questionId },
-      { uid: user?.uid }
-    );
     const batch = this.firebaseService.db.batch();
     const questionRef = this._getRoom().collection("questions").doc(questionId);
 
@@ -112,5 +106,9 @@ export class QuestionsService {
     );
     batch.commit();
     return true;
+  };
+
+  clearActiveQuestion = () => {
+    this._getRoom().update({ activeQuestionId: "" });
   };
 }

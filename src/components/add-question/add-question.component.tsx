@@ -9,11 +9,13 @@ import Button from "../ui/button/button.component";
 import Input from "../ui/input/input.component";
 
 import "./add-question.styles.scss";
+import { useToast } from "../../hooks/useToast.hook";
 
 const AddQuestionForm = () => {
   const { user } = useContext(AuthContext);
   const { questionsService } = useContext(QuestionsContext);
 
+  const { isToastActive, displayToast, Toast } = useToast(5000);
   const [title, setTitle] = useState("");
   const [anonymous, setAnonymous] = useState(true);
 
@@ -37,7 +39,10 @@ const AddQuestionForm = () => {
       upVotes: 1,
     };
     // TODO: Handle Possible Errors here?
-    questionsService?.askQuestion(question);
+    questionsService?.askQuestion(question).then((_: any) => {
+      displayToast();
+      setTitle("");
+    });
   };
 
   const buttonText = anonymous ? "Anonymously..." : `As ${user?.email}`;
@@ -48,7 +53,11 @@ const AddQuestionForm = () => {
         text-align: center;
       `}
     >
+      <Toast show={isToastActive}>Your questions has been received</Toast>
       <Input
+        css={css`
+          width: 100%;
+        `}
         type="text"
         name="title"
         value={title}
@@ -67,7 +76,11 @@ const AddQuestionForm = () => {
 };
 
 const AddQuestion = () => {
-  return <AddQuestionForm />;
+  return (
+    <React.Fragment>
+      <AddQuestionForm />
+    </React.Fragment>
+  );
 };
 
 export default AddQuestion;

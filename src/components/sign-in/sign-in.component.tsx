@@ -3,11 +3,43 @@ import { css, jsx } from "@emotion/core";
 import { useState, useContext, FormEvent } from "react";
 import { useHistory } from "react-router-dom";
 
-import { SignUpLink } from "../sign-up/sign-up.component";
 import * as ROUTES from "../../constants/routes";
 import AuthContext from "../../services/auth/auth.context";
 import Button from "../ui/button/button.component";
 import Input from "../ui/input/input.component";
+
+export const SignInWithMicrosoft = () => {
+  const { authService } = useContext(AuthContext);
+  const history = useHistory();
+  const [error, setError] = useState<any>(null);
+
+  const onClick = () => {
+    authService
+      .doSignInWithMicrosoft()
+      .then((credential) => {
+        authService.createUserProfileDocument(
+          credential.user as firebase.User,
+          { displayName: credential.user?.displayName || "" }
+        );
+        history.push(ROUTES.HOME);
+      })
+      .catch((error) => {
+        setError(error);
+      });
+  };
+
+  return (
+    <div
+      css={css`
+        display: flex;
+        align-items: center;
+      `}
+    >
+      <Button onClick={onClick}>Sign In With Microsoft</Button>
+      {error && <p>{error.message}</p>}
+    </div>
+  );
+};
 
 export const SignInForm = () => {
   const { authService } = useContext(AuthContext);
@@ -95,8 +127,15 @@ export const SignInForm = () => {
 const SignInPage = () => (
   <div>
     <h1>Sign In</h1>
-    <SignInForm />
-    <SignUpLink />
+    <div
+      css={css`
+        display: flex;
+        justify-content: space-around;
+      `}
+    >
+      <SignInForm />
+      <SignInWithMicrosoft />
+    </div>
   </div>
 );
 
