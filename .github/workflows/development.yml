@@ -1,12 +1,13 @@
-name: Production Build and Deploy
+name: Development Build and Deploy
 
 on:
   push:
-    branches: [master]
+    branches: [develop]
+  workflow_dispatch:
 
 jobs:
   build:
-    name: "[PROD] Build Frontend"
+    name: "[DEV] Build Frontend"
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout Repo"
@@ -19,26 +20,18 @@ jobs:
         run: yarn test
 
       - name: "[FE] Build React App"
-        env:
-          DEPLOY_ENVIRONMENT: production
-          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
-          FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
-          FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
-          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
-          FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
-          FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
-          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
-          FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
         run: yarn build
 
       - name: "[FE] Archive Build Artifact"
+        env:
+          DEPLOY_ENVIRONMENT: development
         uses: actions/upload-artifact@v2
         with:
           name: build
           path: build
 
   deploy:
-    name: "[PROD] deploy"
+    name: "[DEV] Deploy"
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -54,10 +47,10 @@ jobs:
           name: build
           path: build
 
-      - name: "[PROD] Deploy to Firebase"
+      - name: "[DEV] Deploy to Firebase"
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --project=production
+          args: deploy --project=development
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_DEPLOY_TOKEN }}
-          PROJECT_ID: "tw-amapp"
+          PROJECT_ID: "tw-amapp-dev" # Hard code DEV as project to deploy
