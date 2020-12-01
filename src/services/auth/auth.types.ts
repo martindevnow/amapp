@@ -6,7 +6,8 @@ export interface IUserProfile {
   photoURL?: string;
   displayName?: string;
   createdAt: firebase.firestore.Timestamp | Date;
-  roles: {
-    [key in AclRoles]: boolean;
-  };
 }
+
+export type IUserRoles = {
+  [key in AclRoles]: boolean;
+};

@@ -36,7 +36,8 @@ const AuthProvider: FunctionComponent = (props) => {
                 (
                   snapshot: firebase.firestore.DocumentSnapshot<IUserProfile>
                 ) => {
-                  const normalizedUser = authService.normalizeUser(snapshot);
+                  const normalizedUser = authService.loadUser(snapshot);
+                  // const normalizedUser = authService.normalizeUser(snapshot);
                   return observer.next(normalizedUser as IUserProfile);
                 }
               )

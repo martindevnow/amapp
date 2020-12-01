@@ -4,14 +4,16 @@ import {
   ACL,
   AclActions,
   AclRoleMap,
-  AclRoles,
   DEFAULT_ACL,
+  DEFAULT_USER_ROLES,
   GuestRoleMap,
 } from "./auth.acl";
+
 import { IUserProfile } from "./auth.types";
 
 export class AuthService {
   private userProfile: IUserProfile | null;
+  private userRoles: AclRoleMap;
   private auth: firebase.auth.Auth;
   private db: firebase.firestore.Firestore;
   private storage: firebase.storage.Storage;
@@ -22,6 +24,7 @@ export class AuthService {
     this.db = firebaseService.db;
     this.storage = firebaseService.storage;
     this.userProfile = null;
+    this.userRoles = GuestRoleMap;
   }
 
   loadAcl = (acl: ACL) => (this.acl = acl);
@@ -36,6 +39,7 @@ export class AuthService {
   authChanged = (user: firebase.User | null) => {
     if (user === null) {
       this.userProfile = null;
+      this.userRoles = GuestRoleMap;
       return null;
     }
 
@@ -51,6 +55,16 @@ export class AuthService {
     });
     return firebase.auth().signInWithPopup(provider);
   };
+
+  loadUser = (
+    userProfileSnapshot: firebase.firestore.DocumentSnapshot<IUserProfile>
+  ): IUserProfile => {
+    const user = this.normalizeUser(userProfileSnapshot);
+
+    this.loadRoles(user.uid);
+    return user;
+  };
+
   normalizeUser = (
     userProfileSnapshot: firebase.firestore.DocumentSnapshot<IUserProfile>
   ): IUserProfile => {
@@ -67,6 +81,16 @@ export class AuthService {
     };
     this.userProfile = normalizedUser as IUserProfile;
     return this.userProfile;
+  };
+
+  loadRoles = (userId: string) => {
+    this.db
+      .doc(`roles/${userId}`)
+      .get()
+      .then((snapshot) => {
+        const data = snapshot.data();
+        this.userRoles = data as AclRoleMap;
+      });
   };
 
   updateUser = (uid: string, profile: Partial<IUserProfile>) => {
@@ -86,7 +110,7 @@ export class AuthService {
 
   canUserDo = (aclAction: AclActions) => {
     const reqRoles = this.acl[aclAction];
-    const roles: AclRoleMap = this.userProfile?.roles || GuestRoleMap;
+    const roles: AclRoleMap = this.userRoles || GuestRoleMap;
     if (!reqRoles || !reqRoles.length) {
       console.error(
         `This action was not registered in the system. Default to hide. Check action ${aclAction} `
@@ -103,6 +127,7 @@ export class AuthService {
   // ): boolean => {};
 
   hasVotedForQuestion = async (questionId: string, userId: string) => {
+    // TODO: Looks likes something missing here..
     if (userId === "TODO") {
       console.warn("Guests cannot vote.");
       return false;
@@ -134,6 +159,7 @@ export class AuthService {
     // console.log("AuthService :: createUserProfileDocument", { additionalData });
     if (!user) {
       this.userProfile = null;
+      this.userRoles = GuestRoleMap;
       return null;
     }
 
@@ -151,15 +177,10 @@ export class AuthService {
         uid: user.uid,
         email: user.email as string,
         createdAt,
-        roles: {
-          [AclRoles.MEMBER_ROLE]: true,
-          [AclRoles.MODERATOR_ROLE]: false,
-          [AclRoles.ADMIN_ROLE]: false,
-          [AclRoles.GUEST_ROLE]: false,
-        },
         ...additionalData,
       };
       this.userProfile = profile;
+      this.userRoles = DEFAULT_USER_ROLES;
       await userRef.set(profile);
     } catch (error) {
       console.error(error);
