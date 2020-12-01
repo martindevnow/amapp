@@ -75,3 +75,10 @@ export const DEFAULT_ACL: ACL = {
   [AclActions.ARCHIVE_ROOM]: AclAdminsOnly,
   [AclActions.DELETE_ROOM]: AclAdminsOnly,
 };
+
+export const DEFAULT_USER_ROLES = {
+  [AclRoles.MEMBER_ROLE]: true,
+  [AclRoles.MODERATOR_ROLE]: false,
+  [AclRoles.ADMIN_ROLE]: false,
+  [AclRoles.GUEST_ROLE]: false,
+};
