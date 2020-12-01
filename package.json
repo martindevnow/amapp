@@ -7,6 +7,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject",
+    "install:functions": "npm --prefix functions i",
     "deploy": "NODE_ENV=development yarn build && bash scripts/confirm.sh && firebase deploy --project=dev",
     "deploy:func": "firebase deploy --project=dev --only functions",
     "deploy:rules": "firebase deploy --project=dev --only firestore:rules"
