@@ -31,14 +31,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        run: actions/checkout@v2
+        uses: actions/checkout@v2
 
       - name: Download Artifact
         uses: actions/download-artifact@v2
         with:
           name: build
           path: build
+
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
           args: deploy --only functions --project=dev
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_DEPLOY_TOKEN }}
