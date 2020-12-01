@@ -1,6 +1,7 @@
 {
   "projects": {
-    "default": "tw-amapp",
-    "dev": "tw-amapp-dev"
+    "default": "tw-amapp-dev",
+    "production": "tw-amapp",
+    "development": "tw-amapp-dev"
   }
 }

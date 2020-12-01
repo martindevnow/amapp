@@ -1,12 +1,46 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    function signedIn () {
+      return request.auth.uid != null
+    }
+    
+    function signedInAndModerator() {
+      return request.auth.uid != null 
+        && get(/databases/$(database)/documents/roles/$(request.auth.uid)).data.moderator == true;
+    }
+
+    function signedInAndAdmin() {
+      return request.auth.uid != null 
+        && get(/databases/$(database)/documents/roles/$(request.auth.uid)).data.admin == true;
+    }
+
+    function signedInAndAuthor() {
+      return request.auth.uid != null && request.resource.data.author.uid == request.auth.uid;
+    }
+
     match /users/{userId} {
       allow read;
       allow write: if request.auth.uid != null && request.auth.uid == userId;
     }
 
+    match /roles/{userId} {
+      // allow read;
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if false; // No writing; only Cloud Function can
+    }
 
+    match /rooms/{roomId} {
+      allow read: if request.auth.uid != null;
+      allow write: if signedInAndModerator() || signedInAndAdmin();
+      match /questions/{questionId} {
+        allow read: if signedIn();
+        allow create: if signedIn();
+        allow update: if signedInAndAuthor();
+        allow delete: if signedInAndAdmin();
+      }
+    }
 
     // match /{document=**} {
     //   allow read, write: if

@@ -1,57 +1,23 @@
 name: CI
 
 on:
-  push:
-    branches: [develop]
   pull_request:
     branches: [develop]
   workflow_dispatch:
 
 jobs:
   build:
-    name: Build Frontend
+    name: "[DEV] Build Frontend"
     runs-on: ubuntu-latest
     steps:
-      - name: "[FE] Checkout Repo"
+      - name: "Checkout Repo"
         uses: actions/checkout@v2
 
       - name: "[FE] Install Dependencies"
         run: yarn
 
-      # Runs a set of commands using the runners shell
       - name: "[FE] Run Tests"
         run: yarn test
 
       - name: "[FE] Build React App"
         run: yarn build
-
-      - name: "[FE] Archive Build Artifact"
-        uses: actions/upload-artifact@v2
-        with:
-          name: build
-          path: build
-
-  deploy:
-    name: DEV deploy
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2
-
-      - name: Install Functions Dependencies
-        run: yarn install:functions
-
-      - name: Download Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: build
-          path: build
-
-      - name: Deploy to Firebase
-        uses: w9jds/firebase-action@master
-        with:
-          args: deploy --project=dev
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_DEPLOY_TOKEN }}
-          PROJECT_ID: "tw-amapp-dev" # Hard code DEV as project to deploy
