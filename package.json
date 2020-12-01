@@ -28,7 +28,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "yarn build && bash scripts/confirm.sh && firebase deploy --only rules,hosting"
+    "deploy": "NODE_ENV=development yarn build && bash scripts/confirm.sh && firebase deploy --project=dev",
+    "deploy:func": "firebase deploy --project=dev --only functions",
+    "deploy:rules": "firebase deploy --project=dev --only firestore:rules"
   },
   "eslintConfig": {
     "extends": "react-app"
