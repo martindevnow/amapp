@@ -26,6 +26,8 @@ jobs:
         run: yarn build
 
       - name: "[FE] Archive Build Artifact"
+        env:
+          DEPLOY_ENVIRONMENT: development
         uses: actions/upload-artifact@v2
         with:
           name: build
@@ -51,7 +53,7 @@ jobs:
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --project=dev
+          args: deploy --project=development
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_DEPLOY_TOKEN }}
           PROJECT_ID: "tw-amapp-dev" # Hard code DEV as project to deploy
