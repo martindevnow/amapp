@@ -53,5 +53,8 @@ const firebaseConfigMap: ConfigMap = {
 
 const environment = process.env.DEPLOY_ENVIRONMENT || "development";
 
+console.log("DEPLOY_ENVIRONMENT", process.env.DEPLOY_ENVIRONMENT);
+console.log("environment", environment);
+
 export const firebaseConfig =
   firebaseConfigMap[environment] || devFirebaseConfig;
