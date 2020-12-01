@@ -6,10 +6,10 @@ on:
 
 jobs:
   build:
-    name: Build Frontend
+    name: "[PROD] Build Frontend"
     runs-on: ubuntu-latest
     steps:
-      - name: "[FE] Checkout Repo"
+      - name: "Checkout Repo"
         uses: actions/checkout@v2
 
       - name: "[FE] Install Dependencies"
@@ -39,23 +39,23 @@ jobs:
           path: build
 
   deploy:
-    name: PROD deploy
+    name: "[PROD] deploy"
     needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
 
-      - name: Install Functions Dependencies
+      - name: "[Func] Install Dependencies"
         run: yarn install:functions
 
-      - name: Download Artifact
+      - name: "[FE] Download Artifact"
         uses: actions/download-artifact@v2
         with:
           name: build
           path: build
 
-      - name: Deploy to Firebase
+      - name: "[PROD] Deploy to Firebase"
         uses: w9jds/firebase-action@master
         with:
           args: deploy --project=production

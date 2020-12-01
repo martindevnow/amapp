@@ -3,16 +3,14 @@ name: CI
 on:
   push:
     branches: [develop]
-  pull_request:
-    branches: [develop]
   workflow_dispatch:
 
 jobs:
   build:
-    name: Build Frontend
+    name: "[DEV] Build Frontend"
     runs-on: ubuntu-latest
     steps:
-      - name: "[FE] Checkout Repo"
+      - name: "Checkout Repo"
         uses: actions/checkout@v2
 
       - name: "[FE] Install Dependencies"
@@ -34,23 +32,23 @@ jobs:
           path: build
 
   deploy:
-    name: DEV deploy
+    name: "[DEV] Deploy"
     needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
 
-      - name: Install Functions Dependencies
+      - name: "[Func] Install Dependencies"
         run: yarn install:functions
 
-      - name: Download Artifact
+      - name: "[FE] Download Artifact"
         uses: actions/download-artifact@v2
         with:
           name: build
           path: build
 
-      - name: Deploy to Firebase
+      - name: "[DEV] Deploy to Firebase"
         uses: w9jds/firebase-action@master
         with:
           args: deploy --project=development
