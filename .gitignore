@@ -25,3 +25,4 @@ yarn-error.log*
 # Keeping .firebaserc as per: https://stackoverflow.com/questions/43527359/
 # .firebaserc
 .firebase/
+*-debug.log

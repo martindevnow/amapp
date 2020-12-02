@@ -2,48 +2,57 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    function signedIn () {
-      return request.auth.uid != null
+    function isSignedIn (userId) {
+      return userId != null
     }
     
-    function signedInAndModerator() {
-      return request.auth.uid != null 
-        && get(/databases/$(database)/documents/roles/$(request.auth.uid)).data.moderator == true;
+    function isModerator(userId) {
+      return get(/databases/$(database)/documents/roles/$(userId)).data.moderator == true;
     }
 
-    function signedInAndAdmin() {
-      return request.auth.uid != null 
-        && get(/databases/$(database)/documents/roles/$(request.auth.uid)).data.admin == true;
+    function isAdmin(userId) {
+      return get(/databases/$(database)/documents/roles/$(userId)).data.admin == true;
+    }
+    
+    function isAuthorOrAdmin(userId, question) {
+      let isAuthor = question.author.uid == userId;
+      return isAuthor || isAdmin(userId);
     }
 
-    function signedInAndAuthor() {
-      return request.auth.uid != null && request.resource.data.author.uid == request.auth.uid;
+    function isAuthorOrModerator(userId, question) {
+      let isAuthor = question.author.uid == userId;
+      return isAuthor || isModerator(userId);
     }
 
     match /users/{userId} {
+      // Everyone can see Users
       allow read;
-      allow write: if request.auth.uid != null && request.auth.uid == userId;
-      
-      match /votes/{questionId} {
-        allow read: if request.auth.uid != null && request.auth.uid == userId;
-        allow write: if request.auth.uid != null && request.auth.uid == userId;
-      }
+      // Only Owner can update their User data
+      allow write: if isSignedIn(request.auth.uid) && request.auth.uid == userId;
+    }
+
+    match /users/{userId}/votes/{questionId} {
+      // Only owner can read/write their votes
+      allow read: if isSignedIn(request.auth.uid) && request.auth.uid == userId;
+      allow write: if isSignedIn(request.auth.uid) && request.auth.uid == userId;
     }
 
     match /roles/{userId} {
-      // allow read;
-      allow read: if request.auth != null && request.auth.uid == userId;
+      // User can read their own roles
+      allow read: if isSignedIn(request.auth.uid) && request.auth.uid == userId;
+      // Only Cloud Function can Write
       allow write: if false; // No writing; only Cloud Function can
     }
 
     match /rooms/{roomId} {
-      allow read: if request.auth.uid != null;
-      allow write: if signedInAndModerator() || signedInAndAdmin();
+      allow read: if isSignedIn(request.auth.uid);
+      allow write: if isModerator(request.auth.uid) || isAdmin(request.auth.uid);
+
       match /questions/{questionId} {
-        allow read: if signedIn();
-        allow create: if signedIn();
-        allow update: if signedInAndAuthor();
-        allow delete: if signedInAndAdmin();
+        allow read: if isSignedIn(request.auth.uid);
+        allow create: if isSignedIn(request.auth.uid);
+        allow update: if isAuthorOrModerator(request.auth.uid, resource);
+        allow delete: if isAdmin(request.auth.uid);
       }
     }
 
