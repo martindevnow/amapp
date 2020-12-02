@@ -78,7 +78,7 @@ export class QuestionsService {
       return false;
     }
     const batch = this.firebaseService.db.batch();
-    const questionRef = this._getRoom().collection("questions").doc(questionId);
+    // const questionRef = this._getRoom().collection("questions").doc(questionId);
 
     // TODO: Expand ACL here
     if (
@@ -95,15 +95,15 @@ export class QuestionsService {
         // If so, do nothing
         return Promise.reject("The user has already voted for this question");
       }
-      batch.set(hasVotedRef, { questionId });
+      batch.set(hasVotedRef, { questionId, roomId: this.roomId });
     }
 
-    // if not, then increment the count, and add a log that this user has now voted
-    batch.set(
-      questionRef,
-      { upVotes: this.firebaseService.increment },
-      { merge: true }
-    );
+    // DONE: This was added as a cloud function
+    // batch.set(
+    //   questionRef,
+    //   { upVotes: this.firebaseService.increment },
+    //   { merge: true }
+    // );
     batch.commit();
     return true;
   };

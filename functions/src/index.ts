@@ -8,10 +8,24 @@ import * as admin from "firebase-admin";
 admin.initializeApp();
 const db: FirebaseFirestore.Firestore = admin.firestore();
 
-export const helloWorld = functions.https.onRequest((request, response) => {
-  functions.logger.info("Hello logs!", { structuredData: true });
-  response.send("Hello from Firebase!");
-});
+// export const helloWorld = functions.https.onRequest((request, response) => {
+//   functions.logger.info("Hello logs!", { structuredData: true });
+//   response.send("Hello from Firebase!");
+// });
+
+export const incrementVoteCount = functions.firestore
+  .document("users/{userId}/votes/{questionId}")
+  .onCreate((snapshot, context) => {
+    const { questionId } = context.params;
+    const data = snapshot.data() as { roomId: string };
+    const { roomId } = data;
+    return db.doc(`rooms/${roomId}/questions/${questionId}`).set(
+      {
+        upVotes: admin.firestore.FieldValue.increment(1),
+      },
+      { merge: true }
+    );
+  });
 
 export const setupUserRoles = functions.firestore
   .document("users/{userId}")
@@ -36,7 +50,7 @@ export const setupUserRoles = functions.firestore
 
 /**
  * This function was used in Production to migrate to new schema for Roles
- * .. We will only need to run it again if new users signup before the other function is added
+ * .. We will only need to run it again if new users sign-up before the other function is added
  * (although, it should exist and keep the table up to date)
  */
 export const migrateRolesToNewTable = functions.https.onRequest((req, res) => {
