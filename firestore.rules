@@ -21,28 +21,33 @@ service cloud.firestore {
     }
 
     match /users/{userId} {
+      // Everyone can see Users
       allow read;
+      // Only Owner can update their User data
       allow write: if request.auth.uid != null && request.auth.uid == userId;
-      
-      match /votes/{questionId} {
-        allow read: if request.auth.uid != null && request.auth.uid == userId;
-        allow write: if request.auth.uid != null && request.auth.uid == userId;
-      }
+    }
+
+    match /users/{userId}/votes/{questionId} {
+      // Only owner can read/write their votes
+      allow read: if request.auth.uid != null && request.auth.uid == userId;
+      allow write: if request.auth.uid != null && request.auth.uid == userId;
     }
 
     match /roles/{userId} {
-      // allow read;
+      // User can read their own roles
       allow read: if request.auth != null && request.auth.uid == userId;
+      // Only Cloud Function can Write
       allow write: if false; // No writing; only Cloud Function can
     }
 
     match /rooms/{roomId} {
       allow read: if request.auth.uid != null;
       allow write: if signedInAndModerator() || signedInAndAdmin();
+
       match /questions/{questionId} {
         allow read: if signedIn();
         allow create: if signedIn();
-        allow update: if signedInAndAuthor();
+        allow update: if signedInAndAuthor() || signedInAndAdmin();
         allow delete: if signedInAndAdmin();
       }
     }

@@ -9,7 +9,7 @@ import {
   GuestRoleMap,
 } from "./auth.acl";
 
-import { IUserProfile } from "./auth.types";
+import { IUserProfile, IUserRoles } from "./auth.types";
 
 export class AuthService {
   private userProfile: IUserProfile | null;
@@ -83,15 +83,14 @@ export class AuthService {
     return this.userProfile;
   };
 
-  loadRoles = async (userId: string) => {
-    console.log("auth.service :: loadRoles()");
+  loadRoles = async (userId: string): Promise<IUserRoles> => {
     return this.db
       .doc(`roles/${userId}`)
       .get()
       .then((snapshot) => {
-        const data = snapshot.data();
-        console.log("roles loaded", data);
+        const data = snapshot.data() as IUserRoles;
         this.userRoles = data as AclRoleMap;
+        return data;
       });
   };
 

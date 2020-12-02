@@ -10,12 +10,13 @@ import { switchMap } from "rxjs/operators";
 import FirebaseContext from "../firebase/firebase.context";
 import authService from "./auth.service";
 import AuthContext from "./auth.context";
-import { ACL, DEFAULT_ACL } from "./auth.acl";
-import { IUserProfile } from "./auth.types";
+import { ACL, DEFAULT_ACL, GuestRoleMap } from "./auth.acl";
+import { IUserProfile, IUserRoles } from "./auth.types";
 
 const AuthProvider: FunctionComponent = (props) => {
   const firebaseService = useContext(FirebaseContext);
   const [user, setUser] = useState<IUserProfile | null>(null);
+  const [roles, setRoles] = useState<IUserRoles>(GuestRoleMap);
   const [loaded, setLoaded] = useState<boolean>(false);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -37,8 +38,9 @@ const AuthProvider: FunctionComponent = (props) => {
                   snapshot: firebase.firestore.DocumentSnapshot<IUserProfile>
                 ) => {
                   const normalizedUser = authService.loadUser(snapshot);
-                  authService.loadRoles(normalizedUser.uid).then(() => {
+                  authService.loadRoles(normalizedUser.uid).then((roles) => {
                     // const normalizedUser = authService.normalizeUser(snapshot);
+                    setRoles(roles);
                     return observer.next(normalizedUser as IUserProfile);
                   });
                 }
@@ -63,7 +65,7 @@ const AuthProvider: FunctionComponent = (props) => {
   }, [firebaseService]);
 
   return (
-    <AuthContext.Provider value={{ user, loaded, authService }}>
+    <AuthContext.Provider value={{ user, loaded, authService, roles }}>
       {props.children}
     </AuthContext.Provider>
   );

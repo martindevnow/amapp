@@ -27,47 +27,49 @@ const Room: FunctionComponent<RoomProps> = ({ room }) => {
     await questionsService?.clearActiveQuestion();
   };
   return (
-    <React.Fragment>
-      <h1>Welcome to {room.name}</h1>
-      <div
-        className="upper"
-        css={css`
-          display: flex;
-          justify-content: space-evenly;
-          flex-direction: column;
-          column-gap: 4rem;
+    room && (
+      <React.Fragment>
+        <h1>Welcome to {room.name}</h1>
+        <div
+          className="upper"
+          css={css`
+            display: flex;
+            justify-content: space-evenly;
+            flex-direction: column;
+            column-gap: 4rem;
 
-          @media (min-width: 1020px) {
-            flex-direction: row;
-          }
-        `}
-      >
-        <Can aclAction={AclActions.ASK_QUESTION}>
-          <div className="left">
-            <h2>Ask a question: </h2>
-            <AddQuestion />
-          </div>
-        </Can>
+            @media (min-width: 1020px) {
+              flex-direction: row;
+            }
+          `}
+        >
+          <Can aclAction={AclActions.ASK_QUESTION}>
+            <div className="left">
+              <h2>Ask a question: </h2>
+              <AddQuestion />
+            </div>
+          </Can>
 
-        {room.activeQuestionId && activeQuestion && (
-          <div className="right">
-            <span
-              css={css`
-                margin-right: 1rem;
-              `}
-            >
-              {" "}
-              Current Question:
-            </span>
-            <Can aclAction={AclActions.CLEAR_ACTIVE_QUESTION}>
-              <Button onClick={clearActiveQuestion}>Clear</Button>
-            </Can>
-            <Question question={activeQuestion} />
-          </div>
-        )}
-      </div>
-      <QuestionFeed roomId={room.id} />
-    </React.Fragment>
+          {room.activeQuestionId && activeQuestion && (
+            <div className="right">
+              <span
+                css={css`
+                  margin-right: 1rem;
+                `}
+              >
+                {" "}
+                Current Question:
+              </span>
+              <Can aclAction={AclActions.CLEAR_ACTIVE_QUESTION}>
+                <Button onClick={clearActiveQuestion}>Clear</Button>
+              </Can>
+              <Question question={activeQuestion} />
+            </div>
+          )}
+        </div>
+        <QuestionFeed roomId={room.id} />
+      </React.Fragment>
+    )
   );
 };
 
