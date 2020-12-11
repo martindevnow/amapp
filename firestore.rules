@@ -1,5 +1,9 @@
 rules_version = '2';
 service cloud.firestore {
+
+// Docs:
+// https://firebase.google.com/docs/rules/rules-language
+
   match /databases/{database}/documents {
 
     function isSignedIn (userId) {
