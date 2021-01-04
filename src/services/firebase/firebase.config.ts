@@ -66,8 +66,5 @@ const hostEnvironmentMap: any = {
 const host: any = window.location.host;
 const environment: Environment = hostEnvironmentMap[host] || "development";
 
-console.log("host", host);
-console.log("environment", environment);
-
 export const firebaseConfig =
   firebaseConfigMap[environment] || devFirebaseConfig;
