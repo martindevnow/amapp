@@ -50,8 +50,8 @@ const getDaySuffix = (dayNum: number) => {
 };
 
 const humanReadable = (date: Date) =>
-  `${getMonthString(date.getMonth())} ${date.getDay()}${getDaySuffix(
-    date.getDay()
+  `${getMonthString(date.getMonth())} ${date.getDate()}${getDaySuffix(
+    date.getDate()
   )} ${date.getFullYear()}`;
 
 const sortByCreatedAtDesc = sortByCreatedAt(true);
