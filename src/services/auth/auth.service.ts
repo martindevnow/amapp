@@ -110,10 +110,6 @@ export class AuthService {
   };
 
   canUserDo = (aclAction: AclActions) => {
-    if (aclAction === AclActions.ASK_QUESTION) {
-      console.log("this.userRoles");
-      console.log(this.userRoles);
-    }
     const reqRoles = this.acl[aclAction];
     const roles: AclRoleMap = this.userRoles || GuestRoleMap;
     if (!reqRoles || !reqRoles.length) {
