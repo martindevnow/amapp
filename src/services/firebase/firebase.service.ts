@@ -12,7 +12,7 @@ export class FirebaseService {
 
   constructor() {
     // console.log("Firebase Service :: Constructor");
-    console.log(firebaseConfig.projectId);
+    console.log(`Loading project :: ${firebaseConfig.projectId}`);
     app.initializeApp(firebaseConfig);
     this.auth = app.auth();
     this.db = app.firestore();
