@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { FunctionComponent, useContext, useEffect, useState } from "react";
 import { css, jsx } from "@emotion/core";
+import styled from "@emotion/styled";
 
 import Can from "../../hoc/can.component";
 
@@ -20,6 +21,20 @@ import { ReactComponent as CommentIcon } from "../../assets/fa/solid/comment.svg
 import { IconButton } from "../ui/button/button.component";
 import React from "react";
 import Unless from "../../hoc/unless.component";
+
+const Container = styled.div<any>`
+  width: 100%;
+  display: flex;
+  border: 1px solid lightgray;
+  align-items: center;
+  background-color: ${({ backgroundColor }: any) => backgroundColor};
+`;
+
+const AnswerText = styled.span<any>`
+  border-left: 4px solid lightgray;
+  padding-left: 0.7rem;
+  font-style: italic;
+`;
 
 interface QuestionProps {
   question: IQuestion;
@@ -55,27 +70,19 @@ const Question: FunctionComponent<QuestionProps> = ({ question }) => {
     await questionsService?.deleteQuestion(question.id);
   };
 
-  const answerQuestion = async () => {
-    await questionsService?.answerQuestion(question.id);
+  const markQuestionAsDiscussed = async () => {
+    await questionsService?.markQuestionAsDiscussed(question.id);
   };
 
-  const unanswerQuestion = async () => {
-    await questionsService?.unanswerQuestion(question.id);
+  const unmarkQuestionAsDiscussed = async () => {
+    await questionsService?.unmarkQuestionAsDiscussed(question.id);
   };
 
   const backgroundColor = question.approved ? "white" : "#ffbbbb";
   const upVotedColor = "#ff4400";
   const upVoteColor = hasVoted ? upVotedColor : "#666";
   return (
-    <div
-      css={css`
-        width: 100%;
-        display: flex;
-        border: 1px solid lightgray;
-        align-items: center;
-        background-color: ${backgroundColor};
-      `}
-    >
+    <Container backgroundColor={backgroundColor}>
       {!question.approved ? (
         <Can aclAction={AclActions.APPROVE_QUESTION}>
           <IconButton
@@ -115,12 +122,12 @@ const Question: FunctionComponent<QuestionProps> = ({ question }) => {
 
       {!question.answered ? (
         <React.Fragment>
-          <Can aclAction={AclActions.ANSWER_QUESTION}>
-            <IconButton onClick={answerQuestion}>
+          <Can aclAction={AclActions.MARK_FOR_DISCUSSION}>
+            <IconButton onClick={markQuestionAsDiscussed}>
               <CommentSlashIcon width="1.5rem" height="1.5rem" fill="green" />
             </IconButton>
           </Can>
-          <Unless aclAction={AclActions.ANSWER_QUESTION}>
+          <Unless aclAction={AclActions.MARK_FOR_DISCUSSION}>
             <IconButton
               css={css`
                 cursor: default;
@@ -132,12 +139,12 @@ const Question: FunctionComponent<QuestionProps> = ({ question }) => {
         </React.Fragment>
       ) : (
         <React.Fragment>
-          <Can aclAction={AclActions.ANSWER_QUESTION}>
-            <IconButton onClick={unanswerQuestion}>
+          <Can aclAction={AclActions.MARK_FOR_DISCUSSION}>
+            <IconButton onClick={unmarkQuestionAsDiscussed}>
               <CommentIcon width="1.5rem" height="1.5rem" fill="green" />
             </IconButton>
           </Can>
-          <Unless aclAction={AclActions.ANSWER_QUESTION}>
+          <Unless aclAction={AclActions.MARK_FOR_DISCUSSION}>
             <IconButton
               css={css`
                 min-width: 3rem;
@@ -164,6 +171,7 @@ const Question: FunctionComponent<QuestionProps> = ({ question }) => {
         >
           {question.title}
         </p>
+        {question?.answer && <AnswerText>{question.answer}</AnswerText>}
       </div>
 
       <div
@@ -216,7 +224,7 @@ const Question: FunctionComponent<QuestionProps> = ({ question }) => {
           )}
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 

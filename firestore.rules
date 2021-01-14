@@ -25,7 +25,7 @@ service cloud.firestore {
 
     function isAuthorOrModerator(userId, question) {
       let isAuthor = question.author.uid == userId;
-      return isAuthor || isModerator(userId);
+      return isAuthor || isModerator(userId) || isAdmin(userId);
     }
 
     match /users/{userId} {

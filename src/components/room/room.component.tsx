@@ -15,6 +15,7 @@ import Can from "../../hoc/can.component";
 import { AclActions } from "../../services/auth/auth.acl";
 import Question from "../question/question.component";
 import Button from "../ui/button/button.component";
+import Answer from "../answer/answer.component";
 
 interface RoomProps {
   room: IRoom;
@@ -64,6 +65,9 @@ const Room: FunctionComponent<RoomProps> = ({ room }) => {
                 <Button onClick={clearActiveQuestion}>Clear</Button>
               </Can>
               <Question question={activeQuestion} />
+              <Can aclAction={AclActions.ANSWER_QUESTION}>
+                <Answer question={activeQuestion} />
+              </Can>
             </div>
           )}
         </div>
