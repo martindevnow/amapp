@@ -26,7 +26,7 @@ export class QuestionsService {
       .update({ approved: true });
   };
 
-  answerQuestion = async (questionId: string) => {
+  markQuestionAsDiscussed = async (questionId: string) => {
     await this._getRoom().update({ activeQuestionId: questionId });
     return this._getRoom()
       .collection("questions")
@@ -34,11 +34,18 @@ export class QuestionsService {
       .update({ answered: true });
   };
 
-  unanswerQuestion = async (questionId: string) => {
+  unmarkQuestionAsDiscussed = async (questionId: string) => {
     return this._getRoom()
       .collection("questions")
       .doc(questionId)
       .update({ answered: false });
+  };
+
+  answerQuestion = async (questionId: string, answer: string) => {
+    return this._getRoom()
+      .collection("questions")
+      .doc(questionId)
+      .update({ answer });
   };
 
   askQuestion = async (question: IQuestionRecord) => {
