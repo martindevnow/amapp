@@ -1,16 +1,18 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import { useState, useContext, FormEvent } from "react";
-import { useHistory } from "react-router-dom";
+import { useEffect, useState, useContext, FormEvent } from "react";
+import { useHistory, useLocation } from "react-router-dom";
 
 import * as ROUTES from "../../constants/routes";
 import AuthContext from "../../services/auth/auth.context";
 import Button from "../ui/button/button.component";
 import Input from "../ui/input/input.component";
 import { firebaseConfig } from "../../services/firebase/firebase.config";
+import { useAuth } from "../../services/auth/auth.provider";
 
-export const SignInWithMicrosoft = () => {
+const SignInWithMicrosoft = () => {
   const { authService } = useContext(AuthContext);
+  const location = useLocation();
   const history = useHistory();
   const [error, setError] = useState<any>(null);
 
@@ -22,7 +24,11 @@ export const SignInWithMicrosoft = () => {
           credential.user as firebase.User,
           { displayName: credential.user?.displayName || "" }
         );
-        history.push(ROUTES.HOME);
+        if ((location.state as any)?.prevPage?.pathname) {
+          history.push((location.state as any).prevPage.pathname);
+        } else {
+          history.push(ROUTES.HOME);
+        }
       })
       .catch((error) => {
         setError(error);
@@ -125,19 +131,35 @@ export const SignInForm = () => {
   );
 };
 
-const SignInPage = () => (
-  <div>
-    <h1>Sign In</h1>
-    <div
-      css={css`
-        display: flex;
-        justify-content: space-around;
-      `}
-    >
-      {firebaseConfig.projectId === "tw-amapp-dev" && <SignInForm />}
-      <SignInWithMicrosoft />
+const SignInPage = () => {
+  const { user, loaded } = useAuth();
+  const history = useHistory();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (loaded && user) {
+      if ((location.state as any)?.prevPage?.pathname) {
+        history.push((location.state as any).prevPage.pathname);
+      } else {
+        history.push(ROUTES.HOME);
+      }
+    }
+  }, [loaded, user, history, location]);
+
+  return (
+    <div>
+      <h1>Sign In</h1>
+      <div
+        css={css`
+          display: flex;
+          justify-content: space-around;
+        `}
+      >
+        {firebaseConfig.projectId === "tw-amapp-dev" && <SignInForm />}
+        <SignInWithMicrosoft />
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default SignInPage;

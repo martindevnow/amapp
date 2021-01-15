@@ -71,4 +71,6 @@ const AuthProvider: FunctionComponent = (props) => {
   );
 };
 
+export const useAuth = () => React.useContext(AuthContext);
+
 export default AuthProvider;
