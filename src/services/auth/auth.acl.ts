@@ -44,6 +44,7 @@ export enum AclActions {
   DELETE_QUESTION = "DELETE_QUESTION",
   APPROVE_QUESTION = "APPROVE_QUESTION",
   UP_VOTE_QUESTION = "UP_VOTE_QUESTION",
+  MARK_FOR_DISCUSSION = "MARK_FOR_DISCUSSION",
   ANSWER_QUESTION = "ANSWER_QUESTION",
 
   // Routing
@@ -70,6 +71,7 @@ export const DEFAULT_ACL: ACL = {
 
   [AclActions.APPROVE_QUESTION]: AclModeratorsOnly,
   [AclActions.DELETE_QUESTION]: AclModeratorsOnly,
+  [AclActions.MARK_FOR_DISCUSSION]: AclModeratorsOnly,
   [AclActions.ANSWER_QUESTION]: AclModeratorsOnly,
 
   [AclActions.ARCHIVE_ROOM]: AclAdminsOnly,
