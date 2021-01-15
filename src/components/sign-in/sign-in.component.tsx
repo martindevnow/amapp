@@ -7,6 +7,7 @@ import * as ROUTES from "../../constants/routes";
 import AuthContext from "../../services/auth/auth.context";
 import Button from "../ui/button/button.component";
 import Input from "../ui/input/input.component";
+import { firebaseConfig } from "../../services/firebase/firebase.config";
 
 export const SignInWithMicrosoft = () => {
   const { authService } = useContext(AuthContext);
@@ -133,7 +134,7 @@ const SignInPage = () => (
         justify-content: space-around;
       `}
     >
-      <SignInForm />
+      {firebaseConfig.projectId === "tw-amapp-dev" && <SignInForm />}
       <SignInWithMicrosoft />
     </div>
   </div>
