@@ -1,7 +1,8 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import React, { useContext, FunctionComponent } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, withRouter, useHistory } from "react-router-dom";
+import * as ROUTES from "../../constants/routes";
 
 import { IRoom, RoomMap } from "../../services/rooms/rooms.types";
 import QuestionFeed from "../question-feed/question-feed.component";
@@ -16,6 +17,7 @@ import { AclActions } from "../../services/auth/auth.acl";
 import Question from "../question/question.component";
 import Button from "../ui/button/button.component";
 import Answer from "../answer/answer.component";
+import { useAuth } from "../../services/auth/auth.provider";
 
 interface RoomProps {
   room: IRoom;
@@ -27,6 +29,7 @@ const Room: FunctionComponent<RoomProps> = ({ room }) => {
   const clearActiveQuestion = async () => {
     await questionsService?.clearActiveQuestion();
   };
+
   return (
     room && (
       <React.Fragment>
@@ -77,9 +80,17 @@ const Room: FunctionComponent<RoomProps> = ({ room }) => {
   );
 };
 
-const RoomPage = () => {
+const RoomPage = ({ location }: any) => {
   const { roomId } = useParams<{ roomId: string }>();
   const { rooms, loaded } = useContext(RoomsContext);
+  const { user, loaded: userLoaded } = useAuth();
+  const history = useHistory();
+
+  React.useEffect(() => {
+    if (userLoaded && !user) {
+      history.push(ROUTES.SIGN_IN, { prevPage: location });
+    }
+  }, [history, user, userLoaded, location]);
 
   return loaded ? (
     <QuestionsProvider roomId={roomId}>
@@ -90,4 +101,4 @@ const RoomPage = () => {
   );
 };
 
-export default RoomPage;
+export default withRouter(RoomPage);

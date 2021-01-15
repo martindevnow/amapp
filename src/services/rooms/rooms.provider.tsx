@@ -7,6 +7,7 @@ import React, {
 
 import { RoomMap, IRoomRecord } from "./rooms.types";
 import FirebaseContext from "../firebase/firebase.context";
+import { useAuth } from "../auth/auth.provider";
 
 export interface RoomsService {
   createRoom: (room: IRoomRecord) => Promise<string>;
@@ -31,8 +32,12 @@ const RoomsProvider: FunctionComponent = (props) => {
   const firebaseService = useContext(FirebaseContext);
   const [rooms, setRooms] = useState<RoomMap>({});
   const [loaded, setLoaded] = useState<boolean>(false);
+  const { user } = useAuth();
 
   useEffect(() => {
+    if (!user) {
+      return;
+    }
     return firebaseService.db.collection("rooms").onSnapshot((qs) => {
       const rooms: RoomMap = qs.docs
         .map((doc) => ({
@@ -44,7 +49,7 @@ const RoomsProvider: FunctionComponent = (props) => {
       setRooms(rooms);
       setLoaded(true);
     });
-  }, [firebaseService]);
+  }, [firebaseService, user]);
 
   const createRoom = async (room: IRoomRecord) => {
     const createdAt = new Date();
