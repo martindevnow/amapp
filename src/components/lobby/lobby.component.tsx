@@ -1,10 +1,12 @@
-import React, { useContext } from "react";
+import styled from "@emotion/styled";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 
 import * as ROUTES from "../../constants/routes";
 import Can from "../../hoc/can.component";
 import { AclActions } from "../../services/auth/auth.acl";
 import { RoomsContext } from "../../services/rooms/rooms.provider";
+import { IRoom } from "../../services/rooms/rooms.types";
 import CreateRoom from "../create-room/create-room.component";
 import JoinRoom from "../join-room/join-room.component";
 
@@ -56,34 +58,68 @@ const humanReadable = (date: Date) =>
 
 const sortByCreatedAtDesc = sortByCreatedAt(true);
 
+const ActionMenu = styled.div`
+  padding: 1rem;
+`;
+
+const Page = styled.div`
+  width: 100%;
+  display: flex;
+  margin-top: 1rem;
+`;
+
+const Left = styled.div`
+  flex-grow: 1;
+`;
+
 const LobbyPage = () => {
   const { rooms } = useContext(RoomsContext);
+  const [showArchived, setShowArchived] = useState(false);
+  const shouldIncludeArchived = (room: IRoom) =>
+    showArchived ? true : !room.isArchived;
+  const onShowArchivedToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setShowArchived(event.target.checked);
+  };
   return (
-    <div>
-      <Can aclAction={AclActions.LIST_ROOMS}>
-        <h2>Active Rooms</h2>
-        {rooms &&
-          Object.values(rooms)
-            .sort(sortByCreatedAtDesc)
-            .map((room) => (
-              <React.Fragment key={room.id}>
-                <Link key={room.id} to={ROUTES.ROOM_BY_ID(room.id)}>
-                  {room.name}
-                </Link>
-                {" - "}
-                <em>Created: {humanReadable(room.createdAt)}</em>
-                <br />
-              </React.Fragment>
-            ))}
-      </Can>
-      <Can aclAction={AclActions.CREATE_ROOM}>
-        <h2>Create a New Room</h2>
-        <CreateRoom />
-      </Can>
+    <Page>
+      <Left>
+        <Can aclAction={AclActions.LIST_ROOMS}>
+          <h2>{`Active${showArchived ? " and Archived" : ""} Rooms`}</h2>
+          {rooms &&
+            Object.values(rooms)
+              .sort(sortByCreatedAtDesc)
+              .filter(shouldIncludeArchived)
+              .map((room) => (
+                <React.Fragment key={room.id}>
+                  <Link key={room.id} to={ROUTES.ROOM_BY_ID(room.id)}>
+                    {room.name}
+                  </Link>
+                  {" - "}
+                  <em>Created: {humanReadable(room.createdAt)}</em>
+                  <br />
+                </React.Fragment>
+              ))}
+        </Can>
+        <Can aclAction={AclActions.CREATE_ROOM}>
+          <h2>Create a New Room</h2>
+          <CreateRoom />
+        </Can>
 
-      <h2>Join an Open Room</h2>
-      <JoinRoom />
-    </div>
+        <h2>Join an Open Room</h2>
+        <JoinRoom />
+      </Left>
+      <ActionMenu>
+        <h3>Options</h3>
+        <label htmlFor="showArchived">Show Archived</label>{" "}
+        <input
+          onChange={(e) => onShowArchivedToggle(e)}
+          type="checkbox"
+          name="showArchived"
+          id="showArchived"
+          value="showArchived"
+        />
+      </ActionMenu>
+    </Page>
   );
 };
 

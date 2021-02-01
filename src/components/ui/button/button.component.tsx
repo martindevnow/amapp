@@ -24,6 +24,9 @@ export const IconButton = styled("button")`
       fill: #555;
     }
   }
+  :disabled {
+    cursor: not-allowed;
+  }
 `;
 
 export default Button;

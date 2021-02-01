@@ -11,6 +11,8 @@ import { useAuth } from "../auth/auth.provider";
 
 export interface RoomsService {
   createRoom: (room: IRoomRecord) => Promise<string>;
+  archiveRoom: (roomId: string) => Promise<void>;
+  unarchiveRoom: (roomId: string) => Promise<void>;
 }
 
 interface RoomsContextValue {
@@ -59,12 +61,30 @@ const RoomsProvider: FunctionComponent = (props) => {
     return newRoom.id;
   };
 
+  const archiveRoom = async (roomId: string) => {
+    return firebaseService.db.doc(`rooms/${roomId}`).set(
+      {
+        isArchived: true,
+      },
+      { merge: true }
+    );
+  };
+
+  const unarchiveRoom = async (roomId: string) => {
+    return firebaseService.db.doc(`rooms/${roomId}`).set(
+      {
+        isArchived: false,
+      },
+      { merge: true }
+    );
+  };
+
   return (
     <RoomsContext.Provider
       value={{
         rooms,
         loaded,
-        roomsService: { createRoom },
+        roomsService: { createRoom, archiveRoom, unarchiveRoom },
       }}
     >
       {props.children}
