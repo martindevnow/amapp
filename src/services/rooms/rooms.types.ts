@@ -7,6 +7,7 @@ export interface IRoomRecord {
 export interface IRoom extends IRoomRecord {
   id: string;
   createdAt: Date;
+  isArchived?: boolean;
 }
 
 export interface RoomMap {
