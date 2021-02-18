@@ -1,6 +1,5 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
-import { useEffect, useState, useContext, FormEvent } from "react";
+import React, { useEffect, useState, useContext, FormEvent } from "react";
+import { css } from "styled-components";
 import { useHistory, useLocation } from "react-router-dom";
 
 import * as ROUTES from "../../constants/routes";

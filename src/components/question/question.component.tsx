@@ -1,6 +1,10 @@
-/** @jsx jsx */
-import { FunctionComponent, useContext, useEffect, useState } from "react";
-import { css, jsx } from "@emotion/core";
+import React, {
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { css } from "styled-components";
 import styled from "@emotion/styled";
 
 import Can from "../../hoc/can.component";
@@ -19,7 +23,6 @@ import { ReactComponent as EyeSlashIcon } from "../../assets/fa/solid/eye-slash.
 import { ReactComponent as CommentSlashIcon } from "../../assets/fa/solid/comment-slash.svg";
 import { ReactComponent as CommentIcon } from "../../assets/fa/solid/comment.svg";
 import { IconButton } from "../ui/button/button.component";
-import React from "react";
 import Unless from "../../hoc/unless.component";
 
 const Container = styled.div<any>`

@@ -1,5 +1,5 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
+import React from "react";
+import styled, { css } from "styled-components";
 import { Route, BrowserRouter as Router } from "react-router-dom";
 
 import * as ROUTES from "./constants/routes";
@@ -14,19 +14,19 @@ import LobbyPage from "./components/lobby/lobby.component";
 import ProtectedRoute from "./hoc/protected-route.component";
 import { AclActions } from "./services/auth/auth.acl";
 
+const Main = styled.main`
+  padding: 0 1rem 1rem;
+  @media (min-width: 420px) {
+    padding: 0 2rem 2rem;
+  }
+`;
+
 function App() {
   return (
     <Router>
       <div>
         <Navigation />
-        <main
-          css={css`
-            padding: 0 1rem 1rem;
-            @media (min-width: 420px) {
-              padding: 0 2rem 2rem;
-            }
-          `}
-        >
+        <main>
           <Route exact path={ROUTES.LANDING} component={LandingPage} />
           <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
           <Route path={ROUTES.SIGN_IN} component={SignInPage} />

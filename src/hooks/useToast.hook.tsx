@@ -1,29 +1,26 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
-import { FunctionComponent, useCallback, useState } from "react";
+import React, { FunctionComponent, useCallback, useState } from "react";
+import styled, { css } from "styled-components";
 
 interface ToastProps {
   show: boolean;
 }
 
+const StyledToast = styled.div<{ show: boolean }>`
+  visibility: ${({ show }) => (show ? "visible" : "hidden")};
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: orange;
+  padding: 1rem 3rem;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  opacity: ${({ show }) => (show ? "100%" : "0%")};
+  transition: opacity 0.3s ease-in-out;
+`;
+
 const Toast: FunctionComponent<ToastProps> = ({ show, children }) => (
-  <div
-    css={css`
-      visibility: ${show ? "visible" : "hidden"};
-      position: fixed;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: orange;
-      padding: 1rem 3rem;
-      border-bottom-left-radius: 10px;
-      border-bottom-right-radius: 10px;
-      opacity: ${show ? "100%" : "0%"};
-      transition: opacity 0.3s ease-in-out;
-    `}
-  >
-    {children}
-  </div>
+  <StyledToast show={show}>{children}</StyledToast>
 );
 
 export const useToast = (autoDismissTimerMilliseconds: number) => {

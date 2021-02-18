@@ -1,6 +1,5 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
-import { FunctionComponent, useContext, useState } from "react";
+import React, { FunctionComponent, useContext, useState } from "react";
+import { css } from "styled-components";
 
 import Question from "../question/question.component";
 import { QuestionsContext } from "../../services/questions/questions.provider";

@@ -1,6 +1,5 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
 import React, { useState, useContext } from "react";
+import { css } from "styled-components";
 
 import { QuestionsContext } from "../../services/questions/questions.provider";
 import AuthContext from "../../services/auth/auth.context";

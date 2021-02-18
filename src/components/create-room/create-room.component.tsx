@@ -1,6 +1,5 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
-import { useState, useContext } from "react";
+import React, { useState, useContext } from "react";
+import { css } from "styled-components";
 import { useHistory } from "react-router-dom";
 
 import { IRoomRecord } from "../../services/rooms/rooms.types";

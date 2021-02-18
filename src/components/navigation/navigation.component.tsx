@@ -1,6 +1,5 @@
-/** @jsx jsx */
 import React, { useContext } from "react";
-import { css, jsx } from "@emotion/core";
+import { css } from "styled-components";
 
 import { Link } from "react-router-dom";
 
@@ -8,7 +7,6 @@ import * as ROUTES from "../../constants/routes";
 import AuthContext from "../../services/auth/auth.context";
 import SignOutButton from "../sign-out/sign-out.component";
 
-import "./navigation.styles.scss";
 import styled from "@emotion/styled";
 
 const NavigationContainer = styled.div`

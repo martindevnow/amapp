@@ -1,5 +1,5 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
+import React from "react";
+import { css } from "styled-components";
 import styled from "@emotion/styled";
 import JoinRoom from "../join-room/join-room.component";
 import Can from "../../hoc/can.component";

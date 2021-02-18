@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
-    "@emotion/core": "^10.0.35",
     "@emotion/styled": "^10.0.27",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -32,11 +31,13 @@
     "react-scripts": "3.4.3",
     "recompose": "^0.30.0",
     "rxjs": "^6.6.3",
+    "styled-components": "^5.2.1",
     "typescript": "~3.7.2"
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.1.5",
-    "@types/recompose": "^0.30.7"
+    "@types/recompose": "^0.30.7",
+    "@types/styled-components": "^5.1.7"
   },
   "eslintConfig": {
     "extends": "react-app"
