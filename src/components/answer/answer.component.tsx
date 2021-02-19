@@ -3,7 +3,7 @@ import { IQuestion } from "../../services/questions/questions.types";
 import { QuestionsContext } from "../../services/questions/questions.provider";
 import Input from "../ui/input/input.component";
 import Button from "../ui/button/button.component";
-import { useToast } from "../../hooks/useToast.hook";
+import useToast from "../../hooks/useToast.hook";
 
 const Answer = ({ question }: { question: IQuestion }) => {
   const { questionsService } = useContext(QuestionsContext);

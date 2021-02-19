@@ -87,12 +87,7 @@ const Question: FunctionComponent<QuestionProps> = ({ question }) => {
     <Container backgroundColor={backgroundColor}>
       {!question.approved ? (
         <Can aclAction={AclActions.APPROVE_QUESTION}>
-          <IconButton
-            css={css`
-              min-width: 3rem;
-            `}
-            onClick={approveQuestion}
-          >
+          <IconButton onClick={approveQuestion}>
             <CheckIcon width="1.5rem" height="1.5rem" fill="green" />
           </IconButton>
         </Can>

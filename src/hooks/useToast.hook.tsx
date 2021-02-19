@@ -23,7 +23,7 @@ const Toast: FunctionComponent<ToastProps> = ({ show, children }) => (
   <StyledToast show={show}>{children}</StyledToast>
 );
 
-export const useToast = (autoDismissTimerMilliseconds: number) => {
+const useToast = (autoDismissTimerMilliseconds: number) => {
   const [isToastActive, setIsToastActive] = useState(false);
   const displayToast = useCallback(() => {
     setIsToastActive(true);
@@ -36,3 +36,5 @@ export const useToast = (autoDismissTimerMilliseconds: number) => {
 
   return { isToastActive, displayToast, Toast };
 };
+
+export default useToast;

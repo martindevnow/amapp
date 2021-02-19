@@ -38,6 +38,17 @@ const Title = styled.h1`
   flex-grow: 1;
 `;
 
+const Top = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+  column-gap: 4rem;
+
+  @media (min-width: 1020px) {
+    flex-direction: row;
+  }
+`;
+
 const Room: FunctionComponent<RoomProps> = ({ room }) => {
   const { questions, questionsService } = useContext(QuestionsContext);
   const activeQuestion = questions?.find((q) => q.id === room.activeQuestionId);
@@ -60,19 +71,7 @@ const Room: FunctionComponent<RoomProps> = ({ room }) => {
         </Can>
       </Section>
 
-      <div
-        className="upper"
-        css={css`
-          display: flex;
-          justify-content: space-evenly;
-          flex-direction: column;
-          column-gap: 4rem;
-
-          @media (min-width: 1020px) {
-            flex-direction: row;
-          }
-        `}
-      >
+      <Top>
         <Can aclAction={AclActions.ASK_QUESTION}>
           <div className="left">
             <h2>Ask a question: </h2>
@@ -99,7 +98,7 @@ const Room: FunctionComponent<RoomProps> = ({ room }) => {
             </Can>
           </div>
         )}
-      </div>
+      </Top>
       <QuestionFeed roomId={room.id} />
     </React.Fragment>
   );

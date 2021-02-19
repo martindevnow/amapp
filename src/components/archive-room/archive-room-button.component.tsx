@@ -5,7 +5,7 @@ import { ReactComponent as ArchiveIcon } from "../../assets/fa/solid/archive.svg
 import { ReactComponent as BoxOpenIcon } from "../../assets/fa/solid/box-open.svg";
 import { RoomsContext } from "../../services/rooms/rooms.provider";
 
-import { useToast } from "../../hooks/useToast.hook";
+import useToast from "../../hooks/useToast.hook";
 
 const ArchiveRoomButton = ({
   roomId,

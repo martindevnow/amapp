@@ -65,17 +65,14 @@ const Navigation = () => {
 };
 
 const NavigationAuth = () => (
-  <React.Fragment>
-    <NavigationItem>
-      <Link to={ROUTES.HOME}>Home</Link>
-    </NavigationItem>
+  <>
     <NavigationItem>
       <Link to={ROUTES.LOBBY}>Lobby</Link>
     </NavigationItem>
     <NavigationItem>
       <SignOutButton />
     </NavigationItem>
-  </React.Fragment>
+  </>
 );
 
 const NavigationNonAuth = () => (
