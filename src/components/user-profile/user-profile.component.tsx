@@ -1,22 +1,22 @@
-import styled from "@emotion/styled";
 import React, { FunctionComponent, useContext } from "react";
+import styled from "styled-components";
 import AuthContext from "../../services/auth/auth.context";
 
-const ProfileCard = styled("div")`
+const ProfileCard = styled.div`
   display: flex;
   border: 1px solid lightgray;
 `;
 
-const ProfileImageContainer = styled("div")`
+const ProfileImageContainer = styled.div`
   padding: 1rem;
 `;
 
-const ProfileImage = styled("img")`
+const ProfileImage = styled.img`
   width: 100px;
   height: 100px;
 `;
 
-const ProfileBodyContainer = styled("div")`
+const ProfileBodyContainer = styled.div`
   padding: 1rem;
 `;
 

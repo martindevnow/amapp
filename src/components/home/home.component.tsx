@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 
 import AuthContext from "../../services/auth/auth.context";
+
 import EditProfile from "../edit-profile/edit-profile.component";
 import UserProfile from "../user-profile/user-profile.component";
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { css } from "styled-components";
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import JoinRoom from "../join-room/join-room.component";
 import Can from "../../hoc/can.component";
 import { AclActions } from "../../services/auth/auth.acl";

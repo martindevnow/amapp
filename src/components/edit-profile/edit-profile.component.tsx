@@ -1,10 +1,10 @@
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import React, { FormEvent, useContext, useState } from "react";
 import AuthContext from "../../services/auth/auth.context";
 import Button from "../ui/button/button.component";
 import Input from "../ui/input/input.component";
 
-const Form = styled("form")`
+const Form = styled.form`
   display: flex;
   flex-direction: column;
 `;

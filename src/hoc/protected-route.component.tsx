@@ -19,19 +19,18 @@ const ProtectedRoute: FunctionComponent<ProtectedRouteProps> = ({
     <Route
       {...rest}
       path={path}
-      render={(props) => {
-        if (authService.canUserDo(action)) {
-          return <Component {...props} />;
-        }
-        return (
+      render={(props) =>
+        authService.canUserDo(action) ? (
+          <Component {...props} />
+        ) : (
           <Redirect
             to={{
               pathname: "/",
               state: { from: props.location },
             }}
           />
-        );
-      }}
+        )
+      }
     />
   );
 };

@@ -3,9 +3,7 @@ import { useHistory } from "react-router-dom";
 
 import * as ROUTES from "../../constants/routes";
 import AuthContext from "../../services/auth/auth.context";
-import Button from "../ui/button/button.component";
-
-import "./sign-out.styles.scss";
+import { ButtonLight } from "../ui/button/button.component";
 
 const SignOutButton = () => {
   const { authService } = useContext(AuthContext);
@@ -17,9 +15,9 @@ const SignOutButton = () => {
     });
   };
   return (
-    <Button type="button" className="sign-out-button" onClick={signOut}>
+    <ButtonLight type="button" onClick={signOut}>
       Sign Out
-    </Button>
+    </ButtonLight>
   );
 };
 

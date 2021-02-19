@@ -4,8 +4,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { css } from "styled-components";
-import styled from "@emotion/styled";
+import styled, { css } from "styled-components";
 
 import Can from "../../hoc/can.component";
 

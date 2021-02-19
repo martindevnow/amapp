@@ -1,68 +1,24 @@
 import React, { useContext, FunctionComponent } from "react";
-import { css } from "styled-components";
+import styled, { css } from "styled-components";
 import { useParams, withRouter, useHistory } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
 
 import { IRoom, RoomMap } from "../../services/rooms/rooms.types";
 import QuestionFeed from "../question-feed/question-feed.component";
-import AddQuestion from "../add-question/add-question.component";
+import AddQuestionForm from "../add-question/add-question-form.component";
 import QuestionsProvider, {
   QuestionsContext,
 } from "../../services/questions/questions.provider";
 import { RoomsContext } from "../../services/rooms/rooms.provider";
-import Loading from "../loading/loading.component";
+import Loading from "../ui/loading/loading.component";
 import Can from "../../hoc/can.component";
 import { AclActions } from "../../services/auth/auth.acl";
 import Question from "../question/question.component";
-import Button, { IconButton } from "../ui/button/button.component";
+import Button from "../ui/button/button.component";
 import Answer from "../answer/answer.component";
 import { useAuth } from "../../services/auth/auth.provider";
-import { ReactComponent as ArchiveIcon } from "../../assets/fa/solid/archive.svg";
-import { ReactComponent as BoxOpenIcon } from "../../assets/fa/solid/box-open.svg";
-import { useToast } from "../../hooks/useToast.hook";
-import styled from "@emotion/styled";
 
-const ArchiveRoomButton = ({
-  roomId,
-  isArchived,
-}: {
-  roomId: string;
-  isArchived: boolean;
-}) => {
-  const roomService = useContext(RoomsContext);
-  const { isToastActive, displayToast, Toast } = useToast(5000);
-  const unarchive = () => {
-    return roomService?.roomsService
-      ?.unarchiveRoom(roomId)
-      .then(() => displayToast());
-  };
-  const archive = () => {
-    return roomService?.roomsService
-      ?.archiveRoom(roomId)
-      .then(() => displayToast());
-  };
-  return (
-    <React.Fragment>
-      <Toast show={isToastActive}>
-        {isArchived ? "Archived" : "Unarchived"}
-      </Toast>
-      <IconButton onClick={unarchive} disabled={!isArchived}>
-        <BoxOpenIcon
-          width="1.5rem"
-          height="1.5rem"
-          fill={isArchived ? "red" : "lightgray"}
-        />
-      </IconButton>
-      <IconButton onClick={archive} disabled={isArchived}>
-        <ArchiveIcon
-          width="1.5rem"
-          height="1.5rem"
-          fill={isArchived ? "lightgray" : "red"}
-        />
-      </IconButton>
-    </React.Fragment>
-  );
-};
+import ArchiveRoomButton from "../archive-room/archive-room-button.component";
 
 interface RoomProps {
   room: IRoom;
@@ -120,7 +76,7 @@ const Room: FunctionComponent<RoomProps> = ({ room }) => {
         <Can aclAction={AclActions.ASK_QUESTION}>
           <div className="left">
             <h2>Ask a question: </h2>
-            <AddQuestion />
+            <AddQuestionForm />
           </div>
         </Can>
 

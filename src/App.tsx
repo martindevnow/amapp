@@ -1,5 +1,5 @@
 import React from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { Route, BrowserRouter as Router } from "react-router-dom";
 
 import * as ROUTES from "./constants/routes";
@@ -26,7 +26,7 @@ function App() {
     <Router>
       <div>
         <Navigation />
-        <main>
+        <Main>
           <Route exact path={ROUTES.LANDING} component={LandingPage} />
           <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
           <Route path={ROUTES.SIGN_IN} component={SignInPage} />
@@ -40,7 +40,7 @@ function App() {
           {/* <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} /> */}
           {/* <Route path={ROUTES.ACCOUNT} component={AccountPage} /> */}
           {/* <Route path={ROUTES.ADMIN} component={AdminPage} /> */}
-        </main>
+        </Main>
       </div>
     </Router>
   );

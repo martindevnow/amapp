@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useCallback, useState } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 interface ToastProps {
   show: boolean;

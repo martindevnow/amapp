@@ -4,11 +4,10 @@ import { css } from "styled-components";
 import { QuestionsContext } from "../../services/questions/questions.provider";
 import AuthContext from "../../services/auth/auth.context";
 import { IQuestionRecord } from "../../services/questions/questions.types";
-import Button from "../ui/button/button.component";
-import Input from "../ui/input/input.component";
-
-import "./add-question.styles.scss";
 import { useToast } from "../../hooks/useToast.hook";
+
+import Button, { ButtonDark } from "../ui/button/button.component";
+import Input from "../ui/input/input.component";
 
 const AddQuestionForm = () => {
   const { user } = useContext(AuthContext);
@@ -65,7 +64,7 @@ const AddQuestionForm = () => {
       />
       <Button
         onClick={() => setAnonymous(!anonymous)}
-        className={anonymous ? "anonymously" : ""}
+        as={anonymous ? ButtonDark : Button}
       >
         {buttonText}
       </Button>
@@ -74,12 +73,4 @@ const AddQuestionForm = () => {
   );
 };
 
-const AddQuestion = () => {
-  return (
-    <React.Fragment>
-      <AddQuestionForm />
-    </React.Fragment>
-  );
-};
-
-export default AddQuestion;
+export default AddQuestionForm;

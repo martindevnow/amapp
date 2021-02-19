@@ -1,13 +1,11 @@
 import React, { useContext } from "react";
-import { css } from "styled-components";
+import styled, { css } from "styled-components";
 
 import { Link } from "react-router-dom";
 
 import * as ROUTES from "../../constants/routes";
 import AuthContext from "../../services/auth/auth.context";
 import SignOutButton from "../sign-out/sign-out.component";
-
-import styled from "@emotion/styled";
 
 const NavigationContainer = styled.div`
   display: flex;
