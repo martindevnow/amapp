@@ -1,5 +1,5 @@
 import React, { useContext, FunctionComponent } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { useParams, withRouter, useHistory } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
 
@@ -16,9 +16,9 @@ import { AclActions } from "../../services/auth/auth.acl";
 import Question from "../question/question.component";
 import Button from "../ui/button/button.component";
 import Answer from "../answer/answer.component";
-import { useAuth } from "../../services/auth/auth.provider";
 
 import ArchiveRoomButton from "../archive-room/archive-room-button.component";
+import useAuth from "../../hooks/useAuth.hook";
 
 interface RoomProps {
   room: IRoom;
@@ -40,13 +40,17 @@ const Title = styled.h1`
 
 const Top = styled.div`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   flex-direction: column;
-  column-gap: 4rem;
+  column-gap: 1rem;
 
   @media (min-width: 1020px) {
     flex-direction: row;
   }
+`;
+
+const Column = styled.div`
+  flex: 1 1 0;
 `;
 
 const Room: FunctionComponent<RoomProps> = ({ room }) => {
@@ -58,7 +62,7 @@ const Room: FunctionComponent<RoomProps> = ({ room }) => {
 
   if (!room) return null;
   return (
-    <React.Fragment>
+    <>
       <Section>
         <Title>Welcome to {room.name}</Title>
         <Can aclAction={AclActions.ARCHIVE_ROOM}>
@@ -73,34 +77,28 @@ const Room: FunctionComponent<RoomProps> = ({ room }) => {
 
       <Top>
         <Can aclAction={AclActions.ASK_QUESTION}>
-          <div className="left">
+          <Column>
             <h2>Ask a question: </h2>
             <AddQuestionForm />
-          </div>
+          </Column>
         </Can>
 
         {room.activeQuestionId && activeQuestion && (
-          <div className="right">
-            <span
-              css={css`
-                margin-right: 1rem;
-              `}
-            >
-              {" "}
-              Current Question:
-            </span>
-            <Can aclAction={AclActions.CLEAR_ACTIVE_QUESTION}>
-              <Button onClick={clearActiveQuestion}>Clear</Button>
-            </Can>
+          <Column>
+            <h2>Current Question</h2>
+
             <Question question={activeQuestion} />
             <Can aclAction={AclActions.ANSWER_QUESTION}>
               <Answer question={activeQuestion} />
             </Can>
-          </div>
+            <Can aclAction={AclActions.CLEAR_ACTIVE_QUESTION}>
+              <Button onClick={clearActiveQuestion}>Clear Current Q</Button>
+            </Can>
+          </Column>
         )}
       </Top>
       <QuestionFeed roomId={room.id} />
-    </React.Fragment>
+    </>
   );
 };
 

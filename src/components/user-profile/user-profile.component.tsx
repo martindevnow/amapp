@@ -1,6 +1,6 @@
-import React, { FunctionComponent, useContext } from "react";
+import React, { FunctionComponent } from "react";
 import styled from "styled-components";
-import AuthContext from "../../services/auth/auth.context";
+import useAuth from "../../hooks/useAuth.hook";
 
 const ProfileCard = styled.div`
   display: flex;
@@ -21,7 +21,7 @@ const ProfileBodyContainer = styled.div`
 `;
 
 const UserProfile: FunctionComponent = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
 
   return (
     user && (

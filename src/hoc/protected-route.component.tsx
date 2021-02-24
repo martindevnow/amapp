@@ -1,7 +1,7 @@
-import React, { FunctionComponent, useContext } from "react";
+import React, { FunctionComponent } from "react";
 import { Redirect, Route, RouteProps } from "react-router-dom";
+import useAuth from "../hooks/useAuth.hook";
 import { AclActions } from "../services/auth/auth.acl";
-import AuthContext from "../services/auth/auth.context";
 
 interface ProtectedRouteProps extends RouteProps {
   action: AclActions;
@@ -14,7 +14,7 @@ const ProtectedRoute: FunctionComponent<ProtectedRouteProps> = ({
   path,
   ...rest
 }) => {
-  const { authService } = useContext(AuthContext);
+  const { authService } = useAuth();
   return (
     <Route
       {...rest}

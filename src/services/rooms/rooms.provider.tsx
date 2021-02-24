@@ -7,7 +7,7 @@ import React, {
 
 import { RoomMap, IRoomRecord } from "./rooms.types";
 import FirebaseContext from "../firebase/firebase.context";
-import { useAuth } from "../auth/auth.provider";
+import useAuth from "../../hooks/useAuth.hook";
 
 export interface RoomsService {
   createRoom: (room: IRoomRecord) => Promise<string>;

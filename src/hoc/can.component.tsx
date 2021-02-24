@@ -1,12 +1,12 @@
-import React, { FunctionComponent, useContext } from "react";
+import React, { FunctionComponent } from "react";
+import useAuth from "../hooks/useAuth.hook";
 import { AclActions } from "../services/auth/auth.acl";
-import AuthContext from "../services/auth/auth.context";
 
 interface CanProps {
   aclAction: AclActions;
 }
 const Can: FunctionComponent<CanProps> = ({ aclAction, children }) => {
-  const { authService } = useContext(AuthContext);
+  const { authService } = useAuth();
   const canDo = authService.canUserDo(aclAction);
   return canDo ? <>{children}</> : null;
 };

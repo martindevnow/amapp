@@ -1,12 +1,11 @@
-import React, { useContext } from "react";
-
-import AuthContext from "../../services/auth/auth.context";
+import React from "react";
+import useAuth from "../../hooks/useAuth.hook";
 
 import EditProfile from "../edit-profile/edit-profile.component";
 import UserProfile from "../user-profile/user-profile.component";
 
 const HomePage = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
 
   return (
     <div>

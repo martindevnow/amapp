@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import React, { FormEvent, useContext, useState } from "react";
-import AuthContext from "../../services/auth/auth.context";
+import React, { FormEvent, useState } from "react";
 import Button from "../ui/button/button.component";
 import Input from "../ui/input/input.component";
+import useAuth from "../../hooks/useAuth.hook";
 
 const Form = styled.form`
   display: flex;
@@ -10,7 +10,7 @@ const Form = styled.form`
 `;
 
 const EditProfile = () => {
-  const { user, authService } = useContext(AuthContext);
+  const { user, authService } = useAuth();
 
   let imageInput = React.createRef<HTMLInputElement>();
 

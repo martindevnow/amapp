@@ -4,10 +4,10 @@ import { useHistory, useLocation } from "react-router-dom";
 
 import * as ROUTES from "../../constants/routes";
 import { firebaseConfig } from "../../services/firebase/firebase.config";
-import { useAuth } from "../../services/auth/auth.provider";
 
 import SignInWithMicrosoft from "./sign-in-microsoft.component";
 import SignInForm from "./sign-in-form.component";
+import useAuth from "../../hooks/useAuth.hook";
 
 const SignInPage = () => {
   const { user, loaded } = useAuth();

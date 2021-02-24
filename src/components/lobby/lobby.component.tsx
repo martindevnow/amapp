@@ -65,7 +65,6 @@ const ActionMenu = styled.div`
 const Page = styled.div`
   width: 100%;
   display: flex;
-  margin-top: 1rem;
 `;
 
 const Left = styled.div`

@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useContext, useState } from "react";
-import { css } from "styled-components";
+import styled, { css } from "styled-components";
 
 import Question from "../question/question.component";
 import { QuestionsContext } from "../../services/questions/questions.provider";
@@ -45,6 +45,24 @@ const filtersAcl: FiltersAcl = {
   approved: AclActions.APPROVE_QUESTION,
   unapproved: AclActions.APPROVE_QUESTION,
 };
+
+const QuestionFeedControlsContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  @media (min-width: 1020px) {
+    flex-direction: row;
+  }
+`;
+
+const SpacedQuestion = styled(Question)`
+  margin-bottom: 1rem;
+`;
+
+const EmptyFeed = styled.p`
+  text-align: center;
+  margin-top: 4rem;
+`;
 
 const QuestionFeed: FunctionComponent<QuestionFeedProps> = ({ roomId }) => {
   const { questions } = useContext(QuestionsContext);
@@ -96,22 +114,9 @@ const QuestionFeed: FunctionComponent<QuestionFeedProps> = ({ roomId }) => {
 
   // TODO: Add a filter/sorting SVG for the sorting
   return (
-    <section
-      css={css`
-        margin-top: 1rem;
-      `}
-    >
+    <section>
       <h2>Question Feed</h2>
-      <div
-        css={css`
-          display: flex;
-          justify-content: space-between;
-          flex-direction: column;
-          @media (min-width: 1020px) {
-            flex-direction: row;
-          }
-        `}
-      >
+      <QuestionFeedControlsContainer>
         <div>
           <span
             css={css`
@@ -191,19 +196,17 @@ const QuestionFeed: FunctionComponent<QuestionFeedProps> = ({ roomId }) => {
             )
           )}
         </div>
-      </div>
+      </QuestionFeedControlsContainer>
 
-      {filteredQuestions.length ? (
-        filteredQuestions.map((q) => <Question key={q.id} question={q} />)
-      ) : (
-        <p
-          css={css`
-            text-align: center;
-            margin-top: 5rem;
-          `}
-        >
+      {filteredQuestions.length &&
+        filteredQuestions.map((q) => (
+          <SpacedQuestion key={q.id} question={q} />
+        ))}
+
+      {filteredQuestions.length === 0 && (
+        <EmptyFeed>
           No questions.. try asking one or adjusting the filters!
-        </p>
+        </EmptyFeed>
       )}
     </section>
   );

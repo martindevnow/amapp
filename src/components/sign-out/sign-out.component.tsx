@@ -1,12 +1,12 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useHistory } from "react-router-dom";
 
 import * as ROUTES from "../../constants/routes";
-import AuthContext from "../../services/auth/auth.context";
+import useAuth from "../../hooks/useAuth.hook";
 import { ButtonLight } from "../ui/button/button.component";
 
 const SignOutButton = () => {
-  const { authService } = useContext(AuthContext);
+  const { authService } = useAuth();
   const history = useHistory();
 
   const signOut = () => {

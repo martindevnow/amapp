@@ -10,7 +10,6 @@ import Can from "../../hoc/can.component";
 
 import { AclActions } from "../../services/auth/auth.acl";
 
-import AuthContext from "../../services/auth/auth.context";
 import { QuestionsContext } from "../../services/questions/questions.provider";
 import { QuestionsService } from "../../services/questions/questions.service";
 import { IQuestion } from "../../services/questions/questions.types";
@@ -23,11 +22,12 @@ import { ReactComponent as CommentSlashIcon } from "../../assets/fa/solid/commen
 import { ReactComponent as CommentIcon } from "../../assets/fa/solid/comment.svg";
 import { IconButton } from "../ui/button/button.component";
 import Unless from "../../hoc/unless.component";
+import Card from "../ui/card/card.component";
+import useAuth from "../../hooks/useAuth.hook";
 
-const Container = styled.div<any>`
+const Container = styled(Card)<any>`
   width: 100%;
   display: flex;
-  border: 1px solid lightgray;
   align-items: center;
   background-color: ${({ backgroundColor }: any) => backgroundColor};
 `;
@@ -40,10 +40,14 @@ const AnswerText = styled.span<any>`
 
 interface QuestionProps {
   question: IQuestion;
+  className?: string;
 }
 
-const Question: FunctionComponent<QuestionProps> = ({ question }) => {
-  const { user, authService } = useContext(AuthContext);
+const Question: FunctionComponent<QuestionProps> = ({
+  question,
+  className,
+}) => {
+  const { user, authService } = useAuth();
   const userId = user?.uid || "TODO";
 
   const [hasVoted, setHasVoted] = useState(false);
@@ -84,7 +88,7 @@ const Question: FunctionComponent<QuestionProps> = ({ question }) => {
   const upVotedColor = "#ff4400";
   const upVoteColor = hasVoted ? upVotedColor : "#666";
   return (
-    <Container backgroundColor={backgroundColor}>
+    <Container backgroundColor={backgroundColor} className={className}>
       {!question.approved ? (
         <Can aclAction={AclActions.APPROVE_QUESTION}>
           <IconButton onClick={approveQuestion}>

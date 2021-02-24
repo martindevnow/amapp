@@ -1,13 +1,13 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { css } from "styled-components";
 
 import * as ROUTES from "../../constants/routes";
-import AuthContext from "../../services/auth/auth.context";
+import useAuth from "../../hooks/useAuth.hook";
 import Button from "../ui/button/button.component";
 
 const SignInWithMicrosoft = () => {
-  const { authService } = useContext(AuthContext);
+  const { authService } = useAuth();
   const location = useLocation();
   const history = useHistory();
   const [error, setError] = useState<any>(null);

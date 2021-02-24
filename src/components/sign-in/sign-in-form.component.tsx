@@ -1,15 +1,15 @@
-import React, { useState, useContext, FormEvent } from "react";
+import React, { useState, FormEvent } from "react";
 import { useHistory } from "react-router-dom";
 import { css } from "styled-components";
 
-import AuthContext from "../../services/auth/auth.context";
 import * as ROUTES from "../../constants/routes";
 
 import Input from "../ui/input/input.component";
 import Button from "../ui/button/button.component";
+import useAuth from "../../hooks/useAuth.hook";
 
 const SignInForm = () => {
-  const { authService } = useContext(AuthContext);
+  const { authService } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
