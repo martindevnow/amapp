@@ -7,6 +7,7 @@ import * as ROUTES from "../../constants/routes";
 import Input from "../ui/input/input.component";
 import Button from "../ui/button/button.component";
 import useAuth from "../../hooks/useAuth.hook";
+import Card from "../ui/card/card.component";
 
 const SignInForm = () => {
   const { authService } = useAuth();
@@ -40,54 +41,57 @@ const SignInForm = () => {
   const isInvalid = password === "" || email === "";
 
   return (
-    <form onSubmit={onSubmit}>
-      <label
-        htmlFor="email"
-        css={css`
-          display: block;
-          margin-top: 1rem;
-          margin-bottom: 0.2rem;
-        `}
-      >
-        Email
-      </label>
-      <Input
-        name="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        type="text"
-        placeholder="Email Address"
-      />
-      <label
-        htmlFor="password"
-        css={css`
-          display: block;
-          margin-top: 1rem;
-          margin-bottom: 0.2rem;
-        `}
-      >
-        Password
-      </label>
-      <Input
-        name="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        type="password"
-        placeholder="Password"
-      />
-      <Button
-        css={css`
-          margin-top: 1rem;
-          display: block;
-        `}
-        disabled={isInvalid}
-        type="submit"
-      >
-        Sign In
-      </Button>
+    <Card>
+      <h2>Email and Password</h2>
+      <form onSubmit={onSubmit}>
+        <label
+          htmlFor="email"
+          css={css`
+            display: block;
+            margin-top: 1rem;
+            margin-bottom: 0.2rem;
+          `}
+        >
+          Email
+        </label>
+        <Input
+          name="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          type="text"
+          placeholder="Email Address"
+        />
+        <label
+          htmlFor="password"
+          css={css`
+            display: block;
+            margin-top: 1rem;
+            margin-bottom: 0.2rem;
+          `}
+        >
+          Password
+        </label>
+        <Input
+          name="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          type="password"
+          placeholder="Password"
+        />
+        <Button
+          css={css`
+            margin-top: 1rem;
+            display: block;
+          `}
+          disabled={isInvalid}
+          type="submit"
+        >
+          Sign In
+        </Button>
 
-      {error && <p>{error.message}</p>}
-    </form>
+        {error && <p>{error.message}</p>}
+      </form>
+    </Card>
   );
 };
 

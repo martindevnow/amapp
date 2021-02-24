@@ -1,5 +1,4 @@
 import React, { useState, useContext } from "react";
-import { css } from "styled-components";
 import { useHistory } from "react-router-dom";
 
 import { IRoomRecord } from "../../services/rooms/rooms.types";
@@ -27,12 +26,7 @@ const CreateRoomForm = () => {
     history.push(ROUTES.ROOM_BY_ID(newRoomId));
   };
   return (
-    <form
-      onSubmit={onSubmit}
-      css={css`
-        text-align: center;
-      `}
-    >
+    <form onSubmit={onSubmit}>
       <Input
         type="text"
         name="title"
@@ -41,9 +35,7 @@ const CreateRoomForm = () => {
         onChange={(e) => setName(e.target.value)}
       />
 
-      <Button css={css``} type="submit">
-        Create
-      </Button>
+      <Button type="submit">Create</Button>
     </form>
   );
 };

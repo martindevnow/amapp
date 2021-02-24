@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useContext, useState } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 import Question from "../question/question.component";
 import { QuestionsContext } from "../../services/questions/questions.provider";
@@ -118,20 +118,9 @@ const QuestionFeed: FunctionComponent<QuestionFeedProps> = ({ roomId }) => {
       <h2>Question Feed</h2>
       <QuestionFeedControlsContainer>
         <div>
-          <span
-            css={css`
-              margin-right: 1rem;
-            `}
-          >
-            Sort:
-          </span>
+          <span>Sort:</span>
           <Button
-            css={css`
-              background-color: ${orderBy === "createdAt"
-                ? "black"
-                : "lightgray"};
-              color: ${orderBy === "createdAt" ? "lightgray" : "black"};
-            `}
+            variant={orderBy === "createdAt" ? "primary" : "secondary"}
             onClick={() => {
               setOrderBy("createdAt");
             }}
@@ -139,41 +128,19 @@ const QuestionFeed: FunctionComponent<QuestionFeedProps> = ({ roomId }) => {
             Newest
           </Button>
           <Button
-            css={css`
-              background-color: ${orderBy === "upVotes"
-                ? "black"
-                : "lightgray"};
-              color: ${orderBy === "upVotes" ? "lightgray" : "black"};
-            `}
-            onClick={() => {
-              setOrderBy("upVotes");
-            }}
+            variant={orderBy === "upVotes" ? "primary" : "secondary"}
+            onClick={() => setOrderBy("upVotes")}
           >
             Most Votes
           </Button>
         </div>
         <div>
-          <span
-            css={css`
-              @media (min-width: 1020px) {
-                margin-left: 1rem;
-              }
-              margin-right: 1rem;
-            `}
-          >
-            Filters:
-          </span>
+          <span>Filters:</span>
           {filters.map((filter) =>
             filtersAcl[filter] !== undefined ? (
               <Can key={filter} aclAction={filtersAcl[filter] as AclActions}>
                 <Button
-                  css={css`
-                    text-transform: uppercase;
-                    background-color: ${appliedFilters[filter]
-                      ? "black"
-                      : "lightgray"};
-                    color: ${appliedFilters[filter] ? "lightgray" : "black"};
-                  `}
+                  variant={appliedFilters[filter] ? "primary" : "secondary"}
                   onClick={() => toggleFilter(filter)}
                 >
                   {filter}
@@ -182,13 +149,7 @@ const QuestionFeed: FunctionComponent<QuestionFeedProps> = ({ roomId }) => {
             ) : (
               <Button
                 key={filter}
-                css={css`
-                  text-transform: uppercase;
-                  background-color: ${appliedFilters[filter]
-                    ? "black"
-                    : "lightgray"};
-                  color: ${appliedFilters[filter] ? "lightgray" : "black"};
-                `}
+                variant={appliedFilters[filter] ? "primary" : "secondary"}
                 onClick={() => toggleFilter(filter)}
               >
                 {filter}

@@ -1,9 +1,25 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
-const Button = styled.button`
+interface ButtonProps {
+  variant?: "primary" | "secondary";
+}
+
+const Button = styled.button<ButtonProps>`
   padding: 0.5rem 1rem;
   border: 1px solid lightgray;
   cursor: pointer;
+  ${(props) =>
+    props.variant === "primary" &&
+    css`
+      background-color: ${props.theme.colors.primary};
+      color: black;
+    `}
+  ${(props) =>
+    props.variant === "secondary" &&
+    css`
+      background-color: ${props.theme.colors.secondary};
+      color: black;
+    `}
 `;
 
 export const IconButton = styled.button`

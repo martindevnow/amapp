@@ -19,6 +19,7 @@ import Answer from "../answer/answer.component";
 
 import ArchiveRoomButton from "../archive-room/archive-room-button.component";
 import useAuth from "../../hooks/useAuth.hook";
+import Column from "../ui/layout/column.component";
 
 interface RoomProps {
   room: IRoom;
@@ -47,10 +48,6 @@ const Top = styled.div`
   @media (min-width: 1020px) {
     flex-direction: row;
   }
-`;
-
-const Column = styled.div`
-  flex: 1 1 0;
 `;
 
 const Room: FunctionComponent<RoomProps> = ({ room }) => {

@@ -1,5 +1,4 @@
 import React from "react";
-import { css } from "styled-components";
 import styled from "styled-components";
 import JoinRoom from "../join-room/join-room.component";
 import Can from "../../hoc/can.component";
@@ -12,15 +11,7 @@ const Paragraph = styled.p`
 
 const LandingPage = () => {
   return (
-    <div
-      css={css`
-        width: 100%;
-        margin: 0 auto;
-        @media (min-width: 420px) {
-          width: 80%;
-        }
-      `}
-    >
+    <div>
       <h1>Ask Me Anything</h1>
       <Paragraph>
         In 2009, the sub-reddit <code>r/IAmA</code> was founded on the premise
@@ -38,22 +29,10 @@ const LandingPage = () => {
         questions of the speaker.
       </Paragraph>
 
-      <h2
-        css={css`
-          margin-top: 1.5rem;
-        `}
-      >
-        Have a Room ID?
-      </h2>
+      <h2>Have a Room ID?</h2>
       <JoinRoom />
       <Can aclAction={AclActions.CREATE_ROOM}>
-        <h2
-          css={css`
-            margin-top: 1.5rem;
-          `}
-        >
-          Create a new Room{" "}
-        </h2>
+        <h2>Create a new Room </h2>
         <CreateRoom />
       </Can>
     </div>

@@ -1,10 +1,17 @@
 import React, { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import { css } from "styled-components";
+import styled from "styled-components";
 
 import * as ROUTES from "../../constants/routes";
 import useAuth from "../../hooks/useAuth.hook";
 import Button from "../ui/button/button.component";
+import { default as UICard } from "../ui/card/card.component";
+
+const Card = styled(UICard)`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
 
 const SignInWithMicrosoft = () => {
   const { authService } = useAuth();
@@ -32,15 +39,11 @@ const SignInWithMicrosoft = () => {
   };
 
   return (
-    <div
-      css={css`
-        display: flex;
-        align-items: center;
-      `}
-    >
+    <Card>
+      <h2>Microsoft Single Sign On</h2>
       <Button onClick={onClick}>Sign In With Microsoft</Button>
       {error && <p>{error.message}</p>}
-    </div>
+    </Card>
   );
 };
 

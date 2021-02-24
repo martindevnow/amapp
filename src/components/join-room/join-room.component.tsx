@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { css } from "styled-components";
 import { useHistory } from "react-router-dom";
 
 import * as ROUTES from "../../constants/routes";
@@ -14,12 +13,7 @@ const JoinRoom = () => {
     history.push(ROUTES.ROOM_BY_ID(roomId));
   };
   return (
-    <form
-      css={css`
-        text-align: center;
-      `}
-      onSubmit={(e) => onSubmit(e)}
-    >
+    <form onSubmit={(e) => onSubmit(e)}>
       <Input
         type="text"
         name="roomId"
