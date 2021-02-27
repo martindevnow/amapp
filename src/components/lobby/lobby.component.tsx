@@ -10,7 +10,7 @@ import { IRoom } from "../../services/rooms/rooms.types";
 import CreateRoom from "../create-room/create-room.component";
 import JoinRoom from "../join-room/join-room.component";
 import Column from "../ui/layout/column.component";
-import { MDHeader } from "../ui/header/header.component";
+import { LGHeader, MDHeader, SMHeader } from "../ui/header/header.component";
 import Card from "../ui/card/card.component";
 
 const sortByCreatedAt = (descending = true) => {
@@ -69,10 +69,11 @@ const Page = styled.div`
   position: relative;
 `;
 
+// TODO: Make a component for hover/drop-down menus and admin type actions
 const ActionMenu = styled.div`
   padding: 1rem;
   position: absolute;
-  top: 0;
+  top: 80px;
   right: 0;
 `;
 
@@ -100,7 +101,7 @@ const LobbyPage = () => {
   return (
     <Page>
       <ActionMenu>
-        <h3>Options</h3>
+        <SMHeader>Options</SMHeader>
         <label htmlFor="showArchived">Show Archived</label>{" "}
         <input
           onChange={(e) => onShowArchivedToggle(e)}
@@ -113,7 +114,9 @@ const LobbyPage = () => {
 
       <div style={{ width: "100%" }}>
         <Can aclAction={AclActions.LIST_ROOMS}>
-          <h2>{`Active${showArchived ? " and Archived" : ""} Rooms`}</h2>
+          <LGHeader>{`Active${
+            showArchived ? " and Archived" : ""
+          } Rooms`}</LGHeader>
           {rooms &&
             Object.values(rooms)
               .sort(sortByCreatedAtDesc)

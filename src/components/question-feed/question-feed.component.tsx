@@ -51,6 +51,8 @@ const QuestionFeedControlsContainer = styled.div`
   display: flex;
   justify-content: space-between;
   flex-direction: column;
+  margin-bottom: 15px;
+
   @media (min-width: 1020px) {
     flex-direction: row;
   }
@@ -119,7 +121,7 @@ const QuestionFeed: FunctionComponent<QuestionFeedProps> = ({ roomId }) => {
       <MDHeader style={{ marginTop: "50px" }}>Question Feed</MDHeader>
       <QuestionFeedControlsContainer>
         <div>
-          <span>Sort:</span>
+          <span style={{ marginRight: "10px" }}>Sort</span>
           <Button
             variant={orderBy === "createdAt" ? "primary" : "secondary"}
             onClick={() => {
@@ -136,7 +138,7 @@ const QuestionFeed: FunctionComponent<QuestionFeedProps> = ({ roomId }) => {
           </Button>
         </div>
         <div>
-          <span>Filters:</span>
+          <span style={{ marginRight: "10px" }}>Filter</span>
           {filters.map((filter) =>
             filtersAcl[filter] !== undefined ? (
               <Can key={filter} aclAction={filtersAcl[filter] as AclActions}>

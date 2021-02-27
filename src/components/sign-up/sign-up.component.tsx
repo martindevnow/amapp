@@ -1,11 +1,13 @@
 import React, { FormEvent, useState } from "react";
-import { css } from "styled-components";
 import { Link, useHistory } from "react-router-dom";
 
 import * as ROUTES from "../../constants/routes";
 import Button from "../ui/button/button.component";
 import Input from "../ui/input/input.component";
 import useAuth from "../../hooks/useAuth.hook";
+import { Label } from "../ui/label/label.component";
+import InlineError from "../ui/error/inline-error.component";
+import { LGHeader } from "../ui/header/header.component";
 
 export const SignUpForm = () => {
   const { authService } = useAuth();
@@ -50,16 +52,7 @@ export const SignUpForm = () => {
 
   return (
     <form onSubmit={onSubmit}>
-      <label
-        htmlFor="displayName"
-        css={css`
-          display: block;
-          margin-top: 1rem;
-          margin-bottom: 0.2rem;
-        `}
-      >
-        Display Name
-      </label>
+      <Label htmlFor="displayName">Display Name</Label>
       <Input
         name="displayName"
         value={displayName}
@@ -67,16 +60,8 @@ export const SignUpForm = () => {
         type="text"
         placeholder="Display Name"
       />
-      <label
-        htmlFor="email"
-        css={css`
-          display: block;
-          margin-top: 1rem;
-          margin-bottom: 0.2rem;
-        `}
-      >
-        Email
-      </label>
+
+      <Label htmlFor="email">Email</Label>
       <Input
         name="email"
         value={email}
@@ -84,16 +69,8 @@ export const SignUpForm = () => {
         type="text"
         placeholder="Email Address"
       />
-      <label
-        htmlFor="passwordOne"
-        css={css`
-          display: block;
-          margin-top: 1rem;
-          margin-bottom: 0.2rem;
-        `}
-      >
-        Password
-      </label>
+
+      <Label htmlFor="passwordOne">Password</Label>
       <Input
         name="passwordOne"
         value={passwordOne}
@@ -101,16 +78,8 @@ export const SignUpForm = () => {
         type="password"
         placeholder="Password"
       />
-      <label
-        htmlFor="passwordTwo"
-        css={css`
-          display: block;
-          margin-top: 1rem;
-          margin-bottom: 0.2rem;
-        `}
-      >
-        Confirm Password
-      </label>
+
+      <Label htmlFor="passwordTwo">Confirm Password</Label>
       <Input
         name="passwordTwo"
         value={passwordTwo}
@@ -118,17 +87,12 @@ export const SignUpForm = () => {
         type="password"
         placeholder="Confirm Password"
       />
-      <Button
-        disabled={isInvalid}
-        type="submit"
-        css={css`
-          display: block;
-          margin-top: 1rem;
-        `}
-      >
+
+      <Button disabled={isInvalid} type="submit">
         Sign Up
       </Button>
-      {error && <p>{error.message}</p>}
+
+      <InlineError show={!!error?.message}>{error?.message}</InlineError>
     </form>
   );
 };
@@ -141,7 +105,7 @@ export const SignUpLink = () => (
 
 const SignUpPage = () => (
   <div>
-    <h1>SignUp</h1>
+    <LGHeader>SignUp</LGHeader>
     <SignUpForm />
   </div>
 );

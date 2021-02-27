@@ -5,7 +5,6 @@ import { IQuestionRecord } from "../../services/questions/questions.types";
 import useToast from "../../hooks/useToast.hook";
 
 import Button, { ButtonDark } from "../ui/button/button.component";
-import Toggle from "../ui/toggle/toggle.component";
 import useToggle from "../../hooks/useToggle.hook";
 import useAuth from "../../hooks/useAuth.hook";
 
@@ -44,8 +43,6 @@ const AddQuestionForm = () => {
       setTitle("");
     });
   };
-
-  const buttonText = isAnonymous ? "Anonymously..." : `As ${user?.email}`;
 
   return (
     <>

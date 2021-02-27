@@ -17,11 +17,6 @@ import theme from "./styles/theme";
 import { GlobalStyle } from "./styles/global";
 import ProtectedRoute from "./hoc/protected-route.component";
 import { AclActions } from "./services/auth/auth.acl";
-import {
-  LGHeader,
-  MDHeader,
-  SMHeader,
-} from "./components/ui/header/header.component";
 
 function App() {
   return (
@@ -31,9 +26,6 @@ function App() {
         <Navigation />
         <Layout>
           <Main>
-            {/* <LGHeader>AMApp</LGHeader>
-            <MDHeader>AMApp</MDHeader>
-            <SMHeader>AMApp</SMHeader> */}
             <Route component={LandingPage} exact path={ROUTES.LANDING} />
             <Route component={SignUpPage} path={ROUTES.SIGN_UP} />
             <Route component={SignInPage} path={ROUTES.SIGN_IN} />

@@ -3,6 +3,7 @@ import React, { FormEvent, useState } from "react";
 import Button from "../ui/button/button.component";
 import Input from "../ui/input/input.component";
 import useAuth from "../../hooks/useAuth.hook";
+import { LGHeader } from "../ui/header/header.component";
 
 const Form = styled.form`
   display: flex;
@@ -32,7 +33,7 @@ const EditProfile = () => {
 
   return (
     <section>
-      <h2>Edit your Profile</h2>
+      <LGHeader>Edit your Profile</LGHeader>
 
       <Form onSubmit={onSubmit}>
         <label>

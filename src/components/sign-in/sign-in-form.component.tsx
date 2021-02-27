@@ -1,6 +1,5 @@
 import React, { useState, FormEvent } from "react";
 import { useHistory } from "react-router-dom";
-import styled, { css } from "styled-components";
 
 import * as ROUTES from "../../constants/routes";
 
@@ -10,12 +9,7 @@ import useAuth from "../../hooks/useAuth.hook";
 import Card from "../ui/card/card.component";
 import { MDHeader } from "../ui/header/header.component";
 import InlineError from "../ui/error/inline-error.component";
-
-const Label = styled.label`
-  font-size: 12px;
-  margin-bottom: 2px;
-  display: block;
-`;
+import { Label } from "../ui/label/label.component";
 
 const SignInForm = () => {
   const { authService } = useAuth();

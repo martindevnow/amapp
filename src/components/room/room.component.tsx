@@ -77,7 +77,7 @@ const Room: FunctionComponent<RoomProps> = ({ room }) => {
         <Can aclAction={AclActions.ASK_QUESTION}>
           <Column>
             <Card>
-              <MDHeader>Ask a question</MDHeader>
+              <MDHeader>Ask a Question</MDHeader>
               <AddQuestionForm />
             </Card>
           </Column>
