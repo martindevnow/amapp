@@ -5,11 +5,11 @@ import { IQuestionRecord } from "../../services/questions/questions.types";
 import useToast from "../../hooks/useToast.hook";
 
 import Button, { ButtonDark } from "../ui/button/button.component";
-import Input from "../ui/input/input.component";
 import Toggle from "../ui/toggle/toggle.component";
 import useToggle from "../../hooks/useToggle.hook";
-import Card from "../ui/card/card.component";
 import useAuth from "../../hooks/useAuth.hook";
+
+import Input from "../ui/input/input.component";
 
 const AddQuestionForm = () => {
   const { user } = useAuth();
@@ -48,7 +48,7 @@ const AddQuestionForm = () => {
   const buttonText = isAnonymous ? "Anonymously..." : `As ${user?.email}`;
 
   return (
-    <Card>
+    <>
       <Toast show={isToastActive}>Your questions has been received</Toast>
       <Input
         type="text"
@@ -58,15 +58,26 @@ const AddQuestionForm = () => {
         placeholder="Your question .. ?"
         onChange={(e) => setTitle(e.target.value)}
       />
-      <Toggle onChange={toggleAnonymous} checked={isAnonymous} />
+      {/* <Toggle onChange={toggleAnonymous} checked={isAnonymous} /> */}
       <Button
         onClick={() => toggleAnonymous()}
         as={isAnonymous ? ButtonDark : Button}
+        style={{ marginBottom: "15px" }}
       >
-        {buttonText}
+        Anonymously
       </Button>
-      <Button onClick={onSubmit}>Ask</Button>
-    </Card>
+      <Button
+        onClick={() => toggleAnonymous()}
+        as={isAnonymous ? Button : ButtonDark}
+        style={{ marginBottom: "15px" }}
+      >
+        As {user?.email}
+      </Button>
+
+      <ButtonDark style={{ display: "block" }} onClick={onSubmit}>
+        Ask
+      </ButtonDark>
+    </>
   );
 };
 

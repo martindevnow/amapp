@@ -1,15 +1,9 @@
-import React, {
-  FunctionComponent,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import styled, { css } from "styled-components";
+import React, { FunctionComponent, useContext } from "react";
+import styled from "styled-components";
 
 import Can from "../../hoc/can.component";
-
+import Unless from "../../hoc/unless.component";
 import { AclActions } from "../../services/auth/auth.acl";
-
 import { QuestionsContext } from "../../services/questions/questions.provider";
 import { QuestionsService } from "../../services/questions/questions.service";
 import { IQuestion } from "../../services/questions/questions.types";
@@ -21,18 +15,21 @@ import { ReactComponent as EyeSlashIcon } from "../../assets/fa/solid/eye-slash.
 import { ReactComponent as CommentSlashIcon } from "../../assets/fa/solid/comment-slash.svg";
 import { ReactComponent as CommentIcon } from "../../assets/fa/solid/comment.svg";
 import { IconButton } from "../ui/button/button.component";
-import Unless from "../../hoc/unless.component";
-import Card from "../ui/card/card.component";
+import { default as UICard } from "../ui/card/card.component";
 import useAuth from "../../hooks/useAuth.hook";
+import useHasVoted from "../../hooks/useHasVoted.hook";
+import Column from "../ui/layout/column.component";
 
-const Container = styled(Card)<any>`
+const Card = styled(UICard)<{ backgroundColor: string }>`
   width: 100%;
   display: flex;
   align-items: center;
-  background-color: ${({ backgroundColor }: any) => backgroundColor};
+  background-color: ${({ backgroundColor }) => backgroundColor};
+  justify-content: space-between;
+  padding: 12px;
 `;
 
-const AnswerText = styled.span<any>`
+const AnswerText = styled.span`
   border-left: 4px solid lightgray;
   padding-left: 0.7rem;
   font-style: italic;
@@ -47,19 +44,9 @@ const Question: FunctionComponent<QuestionProps> = ({
   question,
   className,
 }) => {
-  const { user, authService } = useAuth();
-  const userId = user?.uid || "TODO";
-
-  const [hasVoted, setHasVoted] = useState(false);
+  const { user } = useAuth();
   const { questionsService } = useContext(QuestionsContext);
-
-  useEffect(() => {
-    const run = async () => {
-      const voted = await authService.hasVotedForQuestion(question.id, userId);
-      setHasVoted(voted || question.author.uid === userId);
-    };
-    run();
-  }, [authService, question, userId]);
+  const hasVoted = useHasVoted(question, user?.uid || "TODO");
 
   const upVote = () => {
     (questionsService as QuestionsService)
@@ -68,27 +55,22 @@ const Question: FunctionComponent<QuestionProps> = ({
       .catch((e) => alert(JSON.stringify(e)));
   };
 
-  const approveQuestion = async () => {
-    await questionsService?.approveQuestion(question.id);
-  };
+  const approveQuestion = () => questionsService?.approveQuestion(question.id);
 
-  const deleteQuestion = async () => {
-    await questionsService?.deleteQuestion(question.id);
-  };
+  const deleteQuestion = () => questionsService?.deleteQuestion(question.id);
 
-  const markQuestionAsDiscussed = async () => {
-    await questionsService?.markQuestionAsDiscussed(question.id);
-  };
+  const markQuestionAsDiscussed = () =>
+    questionsService?.markQuestionAsDiscussed(question.id);
 
-  const unmarkQuestionAsDiscussed = async () => {
-    await questionsService?.unmarkQuestionAsDiscussed(question.id);
-  };
+  const unmarkQuestionAsDiscussed = () =>
+    questionsService?.unmarkQuestionAsDiscussed(question.id);
 
   const backgroundColor = question.approved ? "white" : "#ffbbbb";
   const upVotedColor = "#ff4400";
   const upVoteColor = hasVoted ? upVotedColor : "#666";
+
   return (
-    <Container backgroundColor={backgroundColor} className={className}>
+    <Card backgroundColor={backgroundColor} className={className}>
       {!question.approved ? (
         <Can aclAction={AclActions.APPROVE_QUESTION}>
           <IconButton onClick={approveQuestion}>
@@ -96,99 +78,48 @@ const Question: FunctionComponent<QuestionProps> = ({
           </IconButton>
         </Can>
       ) : (
-        <IconButton
-          css={css`
-            min-width: 3rem;
-            :hover {
-              & svg {
-                fill: ${upVotedColor};
-              }
-            }
-          `}
-          onClick={upVote}
-        >
+        <IconButton onClick={upVote}>
           <UpVoteIcon width="1.5rem" height="1.5rem" fill={upVoteColor} />
         </IconButton>
       )}
 
-      <span
-        css={css`
-          width: 3rem;
-          min-width: 3rem;
-          text-align: center;
-        `}
-      >
-        {question.approved ? question.upVotes : "..."}
-      </span>
+      <span>{question.approved ? question.upVotes : "..."}</span>
 
       {!question.answered ? (
-        <React.Fragment>
+        <>
           <Can aclAction={AclActions.MARK_FOR_DISCUSSION}>
             <IconButton onClick={markQuestionAsDiscussed}>
               <CommentSlashIcon width="1.5rem" height="1.5rem" fill="green" />
             </IconButton>
           </Can>
           <Unless aclAction={AclActions.MARK_FOR_DISCUSSION}>
-            <IconButton
-              css={css`
-                cursor: default;
-              `}
-            >
+            <IconButton>
               <CommentSlashIcon width="1.5rem" height="1.5rem" fill="green" />
             </IconButton>
           </Unless>
-        </React.Fragment>
+        </>
       ) : (
-        <React.Fragment>
+        <>
           <Can aclAction={AclActions.MARK_FOR_DISCUSSION}>
             <IconButton onClick={unmarkQuestionAsDiscussed}>
               <CommentIcon width="1.5rem" height="1.5rem" fill="green" />
             </IconButton>
           </Can>
           <Unless aclAction={AclActions.MARK_FOR_DISCUSSION}>
-            <IconButton
-              css={css`
-                min-width: 3rem;
-                cursor: default;
-              `}
-            >
+            <IconButton>
               <CommentIcon width="1.5rem" height="1.5rem" fill="green" />
             </IconButton>
           </Unless>
-        </React.Fragment>
+        </>
       )}
 
-      <div
-        css={css`
-          flex-grow: 2;
-          padding: 0.5rem;
-          position: relative;
-        `}
-      >
-        <p
-          css={css`
-            margin-right: 1.5rem;
-          `}
-        >
-          {question.title}
-        </p>
+      <Column>
+        <p>{question.title}</p>
         {question?.answer && <AnswerText>{question.answer}</AnswerText>}
-      </div>
+      </Column>
 
-      <div
-        css={css`
-          text-align: right;
-        `}
-      >
-        <span
-          css={css`
-            font-size: 0.8rem;
-            margin-right: 0.7rem;
-            margin-top: 0.7rem;
-            display: block;
-            min-width: 6rem;
-          `}
-        >
+      <div style={{ float: "right", minWidth: "100px", textAlign: "right" }}>
+        <span>
           {`${
             question.createdAt.getHours() < 12
               ? question.createdAt.getHours()
@@ -200,24 +131,13 @@ const Question: FunctionComponent<QuestionProps> = ({
 
         {!question.deleted && (
           <Can aclAction={AclActions.DELETE_QUESTION}>
-            <IconButton
-              css={css`
-                min-width: 3rem;
-                margin-left: auto;
-              `}
-              onClick={deleteQuestion}
-            >
+            <IconButton onClick={deleteQuestion}>
               <TrashIcon width="1.5rem" height="1.5rem" fill="red" />
             </IconButton>
           </Can>
         )}
 
-        <div
-          css={css`
-            /* float: right; */
-            margin-right: 0.7rem;
-          `}
-        >
+        <div>
           {question.anonymous ? (
             <EyeSlashIcon width="1.5rem" height="1.5rem" fill="#555" />
           ) : (
@@ -225,7 +145,7 @@ const Question: FunctionComponent<QuestionProps> = ({
           )}
         </div>
       </div>
-    </Container>
+    </Card>
   );
 };
 

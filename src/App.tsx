@@ -13,10 +13,15 @@ import RoomPage from "./components/room/room.component";
 import LobbyPage from "./components/lobby/lobby.component";
 import Main from "./components/ui/main/main.component";
 
-import ProtectedRoute from "./hoc/protected-route.component";
-import { AclActions } from "./services/auth/auth.acl";
 import theme from "./styles/theme";
 import { GlobalStyle } from "./styles/global";
+import ProtectedRoute from "./hoc/protected-route.component";
+import { AclActions } from "./services/auth/auth.acl";
+import {
+  LGHeader,
+  MDHeader,
+  SMHeader,
+} from "./components/ui/header/header.component";
 
 function App() {
   return (
@@ -26,16 +31,19 @@ function App() {
         <Navigation />
         <Layout>
           <Main>
-            <Route exact path={ROUTES.LANDING} component={LandingPage} />
-            <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
-            <Route path={ROUTES.SIGN_IN} component={SignInPage} />
+            {/* <LGHeader>AMApp</LGHeader>
+            <MDHeader>AMApp</MDHeader>
+            <SMHeader>AMApp</SMHeader> */}
+            <Route component={LandingPage} exact path={ROUTES.LANDING} />
+            <Route component={SignUpPage} path={ROUTES.SIGN_UP} />
+            <Route component={SignInPage} path={ROUTES.SIGN_IN} />
             <ProtectedRoute
               action={AclActions.VISIT_HOME}
-              path={ROUTES.HOME}
               component={HomePage}
+              path={ROUTES.HOME}
             />
-            <Route exact path={ROUTES.LOBBY} component={LobbyPage} />
-            <Route path={ROUTES.ROOM} component={RoomPage} />
+            <Route component={LobbyPage} exact path={ROUTES.LOBBY} />
+            <Route component={RoomPage} path={ROUTES.ROOM} />
             {/* <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} /> */}
             {/* <Route path={ROUTES.ACCOUNT} component={AccountPage} /> */}
             {/* <Route path={ROUTES.ADMIN} component={AdminPage} /> */}

@@ -1,6 +1,6 @@
 import React, { useContext, FunctionComponent } from "react";
 import styled from "styled-components";
-import { useParams, withRouter, useHistory } from "react-router-dom";
+import { useParams, useHistory, useLocation } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
 
 import { IRoom, RoomMap } from "../../services/rooms/rooms.types";
@@ -10,7 +10,6 @@ import QuestionsProvider, {
   QuestionsContext,
 } from "../../services/questions/questions.provider";
 import { RoomsContext } from "../../services/rooms/rooms.provider";
-import Loading from "../ui/loading/loading.component";
 import Can from "../../hoc/can.component";
 import { AclActions } from "../../services/auth/auth.acl";
 import Question from "../question/question.component";
@@ -20,6 +19,10 @@ import Answer from "../answer/answer.component";
 import ArchiveRoomButton from "../archive-room/archive-room-button.component";
 import useAuth from "../../hooks/useAuth.hook";
 import Column from "../ui/layout/column.component";
+import Loading from "../ui/loading/loading.component";
+import InlineError from "../ui/error/inline-error.component";
+import { LGHeader, MDHeader } from "../ui/header/header.component";
+import Card from "../ui/card/card.component";
 
 interface RoomProps {
   room: IRoom;
@@ -35,7 +38,7 @@ const Section = styled.div`
   margin-top: 1rem;
 `;
 
-const Title = styled.h1`
+const Title = styled(LGHeader)`
   flex-grow: 1;
 `;
 
@@ -53,9 +56,7 @@ const Top = styled.div`
 const Room: FunctionComponent<RoomProps> = ({ room }) => {
   const { questions, questionsService } = useContext(QuestionsContext);
   const activeQuestion = questions?.find((q) => q.id === room.activeQuestionId);
-  const clearActiveQuestion = async () => {
-    await questionsService?.clearActiveQuestion();
-  };
+  const clearActiveQuestion = () => questionsService?.clearActiveQuestion();
 
   if (!room) return null;
   return (
@@ -75,22 +76,26 @@ const Room: FunctionComponent<RoomProps> = ({ room }) => {
       <Top>
         <Can aclAction={AclActions.ASK_QUESTION}>
           <Column>
-            <h2>Ask a question: </h2>
-            <AddQuestionForm />
+            <Card>
+              <MDHeader>Ask a question</MDHeader>
+              <AddQuestionForm />
+            </Card>
           </Column>
         </Can>
 
         {room.activeQuestionId && activeQuestion && (
           <Column>
-            <h2>Current Question</h2>
+            <Card invisible>
+              <MDHeader>Current Question</MDHeader>
 
-            <Question question={activeQuestion} />
-            <Can aclAction={AclActions.ANSWER_QUESTION}>
-              <Answer question={activeQuestion} />
-            </Can>
-            <Can aclAction={AclActions.CLEAR_ACTIVE_QUESTION}>
-              <Button onClick={clearActiveQuestion}>Clear Current Q</Button>
-            </Can>
+              <Question question={activeQuestion} />
+              <Can aclAction={AclActions.ANSWER_QUESTION}>
+                <Answer question={activeQuestion} />
+              </Can>
+              <Can aclAction={AclActions.CLEAR_ACTIVE_QUESTION}>
+                <Button onClick={clearActiveQuestion}>Clear Current Q</Button>
+              </Can>
+            </Card>
           </Column>
         )}
       </Top>
@@ -99,11 +104,13 @@ const Room: FunctionComponent<RoomProps> = ({ room }) => {
   );
 };
 
-const RoomPage = ({ location }: any) => {
+const RoomPage = () => {
   const { roomId } = useParams<{ roomId: string }>();
   const { rooms, loaded } = useContext(RoomsContext);
   const { user, loaded: userLoaded } = useAuth();
+
   const history = useHistory();
+  const location = useLocation();
 
   React.useEffect(() => {
     if (userLoaded && !user) {
@@ -111,13 +118,26 @@ const RoomPage = ({ location }: any) => {
     }
   }, [history, user, userLoaded, location]);
 
-  return loaded ? (
+  if (!loaded) {
+    return <Loading />;
+  }
+
+  const room = (rooms as RoomMap)[roomId];
+
+  if (!room) {
+    return (
+      <>
+        <LGHeader style={{ textAlign: "left" }}>404</LGHeader>
+        <InlineError show>No room with the ID "{roomId}" was found</InlineError>
+      </>
+    );
+  }
+
+  return (
     <QuestionsProvider roomId={roomId}>
       <Room room={(rooms as RoomMap)[roomId]} />
     </QuestionsProvider>
-  ) : (
-    <Loading />
   );
 };
 
-export default withRouter(RoomPage);
+export default RoomPage;

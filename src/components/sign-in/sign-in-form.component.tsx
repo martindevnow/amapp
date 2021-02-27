@@ -1,6 +1,6 @@
 import React, { useState, FormEvent } from "react";
 import { useHistory } from "react-router-dom";
-import { css } from "styled-components";
+import styled, { css } from "styled-components";
 
 import * as ROUTES from "../../constants/routes";
 
@@ -8,6 +8,14 @@ import Input from "../ui/input/input.component";
 import Button from "../ui/button/button.component";
 import useAuth from "../../hooks/useAuth.hook";
 import Card from "../ui/card/card.component";
+import { MDHeader } from "../ui/header/header.component";
+import InlineError from "../ui/error/inline-error.component";
+
+const Label = styled.label`
+  font-size: 12px;
+  margin-bottom: 2px;
+  display: block;
+`;
 
 const SignInForm = () => {
   const { authService } = useAuth();
@@ -42,18 +50,9 @@ const SignInForm = () => {
 
   return (
     <Card>
-      <h2>Email and Password</h2>
+      <MDHeader>Email and Password</MDHeader>
       <form onSubmit={onSubmit}>
-        <label
-          htmlFor="email"
-          css={css`
-            display: block;
-            margin-top: 1rem;
-            margin-bottom: 0.2rem;
-          `}
-        >
-          Email
-        </label>
+        <Label htmlFor="email">Email</Label>
         <Input
           name="email"
           value={email}
@@ -61,16 +60,7 @@ const SignInForm = () => {
           type="text"
           placeholder="Email Address"
         />
-        <label
-          htmlFor="password"
-          css={css`
-            display: block;
-            margin-top: 1rem;
-            margin-bottom: 0.2rem;
-          `}
-        >
-          Password
-        </label>
+        <Label htmlFor="password">Password</Label>
         <Input
           name="password"
           value={password}
@@ -78,18 +68,12 @@ const SignInForm = () => {
           type="password"
           placeholder="Password"
         />
-        <Button
-          css={css`
-            margin-top: 1rem;
-            display: block;
-          `}
-          disabled={isInvalid}
-          type="submit"
-        >
+
+        <InlineError show={!!error?.message}>{error?.message}</InlineError>
+
+        <Button disabled={isInvalid} type="submit">
           Sign In
         </Button>
-
-        {error && <p>{error.message}</p>}
       </form>
     </Card>
   );

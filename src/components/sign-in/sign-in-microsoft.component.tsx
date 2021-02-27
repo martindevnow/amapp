@@ -6,6 +6,8 @@ import * as ROUTES from "../../constants/routes";
 import useAuth from "../../hooks/useAuth.hook";
 import Button from "../ui/button/button.component";
 import { default as UICard } from "../ui/card/card.component";
+import InlineError from "../ui/error/inline-error.component";
+import { MDHeader } from "../ui/header/header.component";
 
 const Card = styled(UICard)`
   display: flex;
@@ -40,9 +42,9 @@ const SignInWithMicrosoft = () => {
 
   return (
     <Card>
-      <h2>Microsoft Single Sign On</h2>
+      <MDHeader>Microsoft Single Sign On</MDHeader>
       <Button onClick={onClick}>Sign In With Microsoft</Button>
-      {error && <p>{error.message}</p>}
+      <InlineError show={!!error?.message}>{error?.message}</InlineError>
     </Card>
   );
 };

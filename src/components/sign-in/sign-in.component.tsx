@@ -9,10 +9,16 @@ import SignInWithMicrosoft from "./sign-in-microsoft.component";
 import SignInForm from "./sign-in-form.component";
 import useAuth from "../../hooks/useAuth.hook";
 import Column from "../ui/layout/column.component";
+import { LGHeader } from "../ui/header/header.component";
+import Card from "../ui/card/card.component";
 
 const Flex = styled.div`
   display: flex;
   gap: 2rem;
+  ${Card} {
+    max-width: 500px;
+    margin: 0 auto;
+  }
 `;
 
 const SignInPage = () => {
@@ -32,7 +38,7 @@ const SignInPage = () => {
 
   return (
     <>
-      <h1>Sign In</h1>
+      <LGHeader style={{ textAlign: "left" }}>Sign In</LGHeader>
       <Flex>
         {firebaseConfig.projectId === "tw-amapp-dev" && (
           <Column>

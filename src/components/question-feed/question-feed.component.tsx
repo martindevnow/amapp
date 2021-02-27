@@ -8,6 +8,7 @@ import { sortByCreatedAt, sortByUpVotes } from "../../services/utilities";
 import Button from "../ui/button/button.component";
 import { AclActions } from "../../services/auth/auth.acl";
 import Can from "../../hoc/can.component";
+import { MDHeader } from "../ui/header/header.component";
 
 interface QuestionFeedProps {
   roomId: string;
@@ -115,7 +116,7 @@ const QuestionFeed: FunctionComponent<QuestionFeedProps> = ({ roomId }) => {
   // TODO: Add a filter/sorting SVG for the sorting
   return (
     <section>
-      <h2>Question Feed</h2>
+      <MDHeader style={{ marginTop: "50px" }}>Question Feed</MDHeader>
       <QuestionFeedControlsContainer>
         <div>
           <span>Sort:</span>

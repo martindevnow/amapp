@@ -1,25 +1,34 @@
 import styled, { css } from "styled-components";
+import { themeGet } from "../../../styles/theme";
 
 interface ButtonProps {
   variant?: "primary" | "secondary";
 }
 
+const primaryButtonStyles = css`
+  background-color: ${themeGet("colors.primary")};
+  color: white;
+`;
+
+const secondaryButtonStyles = css`
+  background-color: ${themeGet("colors.secondary")};
+  color: black;
+`;
+
 const Button = styled.button<ButtonProps>`
   padding: 0.5rem 1rem;
   border: 1px solid lightgray;
+  border-radius: 4px;
   cursor: pointer;
-  ${(props) =>
-    props.variant === "primary" &&
-    css`
-      background-color: ${props.theme.colors.primary};
-      color: black;
-    `}
-  ${(props) =>
-    props.variant === "secondary" &&
-    css`
-      background-color: ${props.theme.colors.secondary};
-      color: black;
-    `}
+  transition: all 90ms;
+
+  ${(props) => props.variant === "primary" && primaryButtonStyles}
+  ${(props) => props.variant === "secondary" && secondaryButtonStyles}
+
+  :hover:enabled {
+    box-shadow: ${themeGet("boxShadow.navbar")};
+    transform: scale(1.05);
+  }
 `;
 
 export const IconButton = styled.button`
@@ -46,17 +55,11 @@ export const IconButton = styled.button`
 `;
 
 export const ButtonLight = styled(Button)`
-  width: 7rem;
-  background-color: #dddddd;
-  color: black;
-  font-size: 1rem;
-  padding: 1rem;
-  border-radius: 8px;
+  ${secondaryButtonStyles}
 `;
 
 export const ButtonDark = styled(Button)`
-  background-color: #222222;
-  color: white;
+  ${primaryButtonStyles}
 `;
 
 export default Button;

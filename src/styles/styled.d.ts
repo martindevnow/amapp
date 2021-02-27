@@ -11,7 +11,39 @@ type ByBreakpoint<T> = {
 // and extend them!
 declare module "styled-components" {
   export interface DefaultTheme {
+    border: {
+      light: string;
+      normal: string;
+    };
+    boxShadow: {
+      navbar: string;
+    };
     breakpoints: ByBreakpoint<string>;
+    fonts: {
+      heading: string;
+      copy: string;
+    };
+    fontSizes: {
+      heading: {
+        xxl: string;
+        xl: string;
+        lg: string;
+        md: string;
+        sm: string;
+      };
+      copy: {
+        xxl: string;
+        xl: string;
+        lg: string;
+        md: string;
+        sm: string;
+      };
+    };
+    fontWeight: {
+      light: string;
+      normal: string;
+      bold: string;
+    };
     layout: {
       maxWidth: string;
       padding: ByBreakpoint<string>;

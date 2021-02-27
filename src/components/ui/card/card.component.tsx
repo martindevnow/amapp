@@ -1,9 +1,14 @@
 import styled from "styled-components";
 
-const Card = styled.div`
-  padding: 1rem;
+type CardProps = { invisible?: boolean };
+
+const Card = styled.div<CardProps>`
+  padding: 30px;
   border-radius: 4px;
-  border: 1px solid #ccc;
+  border: ${({ theme, invisible }) =>
+    invisible ? "none" : theme.border.light};
+  box-shadow: ${({ theme, invisible }) =>
+    invisible ? "none" : theme.boxShadow.navbar};
 `;
 
 export default Card;

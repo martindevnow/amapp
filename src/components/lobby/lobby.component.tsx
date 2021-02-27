@@ -9,6 +9,9 @@ import { RoomsContext } from "../../services/rooms/rooms.provider";
 import { IRoom } from "../../services/rooms/rooms.types";
 import CreateRoom from "../create-room/create-room.component";
 import JoinRoom from "../join-room/join-room.component";
+import Column from "../ui/layout/column.component";
+import { MDHeader } from "../ui/header/header.component";
+import Card from "../ui/card/card.component";
 
 const sortByCreatedAt = (descending = true) => {
   if (descending === false) {
@@ -58,17 +61,32 @@ const humanReadable = (date: Date) =>
 
 const sortByCreatedAtDesc = sortByCreatedAt(true);
 
-const ActionMenu = styled.div`
-  padding: 1rem;
-`;
-
 const Page = styled.div`
   width: 100%;
   display: flex;
+  row-gap: 50px;
+  flex-wrap: wrap;
+  position: relative;
 `;
 
-const Left = styled.div`
-  flex-grow: 1;
+const ActionMenu = styled.div`
+  padding: 1rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+`;
+
+const Flex = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  gap: 50px;
+  margin-top: 50px;
+
+  ${Card} {
+    max-width: 500px;
+    margin: 0 auto;
+  }
 `;
 
 const LobbyPage = () => {
@@ -81,7 +99,19 @@ const LobbyPage = () => {
   };
   return (
     <Page>
-      <Left>
+      <ActionMenu>
+        <h3>Options</h3>
+        <label htmlFor="showArchived">Show Archived</label>{" "}
+        <input
+          onChange={(e) => onShowArchivedToggle(e)}
+          type="checkbox"
+          name="showArchived"
+          id="showArchived"
+          value="showArchived"
+        />
+      </ActionMenu>
+
+      <div style={{ width: "100%" }}>
         <Can aclAction={AclActions.LIST_ROOMS}>
           <h2>{`Active${showArchived ? " and Archived" : ""} Rooms`}</h2>
           {rooms &&
@@ -99,27 +129,73 @@ const LobbyPage = () => {
                 </React.Fragment>
               ))}
         </Can>
-        <Can aclAction={AclActions.CREATE_ROOM}>
-          <h2>Create a New Room</h2>
-          <CreateRoom />
-        </Can>
+      </div>
 
-        <h2>Join an Open Room</h2>
-        <JoinRoom />
-      </Left>
-      <ActionMenu>
-        <h3>Options</h3>
-        <label htmlFor="showArchived">Show Archived</label>{" "}
-        <input
-          onChange={(e) => onShowArchivedToggle(e)}
-          type="checkbox"
-          name="showArchived"
-          id="showArchived"
-          value="showArchived"
-        />
-      </ActionMenu>
+      <Flex>
+        <Column>
+          <Card>
+            <MDHeader>Join an Open Room</MDHeader>
+            <JoinRoom />
+          </Card>
+        </Column>
+        <Can aclAction={AclActions.CREATE_ROOM}>
+          <Column>
+            <Card>
+              <MDHeader>Create a New Room</MDHeader>
+              <CreateRoom />
+            </Card>
+          </Column>
+        </Can>
+      </Flex>
     </Page>
   );
+
+  // return (
+  //   <Page>
+  //     <Column>
+  //       <Can aclAction={AclActions.LIST_ROOMS}>
+  //         <h2>{`Active${showArchived ? " and Archived" : ""} Rooms`}</h2>
+  //         {rooms &&
+  //           Object.values(rooms)
+  //             .sort(sortByCreatedAtDesc)
+  //             .filter(shouldIncludeArchived)
+  //             .map((room) => (
+  //               <React.Fragment key={room.id}>
+  //                 <Link key={room.id} to={ROUTES.ROOM_BY_ID(room.id)}>
+  //                   {room.name}
+  //                 </Link>
+  //                 {" - "}
+  //                 <em>Created: {humanReadable(room.createdAt)}</em>
+  //                 <br />
+  //               </React.Fragment>
+  //             ))}
+  //       </Can>
+
+  //       <Card>
+  //         <Can aclAction={AclActions.CREATE_ROOM}>
+  //           <h2>Create a New Room</h2>
+  //           <CreateRoom />
+  //         </Can>
+  //       </Card>
+
+  //       <Card>
+  //         <MDHeader>Join an Open Room</MDHeader>
+  //         <JoinRoom />
+  //       </Card>
+  //     </Column>
+  //     <ActionMenu>
+  //       <h3>Options</h3>
+  //       <label htmlFor="showArchived">Show Archived</label>{" "}
+  //       <input
+  //         onChange={(e) => onShowArchivedToggle(e)}
+  //         type="checkbox"
+  //         name="showArchived"
+  //         id="showArchived"
+  //         value="showArchived"
+  //       />
+  //     </ActionMenu>
+  //   </Page>
+  // );
 };
 
 export default LobbyPage;

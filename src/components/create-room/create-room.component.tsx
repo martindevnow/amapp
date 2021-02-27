@@ -33,8 +33,8 @@ const CreateRoomForm = () => {
         value={name}
         placeholder="The room's name"
         onChange={(e) => setName(e.target.value)}
+        bleed
       />
-
       <Button type="submit">Create</Button>
     </form>
   );

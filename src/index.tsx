@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import WebFont from "webfontloader";
 
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
@@ -8,6 +9,19 @@ import AuthUserProvider from "./services/auth/auth.provider";
 import RoomsProvider from "./services/rooms/rooms.provider";
 
 import "./index.css";
+import theme from "./styles/theme";
+
+const fontWeights = Object.values(theme.fontWeight).join(";");
+
+WebFont.load({
+  google: {
+    families: [
+      `Inconsolata:wght@${fontWeights}&display=swap`,
+      // `Nunito :${Object.values(theme.fontWeight).join(",")}`,
+      // "sans-serif",
+    ],
+  },
+});
 
 ReactDOM.render(
   <React.StrictMode>
