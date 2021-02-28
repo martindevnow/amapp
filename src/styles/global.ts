@@ -8,6 +8,16 @@ const GlobalStyle = createGlobalStyle`
     background-color: ${themeGet("colors", "background")};
     color: ${themeGet("colors", "text")};
   }
+  
+  code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+  background-color: #ddd;
+  border: 1px solid ${themeGet("colors", "primary")};
+  border-radius: ${themeGet("border", "radius")};
+  padding: 0.2rem;
+}
+
 `;
 
 export default GlobalStyle;

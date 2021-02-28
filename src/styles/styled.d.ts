@@ -12,6 +12,7 @@ type ByBreakpoint<T> = {
 declare module "styled-components" {
   export interface DefaultTheme {
     border: {
+      radius: string;
       light: string;
       normal: string;
     };

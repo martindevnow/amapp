@@ -18,7 +18,7 @@ const secondaryButtonStyles = css`
 const Button = styled.button<ButtonProps>`
   padding: 0.5rem 1rem;
   border: 1px solid lightgray;
-  border-radius: 4px;
+  border-radius: ${themeGet("border", "radius")};
   cursor: pointer;
   transition: all 90ms;
 

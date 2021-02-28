@@ -4,6 +4,7 @@ import themeGet from "./themeGet";
 
 const theme: DefaultTheme = {
   border: {
+    radius: "4px",
     light: "1px solid rgb(17 31 93 / 5%)",
     normal: "1px solid rgb(17 31 93 / 15%)",
   },

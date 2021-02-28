@@ -8,7 +8,7 @@ interface InputProps {
 const Input = styled.input<InputProps>`
   display: block;
   border: ${themeGet("border", "normal")};
-  border-radius: 4px;
+  border-radius: ${themeGet("border", "radius")};
   padding: 0.5rem 1rem;
   width: ${({ bleed }) => (bleed ? "100%" : "15rem")};
   :hover {

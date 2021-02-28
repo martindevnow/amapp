@@ -8,7 +8,7 @@ interface ToastProps {
 
 const StyledToast = styled.div<{ show: boolean }>`
   border: 1px solid ${themeGet("colors", "primary")};
-  border-radius: 4px;
+  border-radius: ${themeGet("border", "radius")};
   box-shadow: ${themeGet("boxShadow", "navbar")};
   color: ${themeGet("colors", "primary")};
   background-color: ${themeGet("colors", "background")};

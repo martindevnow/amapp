@@ -24,6 +24,8 @@ const Card = styled(UICard)<{ backgroundColor: string }>`
   width: 100%;
   display: flex;
   align-items: center;
+  // TODO: only allow variants, not any background color
+  // Infact, the main Card component should implement this API
   background-color: ${({ backgroundColor }) => backgroundColor};
   justify-content: space-between;
   padding: 12px;
