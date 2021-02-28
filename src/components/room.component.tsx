@@ -1,20 +1,19 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 
-import Card from "./ui/card.component";
-import Column from "./layout/column.component";
-import ArchiveRoomButton from "./archive-room-button.component";
-
-import { IRoom } from "./../services/rooms/rooms.types";
-import QuestionFeed from "./question-feed.component";
-import AddQuestionForm from "./forms/ask-question.form";
-import { QuestionsContext } from "./../services/questions/questions.provider";
-
 import Can from "./../hoc/can.component";
 import { AclActions } from "./../services/auth/auth.acl";
+import { IRoom } from "./../services/rooms/rooms.types";
+import { QuestionsContext } from "./../services/questions/questions.provider";
+import ArchiveRoomButton from "./archive-room-button.component";
+import QuestionFeed from "./question-feed.component";
 import Question from "./question.component";
+import AddQuestionForm from "./forms/ask-question.form";
+import AnswerQuestion from "./forms/answer-question.form";
+
+import Column from "./layout/column.component";
+import Card from "./ui/card.component";
 import Button from "./ui/button.component";
-import Answer from "./forms/answer-question.form";
 import { LGHeader, MDHeader } from "./ui/header.component";
 
 const ActionMenu = styled.div`
@@ -54,7 +53,7 @@ const Room: React.FC<RoomProps> = ({ room }) => {
   return (
     <>
       <Section>
-        <Title>Welcome to {room.name}</Title>
+        <Title>{room.name}</Title>
         <Can aclAction={AclActions.ARCHIVE_ROOM}>
           <ActionMenu>
             <ArchiveRoomButton
@@ -82,7 +81,7 @@ const Room: React.FC<RoomProps> = ({ room }) => {
 
               <Question question={activeQuestion} />
               <Can aclAction={AclActions.ANSWER_QUESTION}>
-                <Answer question={activeQuestion} />
+                <AnswerQuestion question={activeQuestion} />
               </Can>
               <Can aclAction={AclActions.CLEAR_ACTIVE_QUESTION}>
                 <Button onClick={clearActiveQuestion}>Clear Current Q</Button>
