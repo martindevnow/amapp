@@ -1,9 +1,4 @@
-import React, {
-  FunctionComponent,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Observable, of } from "rxjs";
 import { switchMap } from "rxjs/operators";
 
@@ -13,7 +8,7 @@ import AuthContext from "./auth.context";
 import { ACL, DEFAULT_ACL, GuestRoleMap } from "./auth.acl";
 import { IUserProfile, IUserRoles } from "./auth.types";
 
-const AuthProvider: FunctionComponent = (props) => {
+const AuthProvider: React.FC = (props) => {
   const firebaseService = useContext(FirebaseContext);
   const [user, setUser] = useState<IUserProfile | null>(null);
   const [roles, setRoles] = useState<IUserRoles>(GuestRoleMap);

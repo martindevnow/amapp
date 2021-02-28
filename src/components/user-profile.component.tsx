@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React from "react";
 import styled from "styled-components";
 import { IUserProfile } from "../services/auth/auth.types";
 import { MDHeader } from "./ui/header.component";
@@ -21,7 +21,9 @@ const ProfileBodyContainer = styled.div`
   padding: 1rem;
 `;
 
-const UserProfile: FunctionComponent<{ user: IUserProfile }> = ({ user }) => {
+type UserProfileProps = { user: IUserProfile };
+
+const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
   return (
     <ProfileCard>
       <ProfileImageContainer>

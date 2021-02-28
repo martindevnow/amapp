@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useContext } from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 
 import Can from "../hoc/can.component";
@@ -42,10 +42,7 @@ interface QuestionProps {
   className?: string;
 }
 
-const Question: FunctionComponent<QuestionProps> = ({
-  question,
-  className,
-}) => {
+const Question: React.FC<QuestionProps> = ({ question, className }) => {
   const { user } = useAuth();
   const { questionsService } = useContext(QuestionsContext);
   const hasVoted = useHasVoted(question, user?.uid || "TODO");

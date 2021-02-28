@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React from "react";
 import { Redirect, Route, RouteProps } from "react-router-dom";
 import useAuth from "../hooks/useAuth.hook";
 import { AclActions } from "../services/auth/auth.acl";
@@ -7,7 +7,7 @@ interface ProtectedRouteProps extends RouteProps {
   action: AclActions;
   component: any; // TODO: Find the right Type here
 }
-const ProtectedRoute: FunctionComponent<ProtectedRouteProps> = ({
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   action,
   component: Component,
   // TODO: Use this with the ACL as the key to see if a user can visit this "Path"

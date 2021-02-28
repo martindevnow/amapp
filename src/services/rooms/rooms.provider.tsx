@@ -1,13 +1,8 @@
-import React, {
-  FunctionComponent,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { useEffect, useState } from "react";
 
 import { RoomMap, IRoomRecord } from "./rooms.types";
-import FirebaseContext from "../firebase/firebase.context";
 import useAuth from "../../hooks/useAuth.hook";
+import useFirebase from "../../hooks/useFirebase.hook";
 
 export interface RoomsService {
   createRoom: (room: IRoomRecord) => Promise<string>;
@@ -30,8 +25,8 @@ export const RoomsContext = React.createContext<Partial<RoomsContextValue>>(
   INITIAL_ROOMS_CONTEXT_VALUE
 );
 
-const RoomsProvider: FunctionComponent = (props) => {
-  const firebaseService = useContext(FirebaseContext);
+const RoomsProvider: React.FC = (props) => {
+  const firebaseService = useFirebase();
   const [rooms, setRooms] = useState<RoomMap>({});
   const [loaded, setLoaded] = useState<boolean>(false);
   const { user } = useAuth();

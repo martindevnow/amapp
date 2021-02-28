@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
+import themeGet from "../../styles/themeGet";
+
 const Label = styled.label`
   // Tweak these to change the style of the toggle
   position: relative;
@@ -40,11 +42,11 @@ const Slider = styled.span`
   }
 
   input:checked + & {
-    background-color: #2196f3;
+    background-color: ${themeGet("colors", "primary")};
   }
 
   input:focus + & {
-    box-shadow: 0 0 1px #2196f3;
+    box-shadow: 0 0 1px ${themeGet("colors", "primary")};
   }
 
   input:checked + &:before {
@@ -67,11 +69,7 @@ type ToggleProps = {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const Toggle: React.FunctionComponent<ToggleProps> = ({
-  className,
-  checked,
-  onChange,
-}) => {
+const Toggle: React.FC<ToggleProps> = ({ className, checked, onChange }) => {
   return (
     <Label className={className}>
       <input type="checkbox" checked={checked} onChange={onChange} />

@@ -1,10 +1,4 @@
-import React, {
-  FunctionComponent,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import useAuth from "../../hooks/useAuth.hook";
 
 import FirebaseContext from "../firebase/firebase.context";
@@ -28,7 +22,7 @@ export const QuestionsContext = React.createContext<
   loaded: false,
 });
 
-const QuestionsProvider: FunctionComponent<QuestionsProviderProps> = ({
+const QuestionsProvider: React.FC<QuestionsProviderProps> = ({
   children,
   roomId,
 }) => {

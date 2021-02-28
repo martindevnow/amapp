@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 
 import Question from "./question.component";
@@ -67,7 +67,7 @@ const EmptyFeed = styled.p`
   margin-top: 4rem;
 `;
 
-const QuestionFeed: FunctionComponent<QuestionFeedProps> = ({ roomId }) => {
+const QuestionFeed: React.FC<QuestionFeedProps> = ({ roomId }) => {
   const { questions } = useContext(QuestionsContext);
   const [orderBy, setOrderBy] = useState<"createdAt" | "upVotes">("upVotes");
   const [appliedFilters, setAppliedFilters] = useState<AppliedFilters>({

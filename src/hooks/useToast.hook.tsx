@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import themeGet from "../styles/themeGet";
 
@@ -21,7 +21,7 @@ const StyledToast = styled.div<{ show: boolean }>`
   visibility: ${({ show }) => (show ? "visible" : "hidden")};
 `;
 
-const Toast: FunctionComponent<ToastProps> = ({ show, children }) => (
+const Toast: React.FC<ToastProps> = ({ show, children }) => (
   <StyledToast show={show}>{children}</StyledToast>
 );
 

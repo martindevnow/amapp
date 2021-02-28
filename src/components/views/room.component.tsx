@@ -1,4 +1,4 @@
-import React, { useContext, FunctionComponent } from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { useParams, useHistory, useLocation } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
@@ -53,7 +53,7 @@ const Top = styled.div`
   }
 `;
 
-const Room: FunctionComponent<RoomProps> = ({ room }) => {
+const Room: React.FC<RoomProps> = ({ room }) => {
   const { questions, questionsService } = useContext(QuestionsContext);
   const activeQuestion = questions?.find((q) => q.id === room.activeQuestionId);
   const clearActiveQuestion = () => questionsService?.clearActiveQuestion();
