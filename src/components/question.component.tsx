@@ -31,7 +31,7 @@ const Card = styled(UICard)<{ backgroundColor: string }>`
   padding: 12px;
 `;
 
-const AnswerText = styled.span`
+const AnswerText = styled.p`
   border-left: 4px solid lightgray;
   padding-left: 0.7rem;
   font-style: italic;
