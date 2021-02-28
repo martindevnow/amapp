@@ -12,6 +12,7 @@ import JoinRoom from "../forms/join-room.form";
 import Column from "../layout/column.component";
 import { LGHeader, MDHeader, SMHeader } from "../ui/header.component";
 import Card from "../ui/card.component";
+import { Label } from "../ui/label.component";
 
 const sortByCreatedAt = (descending = true) => {
   if (descending === false) {
@@ -38,6 +39,13 @@ const getMonthString = (monthNum: number) => {
   return monthNames[monthNum];
 };
 
+/**
+ * 1,21,31: st
+ * 2,22: nd
+ * 3,23: rd
+ * 4-20,24-30: th
+ * @param dayNum
+ */
 const getDaySuffix = (dayNum: number) => {
   // Teens are all `th`
   if (dayNum > 3 && dayNum <= 20) return "th";
@@ -72,9 +80,10 @@ const Page = styled.div`
 // TODO: Make a component for hover/drop-down menus and admin type actions
 const ActionMenu = styled.div`
   padding: 1rem;
-  position: absolute;
-  top: 80px;
-  right: 0;
+`;
+
+const OptionLabel = styled(Label)`
+  display: inline;
 `;
 
 const Flex = styled.div`
@@ -90,49 +99,65 @@ const Flex = styled.div`
   }
 `;
 
+const RoomSection = styled.div``;
+
 const LobbyPage = () => {
   const { rooms } = useContext(RoomsContext);
   const [showArchived, setShowArchived] = useState(false);
+  const [showDates, setShowDates] = useState(false);
   const shouldIncludeArchived = (room: IRoom) =>
     showArchived ? true : !room.isArchived;
   const onShowArchivedToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setShowArchived(event.target.checked);
   };
+  const onShowDatesToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setShowDates(event.target.checked);
+  };
   return (
     <Page>
-      <ActionMenu>
-        <SMHeader>Options</SMHeader>
-        <label htmlFor="showArchived">Show Archived</label>{" "}
-        <input
-          onChange={(e) => onShowArchivedToggle(e)}
-          type="checkbox"
-          name="showArchived"
-          id="showArchived"
-          value="showArchived"
-        />
-      </ActionMenu>
-
-      <div style={{ width: "100%" }}>
-        <Can aclAction={AclActions.LIST_ROOMS}>
-          <LGHeader>{`Active${
-            showArchived ? " and Archived" : ""
-          } Rooms`}</LGHeader>
-          {rooms &&
-            Object.values(rooms)
-              .sort(sortByCreatedAtDesc)
-              .filter(shouldIncludeArchived)
-              .map((room) => (
-                <React.Fragment key={room.id}>
-                  <Link key={room.id} to={ROUTES.ROOM_BY_ID(room.id)}>
-                    {room.name}
-                  </Link>
-                  {" - "}
-                  <em>Created: {humanReadable(room.createdAt)}</em>
-                  <br />
-                </React.Fragment>
-              ))}
-        </Can>
-      </div>
+      <Flex>
+        <Column>
+          <Can aclAction={AclActions.LIST_ROOMS}>
+            <LGHeader>{`${showArchived ? "All" : "Active"} Rooms`}</LGHeader>
+            {rooms &&
+              Object.values(rooms)
+                .sort(sortByCreatedAtDesc)
+                .filter(shouldIncludeArchived)
+                .map((room) => (
+                  <RoomSection key={room.id}>
+                    <Link key={room.id} to={ROUTES.ROOM_BY_ID(room.id)}>
+                      {room.name}
+                    </Link>
+                    {showDates && (
+                      <em> - Created: {humanReadable(room.createdAt)}</em>
+                    )}
+                    <br />
+                  </RoomSection>
+                ))}
+          </Can>
+        </Column>
+        <ActionMenu>
+          <SMHeader>Options</SMHeader>
+          <div>
+            <OptionLabel htmlFor="showArchived">Show Archived</OptionLabel>{" "}
+            <input
+              onChange={(e) => onShowArchivedToggle(e)}
+              type="checkbox"
+              name="showArchived"
+              id="showArchived"
+            />
+          </div>
+          <div>
+            <OptionLabel htmlFor="showDates">Show Dates</OptionLabel>{" "}
+            <input
+              onChange={(e) => onShowDatesToggle(e)}
+              type="checkbox"
+              name="showDates"
+              id="showDates"
+            />
+          </div>
+        </ActionMenu>
+      </Flex>
 
       <Flex>
         <Column>

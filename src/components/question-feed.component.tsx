@@ -162,7 +162,7 @@ const QuestionFeed: React.FC<QuestionFeedProps> = ({ roomId }) => {
         </div>
       </QuestionFeedControlsContainer>
 
-      {filteredQuestions.length &&
+      {filteredQuestions.length > 0 &&
         filteredQuestions.map((q) => (
           <SpacedQuestion key={q.id} question={q} />
         ))}

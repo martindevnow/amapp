@@ -3,13 +3,12 @@ import React, { useState, useContext } from "react";
 import { QuestionsContext } from "../../services/questions/questions.provider";
 import { IQuestionRecord } from "../../services/questions/questions.types";
 import useToast from "../../hooks/useToast.hook";
-
-import Button, { ButtonDark } from "../ui/button.component";
 import useToggle from "../../hooks/useToggle.hook";
 import useAuth from "../../hooks/useAuth.hook";
 
-import Input from "../ui/input.component";
+import Button, { ButtonDark } from "../ui/button.component";
 import Toast from "../ui/toast.component";
+import Textarea from "../ui/textarea.component";
 
 const AskQuestionForm = () => {
   const { user } = useAuth();
@@ -48,8 +47,7 @@ const AskQuestionForm = () => {
   return (
     <>
       <Toast show={isToastActive}>Your questions has been received</Toast>
-      <Input
-        type="text"
+      <Textarea
         name="title"
         bleed
         value={title}

@@ -15,7 +15,7 @@ const StyledToast = styled.div<{ show: boolean }>`
   background-color: ${themeGet("colors", "background")};
   position: fixed;
   right: 20px;
-  bottom: 20px;
+  top: calc(20px + ${themeGet("layout", "navigation", "height")});
   padding: 1rem 3rem;
   opacity: ${({ show }) => (show ? "100%" : "0%")};
   transition: opacity 0.3s ease-in-out;

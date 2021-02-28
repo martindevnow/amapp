@@ -17,6 +17,17 @@ const theme: DefaultTheme = {
     lg: "1024px",
     xl: "1200px",
   },
+  colors: {
+    primary: "rgb(232 75 78)",
+    onPrimary: "white",
+    secondary: "#fcfcfc",
+    onSecondary: "black",
+    background: "white",
+    text: "black",
+    success: "green",
+    warning: "yellow",
+    error: "#ff0022",
+  },
   fonts: {
     heading: "Inconsolata",
     copy: "Roboto",
@@ -50,17 +61,9 @@ const theme: DefaultTheme = {
       lg: "3rem",
       xl: "4rem",
     },
-  },
-  colors: {
-    primary: "rgb(232 75 78)",
-    onPrimary: "white",
-    secondary: "#fcfcfc",
-    onSecondary: "black",
-    background: "white",
-    text: "black",
-    success: "green",
-    warning: "yellow",
-    error: "#ff0022",
+    navigation: {
+      height: "65px",
+    },
   },
 };
 

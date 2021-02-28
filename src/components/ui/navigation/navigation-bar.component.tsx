@@ -6,7 +6,7 @@ const NavigationBar = styled.nav`
   border-bottom: 1px solid #eeeeee;
   box-shadow: ${themeGet("boxShadow", "navbar")};
   display: flex;
-  min-height: 65px;
+  min-height: ${themeGet("layout", "navigation", "height")};
   padding: 0 ${themeGet("layout", "padding", "xl")};
 
   ${media("lg")(css`

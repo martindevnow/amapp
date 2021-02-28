@@ -48,6 +48,9 @@ declare module "styled-components" {
     layout: {
       maxWidth: string;
       padding: ByBreakpoint<string>;
+      navigation: {
+        height: string;
+      };
     };
     colors: {
       primary: string;
