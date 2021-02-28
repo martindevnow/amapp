@@ -5,7 +5,6 @@ import { ThemeProvider } from "styled-components";
 
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import AuthUserProvider from "./services/auth/auth.provider";
 import RoomsProvider from "./services/rooms/rooms.provider";
 
 import "./index.css";
@@ -28,11 +27,9 @@ ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <AuthUserProvider>
-        <RoomsProvider>
-          <App />
-        </RoomsProvider>
-      </AuthUserProvider>
+      <RoomsProvider>
+        <App />
+      </RoomsProvider>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")
