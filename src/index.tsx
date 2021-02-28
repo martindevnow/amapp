@@ -10,6 +10,7 @@ import RoomsProvider from "./services/rooms/rooms.provider";
 import "./index.css";
 import GlobalStyle from "./styles/global";
 import theme from "./styles/theme";
+import AuthProvider from "./services/auth/auth.provider";
 
 const fontWeights = Object.values(theme.fontWeight).join(";");
 
@@ -26,10 +27,12 @@ WebFont.load({
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <RoomsProvider>
-        <App />
-      </RoomsProvider>
+      <AuthProvider>
+        <GlobalStyle />
+        <RoomsProvider>
+          <App />
+        </RoomsProvider>
+      </AuthProvider>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")
