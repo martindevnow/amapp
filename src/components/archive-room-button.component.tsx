@@ -1,11 +1,11 @@
 import React from "react";
-import { IconButton } from "./ui/button.component";
 
 import { ReactComponent as ArchiveIcon } from "../assets/fa/solid/archive.svg";
 import { ReactComponent as BoxOpenIcon } from "../assets/fa/solid/box-open.svg";
 import { RoomsContext } from "../services/rooms/rooms.provider";
-
 import useToast from "../hooks/useToast.hook";
+import Toast from "./ui/toast.component";
+import { IconButton } from "./ui/button.component";
 
 const ArchiveRoomButton = ({
   roomId,
@@ -15,7 +15,7 @@ const ArchiveRoomButton = ({
   isArchived: boolean;
 }) => {
   const roomService = React.useContext(RoomsContext);
-  const { isToastActive, displayToast, Toast } = useToast(5000);
+  const { isToastActive, displayToast } = useToast(5000);
   const unarchive = () => {
     return roomService?.roomsService
       ?.unarchiveRoom(roomId)

@@ -9,12 +9,13 @@ import useToggle from "../../hooks/useToggle.hook";
 import useAuth from "../../hooks/useAuth.hook";
 
 import Input from "../ui/input.component";
+import Toast from "../ui/toast.component";
 
 const AskQuestionForm = () => {
   const { user } = useAuth();
   const { questionsService } = useContext(QuestionsContext);
 
-  const { isToastActive, displayToast, Toast } = useToast(5000);
+  const { isToastActive, displayToast } = useToast(5000);
   const [title, setTitle] = useState("");
   const [isAnonymous, toggleAnonymous] = useToggle(true);
 
