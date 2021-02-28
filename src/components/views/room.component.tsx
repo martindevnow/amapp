@@ -1,5 +1,7 @@
 import React, { useContext } from "react";
 import { useParams, useHistory, useLocation } from "react-router-dom";
+import styled from "styled-components";
+
 import * as ROUTES from "../../constants/routes";
 
 import { RoomMap } from "../../services/rooms/rooms.types";
@@ -10,7 +12,12 @@ import useAuth from "../../hooks/useAuth.hook";
 import Loading from "../ui/loading.component";
 import InlineError from "../ui/errors/inline-error.component";
 import { LGHeader } from "../ui/header.component";
+import { default as UICentered } from "../ui/centered.component";
 import Room from "../room.component";
+
+const Centered = styled(UICentered)`
+  margin-top: 100px;
+`;
 
 const RoomPage = () => {
   const { roomId } = useParams<{ roomId: string }>();
@@ -27,7 +34,11 @@ const RoomPage = () => {
   }, [history, user, userLoaded, location]);
 
   if (!loaded) {
-    return <Loading />;
+    return (
+      <Centered>
+        <Loading />
+      </Centered>
+    );
   }
 
   const room = (rooms as RoomMap)[roomId];
