@@ -1,14 +1,15 @@
-import React, { FunctionComponent, useContext } from "react";
+import React from "react";
+import useAuth from "../hooks/useAuth.hook";
 import { AclActions } from "../services/auth/auth.acl";
-import AuthContext from "../services/auth/auth.context";
 
 interface CanProps {
   aclAction: AclActions;
+  disabled?: boolean;
 }
-const Can: FunctionComponent<CanProps> = ({ aclAction, children }) => {
-  const { authService } = useContext(AuthContext);
+const Can: React.FC<CanProps> = ({ aclAction, children, disabled }) => {
+  const { authService } = useAuth();
   const canDo = authService.canUserDo(aclAction);
-  return canDo ? <>{children}</> : null;
+  return canDo && !disabled ? <>{children}</> : null;
 };
 
 export default Can;

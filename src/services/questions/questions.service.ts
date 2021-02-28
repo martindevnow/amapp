@@ -105,12 +105,6 @@ export class QuestionsService {
       batch.set(hasVotedRef, { questionId, roomId: this.roomId });
     }
 
-    // DONE: This was added as a cloud function
-    // batch.set(
-    //   questionRef,
-    //   { upVotes: this.firebaseService.increment },
-    //   { merge: true }
-    // );
     batch.commit();
     return true;
   };
