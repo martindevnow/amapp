@@ -17,6 +17,9 @@ import ProtectedRoute from "./hoc/protected-route.component";
 import { AclActions } from "./services/auth/auth.acl";
 import useAuth from "./hooks/useAuth.hook";
 
+// TODO: Consider absolute imports
+// https://create-react-app.dev/docs/importing-a-component/#absolute-imports
+
 function App() {
   const { user } = useAuth();
 

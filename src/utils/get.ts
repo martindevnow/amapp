@@ -1,3 +1,5 @@
+// Borrowed from: https://codewithstyle.info/Deep-property-access-in-TypeScript/
+
 function get<T, P1 extends keyof NonNullable<T>>(
   obj: T,
   prop1: P1

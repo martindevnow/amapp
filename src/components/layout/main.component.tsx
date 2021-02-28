@@ -1,7 +1,8 @@
 import styled from "styled-components";
+import themeGet from "styles/themeGet";
 
 const Main = styled.main`
-  max-width: ${({ theme }) => theme.layout.maxWidth};
+  max-width: ${themeGet("layout", "maxWidth")};
   margin: 0 auto;
 `;
 
