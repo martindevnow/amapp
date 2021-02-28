@@ -1,47 +1,45 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
+import React from "react";
 import { Route, BrowserRouter as Router } from "react-router-dom";
 
 import * as ROUTES from "./constants/routes";
-import Navigation from "./components/navigation/navigation.component";
-import SignUpPage from "./components/sign-up/sign-up.component";
-import SignInPage from "./components/sign-in/sign-in.component";
-import LandingPage from "./components/landing/landing.component";
-import HomePage from "./components/home/home.component";
-import RoomPage from "./components/room/room.component";
-import LobbyPage from "./components/lobby/lobby.component";
+import Layout from "./components/layout/layout.component";
+import Main from "./components/layout/main.component";
+import Navigation from "./components/layout/navigation.component";
+
+import SignUpPage from "./components/views/sign-up.component";
+import SignInPage from "./components/views/sign-in.component";
+import LandingPage from "./components/views/landing.component";
+import HomePage from "./components/views/home.component";
+import RoomPage from "./components/views/room.component";
+import LobbyPage from "./components/views/lobby.component";
 
 import ProtectedRoute from "./hoc/protected-route.component";
 import { AclActions } from "./services/auth/auth.acl";
+import useAuth from "./hooks/useAuth.hook";
 
 function App() {
+  const { user } = useAuth();
+
   return (
     <Router>
-      <div>
-        <Navigation />
-        <main
-          css={css`
-            padding: 0 1rem 1rem;
-            @media (min-width: 420px) {
-              padding: 0 2rem 2rem;
-            }
-          `}
-        >
-          <Route exact path={ROUTES.LANDING} component={LandingPage} />
-          <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
-          <Route path={ROUTES.SIGN_IN} component={SignInPage} />
+      <Navigation user={user} />
+      <Layout>
+        <Main>
+          <Route component={LandingPage} exact path={ROUTES.LANDING} />
+          <Route component={SignUpPage} path={ROUTES.SIGN_UP} />
+          <Route component={SignInPage} path={ROUTES.SIGN_IN} />
           <ProtectedRoute
             action={AclActions.VISIT_HOME}
-            path={ROUTES.HOME}
             component={HomePage}
+            path={ROUTES.HOME}
           />
-          <Route exact path={ROUTES.LOBBY} component={LobbyPage} />
-          <Route path={ROUTES.ROOM} component={RoomPage} />
+          <Route component={LobbyPage} exact path={ROUTES.LOBBY} />
+          <Route component={RoomPage} path={ROUTES.ROOM} />
           {/* <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} /> */}
           {/* <Route path={ROUTES.ACCOUNT} component={AccountPage} /> */}
           {/* <Route path={ROUTES.ADMIN} component={AdminPage} /> */}
-        </main>
-      </div>
+        </Main>
+      </Layout>
     </Router>
   );
 }
