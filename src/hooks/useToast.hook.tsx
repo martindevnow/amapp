@@ -1,22 +1,24 @@
 import React, { FunctionComponent, useCallback, useState } from "react";
 import styled from "styled-components";
+import themeGet from "../styles/themeGet";
 
 interface ToastProps {
   show: boolean;
 }
 
 const StyledToast = styled.div<{ show: boolean }>`
-  visibility: ${({ show }) => (show ? "visible" : "hidden")};
+  border: 1px solid ${themeGet("colors", "primary")};
+  border-radius: 4px;
+  box-shadow: ${themeGet("boxShadow", "navbar")};
+  color: ${themeGet("colors", "primary")};
+  background-color: ${themeGet("colors", "background")};
   position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: orange;
+  right: 20px;
+  bottom: 20px;
   padding: 1rem 3rem;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
   opacity: ${({ show }) => (show ? "100%" : "0%")};
   transition: opacity 0.3s ease-in-out;
+  visibility: ${({ show }) => (show ? "visible" : "hidden")};
 `;
 
 const Toast: FunctionComponent<ToastProps> = ({ show, children }) => (

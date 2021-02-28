@@ -50,8 +50,14 @@ declare module "styled-components" {
     };
     colors: {
       primary: string;
+      onPrimary: string;
       secondary: string;
+      onSecondary: string;
       background: string;
+      text: string;
+      success: string;
+      warning: string;
+      error: string;
     };
   }
 }

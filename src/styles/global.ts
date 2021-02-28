@@ -1,9 +1,13 @@
 import { normalize } from "polished";
 import { createGlobalStyle } from "styled-components";
+import themeGet from "./themeGet";
 
-export const GlobalStyle = createGlobalStyle`
+const GlobalStyle = createGlobalStyle`
   ${normalize()}
   body {
-    background-color: ${(props) => props.theme.colors.background};
+    background-color: ${themeGet("colors", "background")};
+    color: ${themeGet("colors", "text")};
   }
 `;
+
+export default GlobalStyle;

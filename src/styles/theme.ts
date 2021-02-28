@@ -1,5 +1,6 @@
 import { css, DefaultTheme } from "styled-components";
 import { Breakpoint } from "./styled";
+import themeGet from "./themeGet";
 
 const theme: DefaultTheme = {
   border: {
@@ -50,17 +51,20 @@ const theme: DefaultTheme = {
     },
   },
   colors: {
-    primary: "#ff0022",
+    primary: "rgb(232 75 78)",
+    onPrimary: "white",
     secondary: "#fcfcfc",
+    onSecondary: "black",
     background: "white",
+    text: "black",
+    success: "green",
+    warning: "yellow",
+    error: "#ff0022",
   },
 };
 
-export const themeGet = (accessor: string) => ({ theme }: any) =>
-  accessor.split(".").reduce((acc, curr) => acc[curr] || null, theme);
-
 export const media = (breakpoint: Breakpoint) => (mediaCss: any) => css`
-  @media all and (max-width: ${themeGet(`breakpoints.${breakpoint}`)}) {
+  @media all and (max-width: ${themeGet("breakpoints", breakpoint)}) {
     ${mediaCss}
   }
 `;

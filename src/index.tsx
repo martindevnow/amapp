@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import WebFont from "webfontloader";
+import { ThemeProvider } from "styled-components";
 
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
@@ -9,6 +10,7 @@ import AuthUserProvider from "./services/auth/auth.provider";
 import RoomsProvider from "./services/rooms/rooms.provider";
 
 import "./index.css";
+import GlobalStyle from "./styles/global";
 import theme from "./styles/theme";
 
 const fontWeights = Object.values(theme.fontWeight).join(";");
@@ -25,13 +27,16 @@ WebFont.load({
 
 ReactDOM.render(
   <React.StrictMode>
-    <FirebaseProvider>
-      <AuthUserProvider>
-        <RoomsProvider>
-          <App />
-        </RoomsProvider>
-      </AuthUserProvider>
-    </FirebaseProvider>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <FirebaseProvider>
+        <AuthUserProvider>
+          <RoomsProvider>
+            <App />
+          </RoomsProvider>
+        </AuthUserProvider>
+      </FirebaseProvider>
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
