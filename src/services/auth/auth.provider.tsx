@@ -1,15 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Observable, of } from "rxjs";
 import { switchMap } from "rxjs/operators";
 
-import FirebaseContext from "../firebase/firebase.context";
 import authService from "./auth.service";
 import AuthContext from "./auth.context";
 import { ACL, DEFAULT_ACL, GuestRoleMap } from "./auth.acl";
 import { IUserProfile, IUserRoles } from "./auth.types";
+import useFirebase from "../../hooks/useFirebase.hook";
 
 const AuthProvider: React.FC = (props) => {
-  const firebaseService = useContext(FirebaseContext);
+  const firebaseService = useFirebase();
   const [user, setUser] = useState<IUserProfile | null>(null);
   const [roles, setRoles] = useState<IUserRoles>(GuestRoleMap);
   const [loaded, setLoaded] = useState<boolean>(false);

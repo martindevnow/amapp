@@ -1,9 +1,6 @@
-import React from "react";
-
-import FirebaseContext from "../services/firebase/firebase.context";
+import firebaseService from "../services/firebase/firebase.service";
 
 const useFirebase = () => {
-  const firebaseService = React.useContext(FirebaseContext);
   return firebaseService;
 };
 

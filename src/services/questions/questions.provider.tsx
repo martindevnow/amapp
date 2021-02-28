@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import useAuth from "../../hooks/useAuth.hook";
+import useFirebase from "../../hooks/useFirebase.hook";
 
-import FirebaseContext from "../firebase/firebase.context";
 import { QuestionsService } from "./questions.service";
 import { IQuestion, IQuestionRecord } from "./questions.types";
 
@@ -26,7 +26,7 @@ const QuestionsProvider: React.FC<QuestionsProviderProps> = ({
   children,
   roomId,
 }) => {
-  const firebaseService = useContext(FirebaseContext);
+  const firebaseService = useFirebase();
   const { authService } = useAuth();
   const [loaded, setLoaded] = useState<boolean>(false);
 

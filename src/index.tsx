@@ -5,7 +5,6 @@ import { ThemeProvider } from "styled-components";
 
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import FirebaseProvider from "./services/firebase/firebase.provider";
 import AuthUserProvider from "./services/auth/auth.provider";
 import RoomsProvider from "./services/rooms/rooms.provider";
 
@@ -29,13 +28,11 @@ ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <FirebaseProvider>
-        <AuthUserProvider>
-          <RoomsProvider>
-            <App />
-          </RoomsProvider>
-        </AuthUserProvider>
-      </FirebaseProvider>
+      <AuthUserProvider>
+        <RoomsProvider>
+          <App />
+        </RoomsProvider>
+      </AuthUserProvider>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")
