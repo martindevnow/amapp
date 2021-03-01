@@ -1,3 +1,4 @@
+// import Logger from "../../utils/Logger";
 import { AclActions } from "../auth/auth.acl";
 import { AuthService } from "../auth/auth.service";
 import { FirebaseService } from "../firebase/firebase.service";
@@ -9,7 +10,7 @@ export class QuestionsService {
     private authService: AuthService,
     private roomId: string
   ) {
-    // console.log(`QuestionsService :: Constructor for room ${this.roomId}`);
+    // Logger.log(`QuestionsService :: Constructor for room ${this.roomId}`);
   }
 
   private _getRoom = () =>

@@ -3,10 +3,7 @@ import { useHistory } from "react-router-dom";
 
 import * as ROUTES from "../../constants/routes";
 import { IRoomRecord } from "../../services/rooms/rooms.types";
-import {
-  RoomsContext,
-  RoomsService,
-} from "../../services/rooms/rooms.provider";
+import { RoomsContext } from "../../services/rooms/rooms.provider";
 import Button from "../ui/button.component";
 import Input from "../ui/input.component";
 
@@ -22,7 +19,7 @@ const CreateRoomForm = () => {
       name,
     };
     // TODO: Handle Possible Errors here?
-    const newRoomId = await (roomsService as RoomsService).createRoom(room);
+    const newRoomId = await roomsService.createRoom(room);
     history.push(ROUTES.ROOM_BY_ID(newRoomId));
   };
   return (

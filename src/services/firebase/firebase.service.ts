@@ -2,6 +2,7 @@ import app from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
+// import Logger from "../../utils/Logger";
 
 import { firebaseConfig } from "./firebase.config";
 
@@ -11,7 +12,8 @@ export class FirebaseService {
   public storage: firebase.storage.Storage;
 
   constructor() {
-    // console.log("Firebase Service :: Constructor");
+    // Logger.log("Firebase Service :: Constructor");
+    // Show environment, even in production
     console.log(`Loading Firebase Project :: ${firebaseConfig.projectId}`);
     app.initializeApp(firebaseConfig);
     this.auth = app.auth();

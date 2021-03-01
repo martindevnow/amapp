@@ -7,6 +7,7 @@ import AuthContext from "./auth.context";
 import { ACL, DEFAULT_ACL, GuestRoleMap } from "./auth.acl";
 import { IUserProfile, IUserRoles } from "./auth.types";
 import useFirebase from "../../hooks/useFirebase.hook";
+// import Logger from "../../utils/Logger";
 
 const AuthProvider: React.FC = (props) => {
   const firebaseService = useFirebase();
@@ -19,7 +20,7 @@ const AuthProvider: React.FC = (props) => {
   authService.loadAcl(acl);
 
   React.useEffect(() => {
-    console.log("AuthProvider :: useEffect");
+    // Logger.log("AuthProvider :: useEffect");
     const { auth } = firebaseService;
     const user$ = new Observable<firebase.User | null>((observer) =>
       auth.onAuthStateChanged((userInfo) => observer.next(userInfo))

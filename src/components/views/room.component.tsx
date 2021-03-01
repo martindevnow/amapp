@@ -1,14 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useParams, useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 import * as ROUTES from "../../constants/routes";
-
-import { RoomMap } from "../../services/rooms/rooms.types";
 import QuestionsProvider from "../../services/questions/questions.provider";
-import { RoomsContext } from "../../services/rooms/rooms.provider";
-
 import useAuth from "../../hooks/useAuth.hook";
+import useRoom from "../../hooks/useRoom.hook";
 import Loading from "../ui/loading.component";
 import InlineError from "../ui/errors/inline-error.component";
 import { LGHeader } from "../ui/header.component";
@@ -20,9 +17,9 @@ const Centered = styled(UICentered)`
 `;
 
 const RoomPage = () => {
-  const { roomId } = useParams<{ roomId: string }>();
-  const { rooms, loaded } = useContext(RoomsContext);
   const { user, loaded: userLoaded } = useAuth();
+  const { roomId } = useParams<{ roomId: string }>();
+  const { room, loaded } = useRoom(roomId);
 
   const history = useHistory();
   const location = useLocation();
@@ -41,8 +38,6 @@ const RoomPage = () => {
     );
   }
 
-  const room = (rooms as RoomMap)[roomId];
-
   if (!room) {
     return (
       <>
@@ -54,7 +49,7 @@ const RoomPage = () => {
 
   return (
     <QuestionsProvider roomId={roomId}>
-      <Room room={(rooms as RoomMap)[roomId]} />
+      <Room room={room} />
     </QuestionsProvider>
   );
 };

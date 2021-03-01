@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-import { RoomMap, IRoomRecord } from "./rooms.types";
+import { RoomMap } from "./rooms.types";
 import useAuth from "../../hooks/useAuth.hook";
 import useFirebase from "../../hooks/useFirebase.hook";
-
-export interface RoomsService {
-  createRoom: (room: IRoomRecord) => Promise<string>;
-  archiveRoom: (roomId: string) => Promise<void>;
-  unarchiveRoom: (roomId: string) => Promise<void>;
-}
+import RoomsService from "./rooms.service";
+import firebaseService from "../firebase/firebase.service";
+// import Logger from "../../utils/Logger";
 
 interface RoomsContextValue {
   roomsService: RoomsService;
@@ -19,67 +16,47 @@ interface RoomsContextValue {
 const INITIAL_ROOMS_CONTEXT_VALUE = {
   rooms: {},
   loaded: false,
+  roomsService: new RoomsService(firebaseService),
 };
 
-export const RoomsContext = React.createContext<Partial<RoomsContextValue>>(
+export const RoomsContext = React.createContext<RoomsContextValue>(
   INITIAL_ROOMS_CONTEXT_VALUE
 );
 
 const RoomsProvider: React.FC = (props) => {
   const firebaseService = useFirebase();
-  const [rooms, setRooms] = useState<RoomMap>({});
-  const [loaded, setLoaded] = useState<boolean>(false);
   const { user } = useAuth();
 
-  useEffect(() => {
+  const [rooms, setRooms] = React.useState<RoomMap>({});
+  const [loaded, setLoaded] = React.useState<boolean>(false);
+
+  const roomsService = React.useMemo(() => new RoomsService(firebaseService), [
+    firebaseService,
+  ]);
+
+  const loadRoomMap = (rooms: RoomMap) => {
+    setRooms(rooms);
+    setLoaded(true);
+  };
+
+  React.useEffect(() => {
+    // Logger.log("RoomsProvider :: useEffect()");
     if (!user) {
       return;
     }
-    return firebaseService.db.collection("rooms").onSnapshot((qs) => {
-      const rooms: RoomMap = qs.docs
-        .map((doc) => ({
-          id: doc.id,
-          ...(doc.data() as IRoomRecord),
-          createdAt: doc.data().createdAt.toDate(),
-        }))
-        .reduce((acc, curr) => ({ ...acc, [curr.id]: curr }), {});
-      setRooms(rooms);
-      setLoaded(true);
-    });
-  }, [firebaseService, user]);
+    // To only pull the data, and not subscribe to changed
+    roomsService.list().then(loadRoomMap);
 
-  const createRoom = async (room: IRoomRecord) => {
-    const createdAt = new Date();
-    const newRoom = await firebaseService.db
-      .collection("rooms")
-      .add({ ...room, createdAt });
-    return newRoom.id;
-  };
-
-  const archiveRoom = async (roomId: string) => {
-    return firebaseService.db.doc(`rooms/${roomId}`).set(
-      {
-        isArchived: true,
-      },
-      { merge: true }
-    );
-  };
-
-  const unarchiveRoom = async (roomId: string) => {
-    return firebaseService.db.doc(`rooms/${roomId}`).set(
-      {
-        isArchived: false,
-      },
-      { merge: true }
-    );
-  };
+    // // Or, you can subscribe to changes (and return the unsubscribe function)
+    // return roomsService.listWatcher(loadRoomMap);
+  }, [roomsService, user]);
 
   return (
     <RoomsContext.Provider
       value={{
         rooms,
         loaded,
-        roomsService: { createRoom, archiveRoom, unarchiveRoom },
+        roomsService,
       }}
     >
       {props.children}

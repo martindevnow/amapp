@@ -1,4 +1,5 @@
 import firebase from "firebase";
+import Logger from "../../utils/Logger";
 import firebaseService, { FirebaseService } from "../firebase/firebase.service";
 import {
   ACL,
@@ -19,7 +20,7 @@ export class AuthService {
   private storage: firebase.storage.Storage;
 
   constructor(firebaseService: FirebaseService, private acl: ACL) {
-    // console.log("AuthService :: Constructor");
+    Logger.log("AuthService :: Constructor");
     this.auth = firebaseService.auth;
     this.db = firebaseService.db;
     this.storage = firebaseService.storage;
@@ -157,7 +158,7 @@ export class AuthService {
     user: firebase.User | null,
     additionalData?: { displayName: string }
   ): Promise<firebase.firestore.DocumentReference<IUserProfile> | null> => {
-    // console.log("AuthService :: createUserProfileDocument", { additionalData });
+    // Logger.log("AuthService :: createUserProfileDocument");
     if (!user) {
       this.userProfile = null;
       this.userRoles = GuestRoleMap;

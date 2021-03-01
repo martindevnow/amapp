@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { useHistory, useLocation } from "react-router-dom";
 
@@ -26,7 +26,7 @@ const SignInPage = () => {
   const history = useHistory();
   const location = useLocation();
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (loaded && user) {
       if ((location.state as any)?.prevPage?.pathname) {
         history.push((location.state as any).prevPage.pathname);
