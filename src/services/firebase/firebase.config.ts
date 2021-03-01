@@ -6,7 +6,7 @@ interface ConfigMap {
   production: any;
 }
 
-type Environment = keyof ConfigMap;
+export type Environment = keyof ConfigMap;
 
 // declare global {
 //   namespace NodeJS {
@@ -64,7 +64,8 @@ const hostEnvironmentMap: any = {
 };
 
 const host: any = window.location.host;
-const environment: Environment = hostEnvironmentMap[host] || "development";
+export const environment: Environment =
+  hostEnvironmentMap[host] || "development";
 
 export const firebaseConfig =
   firebaseConfigMap[environment] || devFirebaseConfig;

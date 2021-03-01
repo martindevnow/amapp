@@ -16,6 +16,7 @@ import LobbyPage from "./components/views/lobby.component";
 import ProtectedRoute from "./hoc/protected-route.component";
 import { AclActions } from "./services/auth/auth.acl";
 import useAuth from "./hooks/useAuth.hook";
+import Footer from "./components/footer.component";
 
 // TODO: Consider absolute imports
 // https://create-react-app.dev/docs/importing-a-component/#absolute-imports
@@ -42,6 +43,7 @@ function App() {
           {/* <Route path={ROUTES.ACCOUNT} component={AccountPage} /> */}
           {/* <Route path={ROUTES.ADMIN} component={AdminPage} /> */}
         </Main>
+        <Footer />
       </Layout>
     </Router>
   );

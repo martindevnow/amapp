@@ -3,7 +3,7 @@ import { IQuestion } from "../../services/questions/questions.types";
 import { QuestionsContext } from "../../services/questions/questions.provider";
 import useToast from "../../hooks/useToast.hook";
 import Input from "../ui/input.component";
-import Button from "../ui/button.component";
+import { ButtonDark } from "../ui/button.component";
 import Toast from "../ui/toast.component";
 
 const AnswerQuestionForm = ({ question }: { question: IQuestion }) => {
@@ -25,7 +25,7 @@ const AnswerQuestionForm = ({ question }: { question: IQuestion }) => {
         value={answer}
         onChange={(e) => setAnswer(e.target.value)}
       />
-      <Button onClick={() => submitAnswer()}>Answer</Button>
+      <ButtonDark onClick={() => submitAnswer()}>Answer</ButtonDark>
     </>
   );
 };

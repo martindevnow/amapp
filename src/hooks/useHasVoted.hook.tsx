@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+import React from "react";
 import { IQuestion } from "../services/questions/questions.types";
 import useAuth from "./useAuth.hook";
 
 const useHasVoted = (question: IQuestion, userId: string) => {
   const { authService } = useAuth();
-  const [hasVoted, setHasVoted] = useState(false);
+  const [hasVoted, setHasVoted] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const run = async () => {
       const voted = await authService.hasVotedForQuestion(question.id, userId);
       setHasVoted(voted || question.author.uid === userId);

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React from "react";
 
 import useAuth from "../../hooks/useAuth.hook";
 import useFirebase from "../../hooks/useFirebase.hook";
@@ -29,14 +29,14 @@ const QuestionsProvider: React.FC<QuestionsProviderProps> = ({
 }) => {
   const firebaseService = useFirebase();
   const { authService } = useAuth();
-  const [loaded, setLoaded] = useState<boolean>(false);
+  const [loaded, setLoaded] = React.useState<boolean>(false);
 
-  const [questions, setQuestions] = useState<IQuestion[]>([]);
-  const questionsService = useMemo(
+  const [questions, setQuestions] = React.useState<IQuestion[]>([]);
+  const questionsService = React.useMemo(
     () => new QuestionsService(firebaseService, authService, roomId),
     [firebaseService, authService, roomId]
   );
-  useEffect(() => {
+  React.useEffect(() => {
     return firebaseService.db
       .collection("rooms")
       .doc(roomId)
