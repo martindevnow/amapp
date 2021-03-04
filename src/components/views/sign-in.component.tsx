@@ -6,7 +6,7 @@ import * as ROUTES from "../../constants/routes";
 import { firebaseConfig } from "../../services/firebase/firebase.config";
 
 import SignInWithMicrosoft from "../forms/sign-in-microsoft.form";
-import SignInEmail from "../forms/sign-in-email.form";
+import SignInEmailForm from "../forms/sign-in-email.form";
 import useAuth from "../../hooks/useAuth.hook";
 import Column from "../layout/column.component";
 import { LGHeader } from "../ui/header.component";
@@ -42,7 +42,7 @@ const SignInPage = () => {
       <Flex>
         {firebaseConfig.projectId === "tw-amapp-dev" && (
           <Column>
-            <SignInEmail />
+            <SignInEmailForm />
           </Column>
         )}
         <Column>

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import JoinRoom from "../forms/join-room.form";
+import JoinRoomForm from "../forms/join-room.form";
 import Can from "../../hoc/can.component";
 import { AclActions } from "../../services/auth/auth.acl";
 import CreateRoomForm from "../forms/create-room.form";
@@ -53,7 +53,7 @@ const LandingPage = () => {
         <Column>
           <Card>
             <MDHeader>Have a Room ID?</MDHeader>
-            <JoinRoom />
+            <JoinRoomForm />
           </Card>
         </Column>
         <Can aclAction={AclActions.CREATE_ROOM}>

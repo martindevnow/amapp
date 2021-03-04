@@ -7,8 +7,8 @@ import Can from "../../hoc/can.component";
 import { AclActions } from "../../services/auth/auth.acl";
 import { RoomsContext } from "../../services/rooms/rooms.provider";
 import { IRoom } from "../../services/rooms/rooms.types";
-import CreateRoom from "../forms/create-room.form";
-import JoinRoom from "../forms/join-room.form";
+import CreateRoomForm from "../forms/create-room.form";
+import JoinRoomForm from "../forms/join-room.form";
 import Column from "../layout/column.component";
 import { LGHeader, MDHeader, SMHeader } from "../ui/header.component";
 import Card from "../ui/card.component";
@@ -163,14 +163,14 @@ const LobbyPage = () => {
         <Column>
           <Card>
             <MDHeader>Join an Open Room</MDHeader>
-            <JoinRoom />
+            <JoinRoomForm />
           </Card>
         </Column>
         <Can aclAction={AclActions.CREATE_ROOM}>
           <Column>
             <Card>
               <MDHeader>Create a New Room</MDHeader>
-              <CreateRoom />
+              <CreateRoomForm />
             </Card>
           </Column>
         </Can>

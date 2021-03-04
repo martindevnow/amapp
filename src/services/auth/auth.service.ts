@@ -193,4 +193,5 @@ export class AuthService {
 }
 
 const authService = new AuthService(firebaseService, DEFAULT_ACL);
+
 export default authService;
