@@ -1,5 +1,5 @@
 import React, { FormEvent, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import * as ROUTES from "../../constants/routes";
 import Button from "../ui/button.component";
@@ -7,6 +7,7 @@ import Input from "../ui/input.component";
 import useAuth from "../../hooks/useAuth.hook";
 import { Label } from "../ui/label.component";
 import InlineError from "../ui/errors/inline-error.component";
+import Link from "../ui/link.component";
 
 const SignUpForm = () => {
   const { authService } = useAuth();

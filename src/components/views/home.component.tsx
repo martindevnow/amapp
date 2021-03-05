@@ -1,7 +1,7 @@
 import React from "react";
 import useAuth from "../../hooks/useAuth.hook";
 
-import EditProfile from "../forms/edit-profile.form";
+import EditProfileForm from "../forms/edit-profile.form";
 import { LGHeader } from "../ui/header.component";
 import UserProfile from "../user-profile.component";
 
@@ -17,7 +17,7 @@ const HomePage = () => {
       <LGHeader>Your Profile</LGHeader>
 
       <UserProfile user={user} />
-      <EditProfile user={user} />
+      <EditProfileForm user={user} />
     </div>
   );
 };

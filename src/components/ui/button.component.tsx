@@ -7,12 +7,12 @@ interface ButtonProps {
 
 const primaryButtonStyles = css`
   background-color: ${themeGet("colors", "primary")};
-  color: white;
+  color: ${themeGet("colors", "onPrimary")};
 `;
 
 const secondaryButtonStyles = css`
   background-color: ${themeGet("colors", "secondary")};
-  color: black;
+  color: ${themeGet("colors", "onSecondary")};
 `;
 
 const Button = styled.button<ButtonProps>`
@@ -21,6 +21,9 @@ const Button = styled.button<ButtonProps>`
   border-radius: ${themeGet("border", "radius")};
   cursor: pointer;
   transition: all 90ms;
+
+  background-color: ${themeGet("colors", "background")};
+  color: ${themeGet("colors", "text")};
 
   ${(props) => props.variant === "primary" && primaryButtonStyles}
   ${(props) => props.variant === "secondary" && secondaryButtonStyles}
@@ -43,10 +46,15 @@ export const IconButton = styled.button`
   margin: 0.2rem;
   background: none;
   border-radius: 10px;
+  color: ${themeGet("colors", "text")};
+  & svg {
+    transition: fill 500ms ease;
+  }
+
   :hover {
-    background-color: #eee;
+    background-color: ${themeGet("colors", "background")};
     & svg {
-      fill: #555;
+      fill: ${themeGet("colors", "primary")};
     }
   }
   :disabled {

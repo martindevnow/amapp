@@ -1,12 +1,13 @@
 import React from "react";
-import styled from "styled-components";
-import JoinRoom from "../forms/join-room.form";
+import styled, { css } from "styled-components";
+import JoinRoomForm from "../forms/join-room.form";
 import Can from "../../hoc/can.component";
 import { AclActions } from "../../services/auth/auth.acl";
 import CreateRoomForm from "../forms/create-room.form";
 import { LGHeader, MDHeader } from "../ui/header.component";
 import Column from "../layout/column.component";
 import Card from "../ui/card.component";
+import { media } from "../../styles/themes";
 
 const Paragraph = styled.p`
   margin-bottom: 1rem;
@@ -27,6 +28,10 @@ const Flex = styled.div`
     max-width: 500px;
     margin: 0 auto;
   }
+
+  ${media("md")(css`
+    flex-direction: column;
+  `)}
 `;
 
 const LandingPage = () => {
@@ -53,7 +58,7 @@ const LandingPage = () => {
         <Column>
           <Card>
             <MDHeader>Have a Room ID?</MDHeader>
-            <JoinRoom />
+            <JoinRoomForm />
           </Card>
         </Column>
         <Can aclAction={AclActions.CREATE_ROOM}>

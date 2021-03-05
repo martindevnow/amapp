@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import WebFont from "webfontloader";
-import { ThemeProvider } from "styled-components";
 
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
@@ -9,10 +8,11 @@ import RoomsProvider from "./services/rooms/rooms.provider";
 
 import "./index.css";
 import GlobalStyle from "./styles/global";
-import theme from "./styles/theme";
+import themes from "./styles/themes";
 import AuthProvider from "./services/auth/auth.provider";
+import ThemeProvider from "./services/theme/theme.provider";
 
-const fontWeights = Object.values(theme.fontWeight).join(";");
+const fontWeights = Object.values(themes.light.fontWeight).join(";");
 
 WebFont.load({
   google: {
@@ -26,7 +26,7 @@ WebFont.load({
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
+    <ThemeProvider>
       <AuthProvider>
         <GlobalStyle />
         <RoomsProvider>

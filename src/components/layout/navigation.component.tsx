@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 import * as ROUTES from "../../constants/routes";
 import NavigationContainer from "../ui/navigation/navigation-container.component";
@@ -10,6 +9,7 @@ import Logo from "../ui/logo.component";
 
 import SignOutButton from "../sign-out.component";
 import { IUserProfile } from "../../services/auth/auth.types";
+import Link from "../ui/link.component";
 
 const NavigationAuth = () => (
   <>

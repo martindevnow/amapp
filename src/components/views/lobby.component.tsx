@@ -1,18 +1,19 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
 
 import * as ROUTES from "../../constants/routes";
 import Can from "../../hoc/can.component";
 import { AclActions } from "../../services/auth/auth.acl";
 import { RoomsContext } from "../../services/rooms/rooms.provider";
 import { IRoom } from "../../services/rooms/rooms.types";
-import CreateRoom from "../forms/create-room.form";
-import JoinRoom from "../forms/join-room.form";
+import CreateRoomForm from "../forms/create-room.form";
+import JoinRoomForm from "../forms/join-room.form";
 import Column from "../layout/column.component";
 import { LGHeader, MDHeader, SMHeader } from "../ui/header.component";
 import Card from "../ui/card.component";
 import { Label } from "../ui/label.component";
+import Link from "../ui/link.component";
+import { media } from "../../styles/themes";
 
 const sortByCreatedAt = (descending = true) => {
   if (descending === false) {
@@ -97,6 +98,10 @@ const Flex = styled.div`
     max-width: 500px;
     margin: 0 auto;
   }
+
+  ${media("md")(css`
+    flex-direction: column;
+  `)}
 `;
 
 const RoomSection = styled.div``;
@@ -163,14 +168,14 @@ const LobbyPage = () => {
         <Column>
           <Card>
             <MDHeader>Join an Open Room</MDHeader>
-            <JoinRoom />
+            <JoinRoomForm />
           </Card>
         </Column>
         <Can aclAction={AclActions.CREATE_ROOM}>
           <Column>
             <Card>
               <MDHeader>Create a New Room</MDHeader>
-              <CreateRoom />
+              <CreateRoomForm />
             </Card>
           </Column>
         </Can>
