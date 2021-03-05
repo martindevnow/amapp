@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { media } from "../../../styles/theme";
+import { media } from "../../../styles/themes";
 import themeGet from "../../../styles/themeGet";
 
 const NavigationBar = styled.nav`

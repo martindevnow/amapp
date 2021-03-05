@@ -38,7 +38,9 @@ const SignInPage = () => {
 
   return (
     <>
-      <LGHeader style={{ textAlign: "left" }}>Sign In</LGHeader>
+      <LGHeader style={{ textAlign: "left", marginTop: "50px" }}>
+        Sign In
+      </LGHeader>
       <Flex>
         {firebaseConfig.projectId === "tw-amapp-dev" && (
           <Column>

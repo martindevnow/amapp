@@ -19,13 +19,14 @@ import useAuth from "../hooks/useAuth.hook";
 import useHasVoted from "../hooks/useHasVoted.hook";
 import Column from "./layout/column.component";
 
-const Card = styled(UICard)<{ backgroundColor: string }>`
+const Card = styled(UICard)<{ highlighted: boolean }>`
   width: 100%;
   display: flex;
   align-items: center;
   // TODO: only allow variants, not any background color
   // Infact, the main Card component should implement this API
-  background-color: ${({ backgroundColor }) => backgroundColor};
+  background-color: ${({ theme, highlighted }) =>
+    highlighted ? "#ff6666" : theme.colors.background};
   justify-content: space-between;
   padding: 12px;
 `;
@@ -81,13 +82,13 @@ const Question: React.FC<QuestionProps> = ({ question, className }) => {
   const unmarkQuestionAsDiscussed = () =>
     questionsService?.unmarkQuestionAsDiscussed(question.id);
 
-  const backgroundColor = question.approved ? "white" : "#ffbbbb";
+  // const backgroundColor = question.approved ? "white" : "#ffbbbb";
   const upVoteColor = hasVoted ? theme.colors.primary : "#666";
 
   const askedAt = getTime(question.createdAt);
 
   return (
-    <Card backgroundColor={backgroundColor} className={className}>
+    <Card highlighted={!question.approved} className={className}>
       {question.approved ? (
         <IconButton onClick={upVote}>
           <UpVoteIcon width="1.5rem" height="1.5rem" fill={upVoteColor} />
