@@ -1,5 +1,6 @@
 import React from "react";
 import { ThemeProvider as StyledComponentsThemeProvider } from "styled-components";
+import useLocalStorage from "../../hooks/useLocalStorage.hook";
 import themes from "../../styles/themes";
 
 interface ThemeContextValue {
@@ -17,7 +18,11 @@ export const ThemeContext = React.createContext<ThemeContextValue>(
 );
 
 const ThemeProvider: React.FC = ({ children }) => {
-  const [selectedTheme, setSelectedTheme] = React.useState<"light" | "dark">(
+  // const [selectedTheme, setSelectedTheme] = React.useState<"light" | "dark">(
+  //   "light"
+  // );
+  const [selectedTheme, setSelectedTheme] = useLocalStorage<"light" | "dark">(
+    "selectedTheme",
     "light"
   );
 
