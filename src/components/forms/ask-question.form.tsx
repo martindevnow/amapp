@@ -56,14 +56,14 @@ const AskQuestionForm = () => {
       />
       {/* <Toggle onChange={toggleAnonymous} checked={isAnonymous} /> */}
       <Button
-        onClick={() => toggleAnonymous()}
+        onClick={() => !isAnonymous && toggleAnonymous()}
         as={isAnonymous ? ButtonDark : Button}
         style={{ marginBottom: "15px" }}
       >
         Anonymously
       </Button>
       <Button
-        onClick={() => toggleAnonymous()}
+        onClick={() => isAnonymous && toggleAnonymous()}
         as={isAnonymous ? Button : ButtonDark}
         style={{ marginBottom: "15px" }}
       >
