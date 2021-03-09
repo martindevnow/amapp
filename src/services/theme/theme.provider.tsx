@@ -3,9 +3,11 @@ import { ThemeProvider as StyledComponentsThemeProvider } from "styled-component
 import useLocalStorage from "../../hooks/useLocalStorage.hook";
 import themes from "../../styles/themes";
 
+type Theme = "dark" | "light";
+
 interface ThemeContextValue {
   toggle: Function;
-  selectedTheme: "light" | "dark";
+  selectedTheme: Theme;
 }
 
 const INITIAL_THEME_CONTEXT_VALUE: ThemeContextValue = {
@@ -18,10 +20,7 @@ export const ThemeContext = React.createContext<ThemeContextValue>(
 );
 
 const ThemeProvider: React.FC = ({ children }) => {
-  // const [selectedTheme, setSelectedTheme] = React.useState<"light" | "dark">(
-  //   "light"
-  // );
-  const [selectedTheme, setSelectedTheme] = useLocalStorage<"light" | "dark">(
+  const [selectedTheme, setSelectedTheme] = useLocalStorage<Theme>(
     "selectedTheme",
     "light"
   );
