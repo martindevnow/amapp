@@ -13,6 +13,8 @@ const NavigationList = styled.ul`
     justify-content: center;
     & > a {
       text-decoration: none;
+      transform: translateY(0);
+      transition: transform 150ms ease;
 
       &:hover {
         color: darken(darkblue, 50%);

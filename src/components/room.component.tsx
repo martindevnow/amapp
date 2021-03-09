@@ -24,10 +24,13 @@ const Section = styled.div`
   width: 100%;
   display: flex;
   margin-top: 50px;
+  align-items: center;
+  margin-bottom: 40px;
 `;
 
 const Title = styled(LGHeader)`
-  flex-grow: 1;
+  /* flex-grow: 1; */
+  margin-bottom: 0;
 `;
 
 const Top = styled.div`

@@ -31,20 +31,15 @@ const ArchiveRoomButton = ({
       <Toast show={isToastActive}>
         {isArchived ? "Archived" : "Unarchived"}
       </Toast>
-      <IconButton onClick={unarchive} disabled={!isArchived}>
-        <BoxOpenIcon
-          width="1.5rem"
-          height="1.5rem"
-          fill={isArchived ? "red" : "lightgray"}
-        />
-      </IconButton>
-      <IconButton onClick={archive} disabled={isArchived}>
-        <ArchiveIcon
-          width="1.5rem"
-          height="1.5rem"
-          fill={isArchived ? "lightgray" : "red"}
-        />
-      </IconButton>
+      {isArchived ? (
+        <IconButton onClick={unarchive} disabled={!isArchived}>
+          <BoxOpenIcon width="1.5rem" height="1.5rem" fill={"darkgreen"} />
+        </IconButton>
+      ) : (
+        <IconButton onClick={archive} disabled={isArchived}>
+          <ArchiveIcon width="1.5rem" height="1.5rem" fill={"darkgreen"} />
+        </IconButton>
+      )}
     </React.Fragment>
   );
 };
