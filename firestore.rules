@@ -58,6 +58,31 @@ service cloud.firestore {
         allow update: if isAuthorOrModerator(request.auth.uid, resource);
         allow delete: if isAdmin(request.auth.uid);
       }
+
+    //  match /offerCandidates/{document=**} {
+    //    allow read;
+    //    allow write;
+    //  }
+
+    //  match /answerCandidates/{document=**} {
+    //    allow read;
+    //    allow write;
+    //  }
+    }
+
+    match /calls/{roomId} {
+      allow read: if isSignedIn(request.auth.uid);
+      allow write: if isSignedIn(request.auth.uid);
+
+      match /offerCandidates/{document=**} {
+        allow read;
+        allow write;
+      }
+
+      match /answerCandidates/{document=**} {
+        allow read;
+        allow write;
+      }
     }
 
     // match /{document=**} {

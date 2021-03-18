@@ -15,6 +15,7 @@ import Column from "./layout/column.component";
 import Card from "./ui/card.component";
 import Button from "./ui/button.component";
 import { LGHeader, MDHeader } from "./ui/header.component";
+import Stream from "./stream.component";
 
 const ActionMenu = styled.div`
   padding: 1rem;
@@ -57,6 +58,7 @@ const Room: React.FC<RoomProps> = ({ room }) => {
     <>
       <Section>
         <Title>{room.name}</Title>
+        <Stream roomId={room.id} />
         <Can aclAction={AclActions.ARCHIVE_ROOM}>
           <ActionMenu>
             <ArchiveRoomButton
