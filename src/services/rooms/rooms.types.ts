@@ -8,6 +8,7 @@ export interface IRoom extends IRoomRecord {
   id: string;
   createdAt: Date;
   isArchived?: boolean;
+  cfVideoUrl?: string;
 }
 
 export interface RoomMap {
