@@ -7,6 +7,7 @@ export interface IQuestionRecord {
   };
   anonymous: boolean;
   answered: boolean;
+  answeredTimestamp?: string;
   answer?: string;
   deleted?: boolean;
   approved?: boolean;

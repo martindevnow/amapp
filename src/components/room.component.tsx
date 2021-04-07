@@ -15,6 +15,8 @@ import Column from "./layout/column.component";
 import Card from "./ui/card.component";
 import Button from "./ui/button.component";
 import { LGHeader, MDHeader } from "./ui/header.component";
+import useVideo from "../hooks/useVideoStream.hook";
+import VideoPlayerProvider from "../services/video-player/video-player.provider";
 
 const ActionMenu = styled.div`
   padding: 1rem;
@@ -44,6 +46,10 @@ const Top = styled.div`
   }
 `;
 
+const Video = styled.video`
+  width: 100%;
+`;
+
 interface RoomProps {
   room: IRoom;
 }
@@ -53,8 +59,10 @@ const Room: React.FC<RoomProps> = ({ room }) => {
   const activeQuestion = questions?.find((q) => q.id === room.activeQuestionId);
   const clearActiveQuestion = () => questionsService?.clearActiveQuestion();
 
+  const [videoRef] = useVideo(room.cfVideoUrl);
+
   return (
-    <>
+    <VideoPlayerProvider player={videoRef.current}>
       <Section>
         <Title>{room.name}</Title>
         <Can aclAction={AclActions.ARCHIVE_ROOM}>
@@ -68,16 +76,24 @@ const Room: React.FC<RoomProps> = ({ room }) => {
       </Section>
 
       <Top>
-        <Can aclAction={AclActions.ASK_QUESTION}>
-          <Column>
-            <Card>
-              <MDHeader>Ask a Question</MDHeader>
-              <AddQuestionForm />
-            </Card>
-          </Column>
-        </Can>
+        {!room.cfVideoUrl && (
+          <Can aclAction={AclActions.ASK_QUESTION}>
+            <Column>
+              <Card>
+                <MDHeader>Ask a Question</MDHeader>
+                <AddQuestionForm />
+              </Card>
+            </Column>
+          </Can>
+        )}
 
-        {room.activeQuestionId && activeQuestion && (
+        {room.cfVideoUrl && (
+          <Column>
+            <Video ref={videoRef} controls></Video>
+          </Column>
+        )}
+
+        {room.activeQuestionId && !room.cfVideoUrl && activeQuestion && (
           <Column>
             <Card invisible>
               <MDHeader>Current Question</MDHeader>
@@ -94,7 +110,7 @@ const Room: React.FC<RoomProps> = ({ room }) => {
         )}
       </Top>
       <QuestionFeed roomId={room.id} />
-    </>
+    </VideoPlayerProvider>
   );
 };
 
