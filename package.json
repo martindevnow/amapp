@@ -28,11 +28,9 @@
     "polished": "^4.1.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-firebase-hooks": "^2.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "react-spinners": "^0.10.6",
-    "recompose": "^0.30.0",
     "rxjs": "^6.6.3",
     "styled-components": "^5.2.1",
     "typescript": "~3.7.2",
@@ -40,7 +38,6 @@
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.1.5",
-    "@types/recompose": "^0.30.7",
     "@types/styled-components": "^5.1.7",
     "@types/webfontloader": "^1.6.32"
   },
