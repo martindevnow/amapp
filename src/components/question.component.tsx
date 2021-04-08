@@ -15,21 +15,12 @@ import { ReactComponent as CommentSlashIcon } from "../assets/fa/solid/comment-s
 import { ReactComponent as CommentIcon } from "../assets/fa/solid/comment.svg";
 import { IconButton } from "./ui/button.component";
 import { default as UICard } from "./ui/card.component";
+import InlineAnchor from "./ui/inline-anchor.component";
 import useAuth from "../hooks/useAuth.hook";
 import useHasVoted from "../hooks/useHasVoted.hook";
 import Column from "./layout/column.component";
 import useVideoPlayer from "../hooks/useVideoPlayer.hook";
-import themeGet from "../styles/themeGet";
 import { toSeconds } from "../services/utilities";
-
-const TimestampLink = styled.a`
-  color: ${themeGet("colors", "primary")};
-  cursor: pointer;
-  transition: filter 150ms;
-  &:hover {
-    filter: brightness(90%);
-  }
-`;
 
 const Card = styled(UICard)<{ highlighted: boolean }>`
   width: 100%;
@@ -85,9 +76,9 @@ const Question: React.FC<QuestionProps> = ({ question, className }) => {
     videoPlayer.currentTime = toSeconds(minutesColonSeconds);
   };
   const seek = question.answeredTimestamp && (
-    <TimestampLink onClick={() => handleSeek(question.answeredTimestamp)}>
+    <InlineAnchor onClick={() => handleSeek(question.answeredTimestamp)}>
       @ {question.answeredTimestamp}
-    </TimestampLink>
+    </InlineAnchor>
   );
 
   const upVote = () => {

@@ -5,6 +5,7 @@ import Can from "./../hoc/can.component";
 import { AclActions } from "./../services/auth/auth.acl";
 import { IRoom } from "./../services/rooms/rooms.types";
 import { QuestionsContext } from "./../services/questions/questions.provider";
+import VideoPlayerProvider from "../services/video-player/video-player.provider";
 import ArchiveRoomButton from "./archive-room-button.component";
 import QuestionFeed from "./question-feed.component";
 import Question from "./question.component";
@@ -15,8 +16,8 @@ import Column from "./layout/column.component";
 import Card from "./ui/card.component";
 import Button from "./ui/button.component";
 import { LGHeader, MDHeader } from "./ui/header.component";
+import Video from "./ui/video.component";
 import useVideo from "../hooks/useVideoStream.hook";
-import VideoPlayerProvider from "../services/video-player/video-player.provider";
 
 const ActionMenu = styled.div`
   padding: 1rem;
@@ -44,10 +45,6 @@ const Top = styled.div`
   @media (min-width: 1020px) {
     flex-direction: row;
   }
-`;
-
-const Video = styled.video`
-  width: 100%;
 `;
 
 interface RoomProps {
@@ -89,7 +86,7 @@ const Room: React.FC<RoomProps> = ({ room }) => {
 
         {room.cfVideoUrl && (
           <Column>
-            <Video ref={videoRef} controls></Video>
+            <Video videoRef={videoRef}></Video>
           </Column>
         )}
 
