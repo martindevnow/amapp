@@ -1,12 +1,13 @@
-name: Production Build and Deploy
+name: "[main] Build and Deploy"
 
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   build:
-    name: "[PROD] Build Frontend"
+    name: "Build Frontend"
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout Repo"
@@ -38,7 +39,7 @@ jobs:
           path: build
 
   deploy:
-    name: "[PROD] deploy"
+    name: "Deploy"
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -54,7 +55,7 @@ jobs:
           name: build
           path: build
 
-      - name: "[PROD] Deploy to Firebase"
+      - name: "[production] Deploy to Firebase"
         uses: w9jds/firebase-action@master
         with:
           args: deploy --project=production

@@ -1,4 +1,4 @@
-name: Development Build and Deploy
+name: "[develop] Build and Deploy"
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: "[DEV] Build Frontend"
+    name: "Build Frontend"
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout Repo"
@@ -31,7 +31,7 @@ jobs:
           path: build
 
   deploy:
-    name: "[DEV] Deploy"
+    name: "Deploy"
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -47,7 +47,7 @@ jobs:
           name: build
           path: build
 
-      - name: "[DEV] Deploy to Firebase"
+      - name: "[development] Deploy to Firebase"
         uses: w9jds/firebase-action@master
         with:
           args: deploy --project=development
