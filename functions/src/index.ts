@@ -41,3 +41,38 @@ export const setupUserRoles = functions.firestore
         console.error(`Error setting up roles for ${userId}`, error)
       );
   });
+
+export const zoomVideoUploaded = functions.https.onRequest(async (req, res) => {
+  const { zoomMeetingTopic, zoomMeetingDate, streamablePlaylistUrl } = req.body;
+
+  // TODO: Associate a Video Playlist with an AMA room, based on
+  //
+  const roomsQuerySnapshot = await db
+    .collection("rooms")
+    .where("zoomMeetingTopic", "==", zoomMeetingTopic)
+    .orderBy("zoomMeetingDate", "desc")
+    .get();
+  // const rooms = roomsQuerySnapshot.docs.map((doc) => doc.data());
+
+  // find a room that matches the date
+  const room = roomsQuerySnapshot.docs.find(
+    (room) => room.data().zoomMeetingDate === zoomMeetingDate
+  );
+
+  if (!room) {
+    res.status(404).send({
+      success: false,
+      error: `No room was found with the 'zoomMeetingTopic' of '${zoomMeetingTopic}' for the date '${zoomMeetingDate}'`,
+    });
+    return;
+  }
+
+  // Save the streamablePlaylistUrl to the room document
+  await room.ref.update({ cfVideoUrl: streamablePlaylistUrl });
+
+  res.status(200).send({
+    success: true,
+    message: `Room ID: ${room.id} (${room.data().name}) had a video attached.`,
+  });
+  return;
+});
