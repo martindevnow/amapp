@@ -92,11 +92,16 @@ const Question: React.FC<QuestionProps> = ({ question, className }) => {
 
   const deleteQuestion = () => questionsService?.deleteQuestion(question.id);
 
-  const markQuestionAsDiscussed = () =>
-    questionsService?.markQuestionAsDiscussed(question.id);
+  const markQuestionAsAnswered = () => {
+    questionsService?.setActiveQuestion(question.id);
 
-  const unmarkQuestionAsDiscussed = () =>
-    questionsService?.unmarkQuestionAsDiscussed(question.id);
+    if (!question.answered) {
+      questionsService?.markQuestionAsAnswered(question.id);
+    }
+  };
+
+  const unmarkQuestionAsAnswered = () =>
+    questionsService?.unmarkQuestionAsAnswered(question.id);
 
   // const backgroundColor = question.approved ? "white" : "#ffbbbb";
   const upVoteColor = hasVoted ? theme.colors.primary : "#666";
@@ -122,7 +127,7 @@ const Question: React.FC<QuestionProps> = ({ question, className }) => {
       {question.answered ? (
         <>
           <Can aclAction={AclActions.MARK_FOR_DISCUSSION}>
-            <IconButton onClick={unmarkQuestionAsDiscussed}>
+            <IconButton onClick={unmarkQuestionAsAnswered}>
               <CommentIcon width="1.5rem" height="1.5rem" fill="green" />
             </IconButton>
           </Can>
@@ -135,7 +140,7 @@ const Question: React.FC<QuestionProps> = ({ question, className }) => {
       ) : (
         <>
           <Can aclAction={AclActions.MARK_FOR_DISCUSSION}>
-            <IconButton onClick={markQuestionAsDiscussed}>
+            <IconButton onClick={markQuestionAsAnswered}>
               <CommentSlashIcon width="1.5rem" height="1.5rem" fill="green" />
             </IconButton>
           </Can>

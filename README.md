@@ -1,8 +1,6 @@
 # AMApp
 
-[![Development Build and Deploy](https://github.com/martindevnow/amapp/actions/workflows/development.yml/badge.svg?branch=develop)](https://github.com/martindevnow/amapp/actions/workflows/development.yml)
-
-[![Production Build and Deploy](https://github.com/martindevnow/amapp/actions/workflows/production.yml/badge.svg?branch=main)](https://github.com/martindevnow/amapp/actions/workflows/production.yml)
+[![Development Build and Deploy](https://github.com/martindevnow/amapp/actions/workflows/development.yml/badge.svg?branch=develop)](https://github.com/martindevnow/amapp/actions/workflows/development.yml) [![Production Build and Deploy](https://github.com/martindevnow/amapp/actions/workflows/production.yml/badge.svg?branch=main)](https://github.com/martindevnow/amapp/actions/workflows/production.yml)
 
 This is an tool to make hosting real-time AMAs more intuitive. It also supports VoD streaming of the recording of past AMAs.
 

@@ -27,19 +27,21 @@ export class QuestionsService {
       .update({ approved: true });
   };
 
-  markQuestionAsDiscussed = async (questionId: string) => {
-    await this._getRoom().update({ activeQuestionId: questionId });
+  markQuestionAsAnswered = async (questionId: string) => {
     return this._getRoom()
       .collection("questions")
       .doc(questionId)
-      .update({ answered: true });
+      .update({
+        answered: true,
+        answeredAt: new Date(Date.now()),
+      });
   };
 
-  unmarkQuestionAsDiscussed = async (questionId: string) => {
+  unmarkQuestionAsAnswered = async (questionId: string) => {
     return this._getRoom()
       .collection("questions")
       .doc(questionId)
-      .update({ answered: false });
+      .update({ answered: false, answeredAt: null });
   };
 
   answerQuestion = async (questionId: string, answer: string) => {
@@ -110,7 +112,11 @@ export class QuestionsService {
     return true;
   };
 
+  setActiveQuestion = async (questionId: string) => {
+    return this._getRoom().update({ activeQuestionId: questionId });
+  };
+
   clearActiveQuestion = () => {
-    this._getRoom().update({ activeQuestionId: "" });
+    return this._getRoom().update({ activeQuestionId: "" });
   };
 }
