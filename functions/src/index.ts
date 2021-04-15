@@ -45,6 +45,11 @@ export const setupUserRoles = functions.firestore
 export const zoomVideoUploaded = functions.https.onRequest(async (req, res) => {
   const { zoomMeetingTopic, zoomMeetingDate, streamablePlaylistUrl } = req.body;
 
+  functions.logger.log({
+    zoomMeetingDate,
+    zoomMeetingTopic,
+    streamablePlaylistUrl,
+  });
   // TODO: Associate a Video Playlist with an AMA room, based on
   //
   const roomsQuerySnapshot = await db
@@ -56,8 +61,10 @@ export const zoomVideoUploaded = functions.https.onRequest(async (req, res) => {
 
   // find a room that matches the date
   const room = roomsQuerySnapshot.docs.find(
-    (room) => room.data().zoomMeetingDate === zoomMeetingDate
+    (roomDoc) => roomDoc.data().zoomMeetingDate === zoomMeetingDate
   );
+  functions.logger.log("room");
+  functions.logger.log(room);
 
   if (!room) {
     res.status(404).send({
@@ -67,8 +74,11 @@ export const zoomVideoUploaded = functions.https.onRequest(async (req, res) => {
     return;
   }
 
+  functions.logger.log("Updating room to have this update ");
+  functions.logger.log({ cfVideoUrl: streamablePlaylistUrl });
+
   // Save the streamablePlaylistUrl to the room document
-  await room.ref.update({ cfVideoUrl: streamablePlaylistUrl });
+  // await room.ref.update({ cfVideoUrl: streamablePlaylistUrl });
 
   res.status(200).send({
     success: true,
