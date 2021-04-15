@@ -39,7 +39,7 @@ const zoomVideoUploadStarted = functions.https.onRequest(async (req, res) => {
 
   functions.logger.log("Request looks good");
 
-  // Associate a Video Playlist with an AMA room, based on
+  // Associate a Start Time with an AMA room
   const roomsQuerySnapshot = await db
     .collection("rooms")
     .where("zoomMeetingTopic", "==", zoomMeetingTopic)
