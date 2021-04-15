@@ -9,6 +9,9 @@ export interface IRoom extends IRoomRecord {
   createdAt: Date;
   isArchived?: boolean;
   cfVideoUrl?: string;
+  zoomMeetingDate?: string;
+  zoomMeetingTopic?: string;
+  zoomRecordingStart?: Date;
 }
 
 export interface RoomMap {

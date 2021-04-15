@@ -3,6 +3,7 @@ import themeGet from "../../styles/themeGet";
 
 interface TextareaProps {
   readonly bleed?: boolean;
+  readonly resize?: "both" | "vertical" | "horizontal";
 }
 
 const Textarea = styled.textarea<TextareaProps>`
@@ -14,6 +15,7 @@ const Textarea = styled.textarea<TextareaProps>`
   margin-bottom: 18px;
   background: ${themeGet("colors", "background")};
   color: ${themeGet("colors", "text")};
+  resize: ${({ resize }) => resize || "both"};
 
   :hover {
     box-shadow: ${themeGet("boxShadow", "navbar")};

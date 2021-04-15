@@ -10,7 +10,7 @@ import ArchiveRoomButton from "./archive-room-button.component";
 import QuestionFeed from "./question-feed.component";
 import Question from "./question.component";
 import AddQuestionForm from "./forms/ask-question.form";
-import AnswerQuestionForm from "./forms/answer-question.form";
+// import AnswerQuestionForm from "./forms/answer-question.form";
 
 import Column from "./layout/column.component";
 import Card from "./ui/card.component";
@@ -95,10 +95,10 @@ const Room: React.FC<RoomProps> = ({ room }) => {
             <Card invisible>
               <MDHeader>Current Question</MDHeader>
 
-              <Question question={activeQuestion} />
-              <Can aclAction={AclActions.ANSWER_QUESTION}>
+              <Question question={activeQuestion} slim />
+              {/* <Can aclAction={AclActions.ANSWER_QUESTION}>
                 <AnswerQuestionForm question={activeQuestion} />
-              </Can>
+              </Can> */}
               <Can aclAction={AclActions.CLEAR_ACTIVE_QUESTION}>
                 <Button onClick={clearActiveQuestion}>Clear Current Q</Button>
               </Can>
