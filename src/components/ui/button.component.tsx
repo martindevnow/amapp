@@ -34,9 +34,9 @@ const Button = styled.button<ButtonProps>`
   }
 `;
 
-export const IconButton = styled.button`
+export const IconButton = styled.button<{ noInteraction?: boolean }>`
   padding: 0;
-  cursor: pointer;
+  cursor: ${({ noInteraction }) => (noInteraction ? null : "pointer")};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -51,12 +51,16 @@ export const IconButton = styled.button`
     transition: fill 500ms ease;
   }
 
-  :hover {
-    background-color: ${themeGet("colors", "background")};
-    & svg {
-      fill: ${themeGet("colors", "primary")};
-    }
-  }
+  ${({ noInteraction }) =>
+    !noInteraction &&
+    css`
+      :hover {
+        background-color: ${themeGet("colors", "background")};
+        & svg {
+          fill: ${themeGet("colors", "primary")};
+        }
+      }
+    `}
   :disabled {
     cursor: not-allowed;
   }

@@ -48,6 +48,9 @@ const AnswerText = styled.p`
   border-left: 4px solid lightgray;
   padding-left: 0.7rem;
   font-style: italic;
+  font-size: 0.825rem;
+  margin-top: 0.5rem;
+  margin-left: 1rem;
 `;
 
 const getTime = (dt: Date) =>
@@ -60,9 +63,10 @@ const getTime = (dt: Date) =>
 interface QuestionProps {
   question: IQuestion;
   className?: string;
+  slim?: boolean;
 }
 
-const Question: React.FC<QuestionProps> = ({ question, className }) => {
+const Question: React.FC<QuestionProps> = ({ question, className, slim }) => {
   const { user } = useAuth();
   const { questionsService } = useContext(QuestionsContext);
   const hasVoted = useHasVoted(question, user?.uid || "TODO");
@@ -100,8 +104,8 @@ const Question: React.FC<QuestionProps> = ({ question, className }) => {
     }
   };
 
-  const unmarkQuestionAsAnswered = () =>
-    questionsService?.unmarkQuestionAsAnswered(question.id);
+  // const unmarkQuestionAsAnswered = () =>
+  //   questionsService?.unmarkQuestionAsAnswered(question.id);
 
   // const backgroundColor = question.approved ? "white" : "#ffbbbb";
   const upVoteColor = hasVoted ? theme.colors.primary : "#666";
@@ -110,50 +114,68 @@ const Question: React.FC<QuestionProps> = ({ question, className }) => {
 
   return (
     <Card highlighted={!question.approved} className={className}>
-      {question.approved ? (
-        <IconButton onClick={upVote}>
-          <UpVoteIcon width="1.5rem" height="1.5rem" fill={upVoteColor} />
-        </IconButton>
-      ) : (
-        <Can aclAction={AclActions.APPROVE_QUESTION}>
-          <IconButton onClick={approveQuestion}>
-            <CheckIcon width="1.5rem" height="1.5rem" fill="green" />
+      {!slim &&
+        (question.approved ? (
+          <IconButton onClick={upVote}>
+            <UpVoteIcon width="1.5rem" height="1.5rem" fill={upVoteColor} />
           </IconButton>
-        </Can>
-      )}
-
-      <span>{question.approved ? question.upVotes : "..."}</span>
-
-      {question.answered ? (
-        <>
-          <Can aclAction={AclActions.MARK_FOR_DISCUSSION}>
-            <IconButton onClick={unmarkQuestionAsAnswered}>
-              <CommentIcon width="1.5rem" height="1.5rem" fill="green" />
+        ) : (
+          <Can aclAction={AclActions.APPROVE_QUESTION}>
+            <IconButton onClick={approveQuestion}>
+              <CheckIcon width="1.5rem" height="1.5rem" fill="green" />
             </IconButton>
           </Can>
-          <Unless aclAction={AclActions.MARK_FOR_DISCUSSION}>
-            <IconButton>
-              <CommentIcon width="1.5rem" height="1.5rem" fill="green" />
-            </IconButton>
-          </Unless>
-        </>
-      ) : (
-        <>
-          <Can aclAction={AclActions.MARK_FOR_DISCUSSION}>
-            <IconButton onClick={markQuestionAsAnswered}>
-              <CommentSlashIcon width="1.5rem" height="1.5rem" fill="green" />
-            </IconButton>
-          </Can>
-          <Unless aclAction={AclActions.MARK_FOR_DISCUSSION}>
-            <IconButton>
-              <CommentSlashIcon width="1.5rem" height="1.5rem" fill="green" />
-            </IconButton>
-          </Unless>
-        </>
-      )}
+        ))}
 
-      <Column>
+      {!slim && <span>{question.approved ? question.upVotes : "..."}</span>}
+
+      {!slim &&
+        (question.answered ? (
+          <>
+            <Can aclAction={AclActions.MARK_FOR_DISCUSSION}>
+              {/* <IconButton onClick={unmarkQuestionAsAnswered}> */}
+              <IconButton noInteraction>
+                <CommentIcon width="1.5rem" height="1.5rem" fill="green" />
+              </IconButton>
+            </Can>
+            <Unless aclAction={AclActions.MARK_FOR_DISCUSSION}>
+              <IconButton>
+                <CommentIcon width="1.5rem" height="1.5rem" fill="green" />
+              </IconButton>
+            </Unless>
+          </>
+        ) : (
+          <>
+            <Can aclAction={AclActions.MARK_FOR_DISCUSSION}>
+              <IconButton onClick={markQuestionAsAnswered}>
+                <CommentSlashIcon width="1.5rem" height="1.5rem" fill="green" />
+              </IconButton>
+            </Can>
+            <Unless aclAction={AclActions.MARK_FOR_DISCUSSION}>
+              <IconButton>
+                <CommentSlashIcon width="1.5rem" height="1.5rem" fill="green" />
+              </IconButton>
+            </Unless>
+          </>
+        ))}
+
+      <Column style={{ marginLeft: slim ? "0.5rem" : 0 }}>
         <p>{question.title}</p>
+
+        {question.answeredAt && (
+          <AnswerText>
+            Discussed At:{" "}
+            {
+              question.answeredAt
+                ?.toLocaleString("en-US", {
+                  timeZoneName: "short",
+                  hour12: true,
+                })
+                ?.split(" ")?.[1]
+            }
+          </AnswerText>
+        )}
+
         {question?.answer && !question.answeredTimestamp && (
           <AnswerText>{question.answer}</AnswerText>
         )}

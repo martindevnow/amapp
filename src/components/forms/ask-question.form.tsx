@@ -50,6 +50,7 @@ const AskQuestionForm = () => {
       <Textarea
         name="title"
         bleed
+        resize="vertical"
         value={title}
         placeholder="Your question .. ?"
         onChange={(e) => setTitle(e.target.value)}
