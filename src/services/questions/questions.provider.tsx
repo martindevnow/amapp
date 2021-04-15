@@ -46,6 +46,7 @@ const QuestionsProvider: React.FC<QuestionsProviderProps> = ({
           id: doc.id,
           ...(doc.data() as IQuestionRecord),
           createdAt: doc.data().createdAt.toDate(),
+          answeredAt: doc.data().answeredAt?.toDate(),
         }));
         setQuestions(questions);
         setLoaded(true);
