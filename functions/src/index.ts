@@ -6,6 +6,7 @@ import * as admin from "firebase-admin";
 
 admin.initializeApp();
 const db: FirebaseFirestore.Firestore = admin.firestore();
+// db.settings({ ignoreUndefinedProperties: true });
 
 export const incrementVoteCount = functions.firestore
   .document("users/{userId}/votes/{questionId}")
@@ -43,30 +44,56 @@ export const setupUserRoles = functions.firestore
   });
 
 export const zoomVideoUploaded = functions.https.onRequest(async (req, res) => {
-  const { zoomMeetingTopic, zoomMeetingDate, streamablePlaylistUrl } = req.body;
+  functions.logger.log("Req received", "body", req.body);
 
-  functions.logger.log({
-    zoomMeetingDate,
-    zoomMeetingTopic,
-    streamablePlaylistUrl,
-  });
-  // TODO: Associate a Video Playlist with an AMA room, based on
-  //
+  const zoomMeetingTopic = req.body.zoomMeetingTopic;
+  const zoomMeetingDate = req.body.zoomMeetingDate;
+  const streamablePlaylistUrl = req.body.streamablePlaylistUrl;
+
+  if (!zoomMeetingTopic) {
+    functions.logger.error("zoomMeetingTopic is required", {
+      zoomMeetingTopic,
+    });
+    res
+      .status(400)
+      .send({ success: false, message: "zoomMeetingTopic is required" });
+    return;
+  }
+
+  if (!zoomMeetingDate) {
+    functions.logger.error("zoomMeetingDate is required", { zoomMeetingDate });
+    res
+      .status(400)
+      .send({ success: false, message: "zoomMeetingDate is required" });
+    return;
+  }
+
+  if (!streamablePlaylistUrl) {
+    functions.logger.error("streamablePlaylistUrl is required", {
+      streamablePlaylistUrl,
+    });
+    res
+      .status(400)
+      .send({ success: false, message: "streamablePlaylistUrl is required" });
+    return;
+  }
+
+  functions.logger.log("Request looks good");
+
+  // Associate a Video Playlist with an AMA room, based on
   const roomsQuerySnapshot = await db
     .collection("rooms")
     .where("zoomMeetingTopic", "==", zoomMeetingTopic)
     .orderBy("zoomMeetingDate", "desc")
     .get();
-  // const rooms = roomsQuerySnapshot.docs.map((doc) => doc.data());
 
   // find a room that matches the date
   const room = roomsQuerySnapshot.docs.find(
     (roomDoc) => roomDoc.data().zoomMeetingDate === zoomMeetingDate
   );
-  functions.logger.log("room");
-  functions.logger.log(room);
 
   if (!room) {
+    functions.logger.log("No room found for this topic and date");
     res.status(404).send({
       success: false,
       error: `No room was found with the 'zoomMeetingTopic' of '${zoomMeetingTopic}' for the date '${zoomMeetingDate}'`,
@@ -74,11 +101,8 @@ export const zoomVideoUploaded = functions.https.onRequest(async (req, res) => {
     return;
   }
 
-  functions.logger.log("Updating room to have this update ");
-  functions.logger.log({ cfVideoUrl: streamablePlaylistUrl });
-
   // Save the streamablePlaylistUrl to the room document
-  // await room.ref.update({ cfVideoUrl: streamablePlaylistUrl });
+  await room.ref.update({ cfVideoUrl: streamablePlaylistUrl });
 
   res.status(200).send({
     success: true,
