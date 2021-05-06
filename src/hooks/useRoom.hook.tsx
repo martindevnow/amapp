@@ -16,7 +16,7 @@ const useRoom = (roomId: string) => {
     return roomsService.readWatcher(roomId, updateState);
   }, [roomId, roomsService]);
 
-  return { room, loaded };
+  return { room, loaded, roomsService };
 };
 
 export default useRoom;

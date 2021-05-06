@@ -10,7 +10,6 @@ import ArchiveRoomButton from "./archive-room-button.component";
 import QuestionFeed from "./question-feed.component";
 import Question from "./question.component";
 import AddQuestionForm from "./forms/ask-question.form";
-// import AnswerQuestionForm from "./forms/answer-question.form";
 
 import Column from "./layout/column.component";
 import Card from "./ui/card.component";

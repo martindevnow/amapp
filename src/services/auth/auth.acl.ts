@@ -36,6 +36,7 @@ const AclAdminsOnly = [AclRoles.ADMIN_ROLE];
 export enum AclActions {
   LIST_ROOMS = "LIST_ROOMS",
   CREATE_ROOM = "CREATE_ROOM",
+  UPDATE_ROOM = "UPDATE_ROOM",
   ARCHIVE_ROOM = "ARCHIVE_ROOM",
   DELETE_ROOM = "DELETE_ROOM",
   CLEAR_ACTIVE_QUESTION = "CLEAR_ACTIVE_QUESTION",
@@ -67,6 +68,7 @@ export const DEFAULT_ACL: ACL = {
 
   // Moderator or Higher
   [AclActions.CREATE_ROOM]: AclModeratorsOnly,
+  [AclActions.UPDATE_ROOM]: AclModeratorsOnly,
   [AclActions.CLEAR_ACTIVE_QUESTION]: AclModeratorsOnly,
 
   [AclActions.APPROVE_QUESTION]: AclModeratorsOnly,

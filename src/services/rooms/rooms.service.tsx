@@ -1,6 +1,6 @@
 // import Logger from "../../utils/Logger";
 import { FirebaseService } from "../firebase/firebase.service";
-import { IRoomRecord, RoomMap } from "./rooms.types";
+import { IRoom, IRoomRecord, RoomMap } from "./rooms.types";
 
 class RoomsService {
   private auth: firebase.auth.Auth;
@@ -19,8 +19,8 @@ class RoomsService {
       firebase.firestore.DocumentData | undefined
     >
   ) => ({
+    ...(doc.data() as IRoom),
     id: doc.id,
-    ...(doc.data() as IRoomRecord),
     createdAt: doc.data()?.createdAt.toDate(),
   });
 
@@ -53,6 +53,10 @@ class RoomsService {
       .collection("rooms")
       .add({ ...room, createdAt });
     return newRoom.id;
+  };
+
+  updateRoom = async (roomId: string, room: Partial<IRoom>) => {
+    return this.db.doc(`rooms/${roomId}`).update(room);
   };
 
   archiveRoom = async (roomId: string) => {
