@@ -6,6 +6,7 @@ const Main = styled.main`
   max-width: ${themeGet("layout", "maxWidth")};
   margin: 0 auto;
   flex: 1 1 auto;
+  position: relative;
 `;
 
 export default Main;
