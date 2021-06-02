@@ -23,11 +23,18 @@ const AuthProvider: React.FC = (props) => {
     // Logger.log("AuthProvider :: useEffect");
     const { auth } = firebaseService;
     const user$ = new Observable<firebase.User | null>((observer) =>
-      auth.onAuthStateChanged((userInfo) => observer.next(userInfo))
+      auth.onAuthStateChanged((userInfo) => {
+        if (userInfo) {
+          firebaseService.analytics.logEvent("login", { user: userInfo.email });
+        }
+
+        return observer.next(userInfo);
+      })
     ).pipe(
       // switchMap((userInfo) => authService.createUserProfileDocument(userInfo)),
       switchMap((userInfo) => {
         const userRef = authService.authChanged(userInfo);
+
         return userRef
           ? new Observable<IUserProfile>((observer) =>
               userRef.onSnapshot(

@@ -28,10 +28,12 @@ const RoomMetaForm = ({ roomId, onSaved }: RoomMetaFormProps) => {
 
   const [mtgTopic, setMtgTopic] = React.useState(room?.zoomMeetingTopic || "");
   const [mtgDate, setMtgDate] = React.useState(room?.zoomMeetingDate || "");
+  const [cfVideoUrl, setCfVideoUrl] = React.useState(room?.cfVideoUrl || "");
 
   React.useEffect(() => {
     setMtgTopic(room?.zoomMeetingTopic || "");
     setMtgDate(room?.zoomMeetingDate || "");
+    setCfVideoUrl(room?.cfVideoUrl || "");
   }, [room]);
 
   const saveMeta = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -45,6 +47,7 @@ const RoomMetaForm = ({ roomId, onSaved }: RoomMetaFormProps) => {
     await roomsService.updateRoom(roomId, {
       zoomMeetingDate: mtgDate,
       zoomMeetingTopic: mtgTopic,
+      cfVideoUrl: cfVideoUrl,
     });
     onSaved?.();
   };
@@ -65,6 +68,14 @@ const RoomMetaForm = ({ roomId, onSaved }: RoomMetaFormProps) => {
           value={mtgDate}
           placeholder="Date of Meeting (YYYY-MM-DD)"
           onChange={(e) => setMtgDate(e.target.value)}
+        />
+      </label>
+      <label>
+        CloudFront URL:
+        <Input
+          value={mtgDate}
+          placeholder="URL of the AMA-XXXX-XX-XX.m3u8 file"
+          onChange={(e) => setCfVideoUrl(e.target.value)}
         />
       </label>
       <Button type="submit">Save</Button>

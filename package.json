@@ -9,7 +9,7 @@
     "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject",
     "install:functions": "npm --prefix functions i",
-    "deploy": "NODE_ENV=development yarn build && bash scripts/confirm.sh && firebase deploy --project=default",
+    "deploy": "yarn build && bash scripts/confirm.sh && firebase deploy --project=production",
     "deploy:func": "firebase deploy --project=default --only functions",
     "deploy:rules": "firebase deploy --project=default --only firestore:rules"
   },
